@@ -135,13 +135,36 @@ h4 {
 
 h1 {
   font-size: clamp(1.9rem, 5.4vw, 3.2rem);
-  max-width: 15ch;
+  max-width: 20ch;
+  text-wrap: balance;
+}
+
+h1 .nowrap {
+  white-space: nowrap;
 }
 
 .hero-copy {
   margin: 14px 0 0;
   max-width: 66ch;
   color: var(--muted);
+}
+
+.hero-proof {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hero-proof span {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: #c8f6ff;
+  border: 1px solid rgba(77, 212, 255, 0.28);
+  border-radius: 999px;
+  padding: 5px 10px;
+  background: rgba(77, 212, 255, 0.08);
 }
 
 .hero-actions {
@@ -395,6 +418,14 @@ ul {
 }
 
 @media (max-width: 720px) {
+  h1 {
+    max-width: 14ch;
+  }
+
+  .hero-proof span {
+    font-size: 0.72rem;
+  }
+
   .site-header {
     flex-direction: column;
     align-items: flex-start;
