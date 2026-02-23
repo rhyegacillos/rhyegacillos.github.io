@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio | Agentic AI Full-Stack Engineer</title>
+    <meta
+      name="description"
+      content="Software Engineer portfolio focused on full-stack development and AI-powered applications with practical LLM integration."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="background-grid" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="#top">Rhyegacillos</a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#featured">Featured</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Stack</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero reveal">
+        <p class="eyebrow">Software Engineer</p>
+        <h1>Agentic AI Full-Stack Systems</h1>
+        <p class="hero-copy">
+          Building production-ready AI applications with robust tool orchestration,
+          clean architecture, and cloud-native delivery.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#featured">View Featured Project</a>
+          <a class="button button-ghost" href="#contact">Contact</a>
+        </div>
+      </section>
+
+      <section id="about" class="section reveal">
+        <h2>About</h2>
+        <p>
+          Software Engineer focused on full-stack development and AI-powered
+          applications. My projects emphasize practical LLM integration (tool
+          orchestration, structured outputs, and user-approved memory) alongside
+          production practices like async job execution, usage quotas/guardrails,
+          and observability. I deploy serverless workloads on AWS and build clean,
+          maintainable systems with clear architecture.
+        </p>
+      </section>
+
+      <section id="featured" class="section reveal">
+        <div class="section-header">
+          <h2>Featured Project</h2>
+          <span class="pill">Top Project</span>
+        </div>
+        <article class="project-card featured-card">
+          <h3>Serverless Agentic AI Digital Assistant</h3>
+          <p class="project-summary">
+            Serverless AI assistant with tool orchestration (search, PDF export,
+            email, uploads) and user-approved memory. Designed with async job
+            execution, daily usage quotas, and observability for reliable operation.
+          </p>
+
+          <div class="project-grid">
+            <div>
+              <h4>Highlights</h4>
+              <ul>
+                <li>
+                  Tool orchestration: web search, PDF export, email delivery, file
+                  ingestion
+                </li>
+                <li>
+                  Async job execution (API + worker pattern) to avoid tool-heavy
+                  request timeouts
+                </li>
+                <li>
+                  Serverless AWS deployment: Lambda, API Gateway, S3, CloudFront
+                  (IaC via Terraform + CI/CD)
+                </li>
+                <li>State + coordination: S3 artifacts/memory + Redis for jobs/quotas</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Tech Stack</h4>
+              <div class="chips">
+                <span>FastAPI</span>
+                <span>Next.js</span>
+                <span>React</span>
+                <span>TypeScript</span>
+                <span>AWS Lambda</span>
+                <span>API Gateway</span>
+                <span>S3</span>
+                <span>CloudFront</span>
+                <span>Terraform</span>
+                <span>Redis</span>
+                <span>Observability</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="links-grid">
+            <a
+              href="https://digital-assistant.agentairg.site/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Live App: https://digital-assistant.agentairg.site/</a
+            >
+            <a
+              href="#"
+              class="placeholder-link"
+              aria-label="One pager placeholder"
+              aria-disabled="true"
+              >One-Pager: Coming Soon</a
+            >
+            <a
+              href="images/digital-assistant/digital%20assistant.png"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Architecture Image</a
+            >
+          </div>
+          <figure class="architecture-figure">
+            <img
+              src="images/digital-assistant/digital%20assistant.png"
+              alt="Architecture diagram for the Serverless Agentic AI Digital Assistant project"
+            />
+          </figure>
+        </article>
+      </section>
+
+      <section id="projects" class="section reveal">
+        <h2>Other Projects</h2>
+        <p class="section-copy">
+          One project is active now. Three additional project slots are ready for
+          upcoming releases.
+        </p>
+        <div class="project-list">
+          <article class="project-card">
+            <h3>[Project Name - 2]</h3>
+            <p>One-line description of what it does and who it is for.</p>
+            <h4>Highlights</h4>
+            <ul>
+              <li>[Key capability #1]</li>
+              <li>[Key capability #2]</li>
+              <li>
+                [Production/scale detail: serverless/CI/CD/guardrails/observability]
+              </li>
+            </ul>
+            <h4>Tech Stack</h4>
+            <p>[FastAPI/Next.js/React/TypeScript/AWS/Terraform/etc.]</p>
+            <div class="links-grid compact">
+              <a href="#" aria-label="Live app link placeholder">Live App: [URL]</a>
+              <a href="#" aria-label="Repository link placeholder">Repo: [URL]</a>
+              <a href="#" aria-label="Documentation link placeholder"
+                >Docs/One-Pager: [URL]</a
+              >
+            </div>
+          </article>
+
+          <article class="project-card">
+            <h3>[Project Name - 3]</h3>
+            <p>One-line description of what it does and who it is for.</p>
+            <h4>Highlights</h4>
+            <ul>
+              <li>[Key capability #1]</li>
+              <li>[Key capability #2]</li>
+              <li>
+                [Production/scale detail: serverless/CI/CD/guardrails/observability]
+              </li>
+            </ul>
+            <h4>Tech Stack</h4>
+            <p>[FastAPI/Next.js/React/TypeScript/AWS/Terraform/etc.]</p>
+            <div class="links-grid compact">
+              <a href="#" aria-label="Live app link placeholder">Live App: [URL]</a>
+              <a href="#" aria-label="Repository link placeholder">Repo: [URL]</a>
+              <a href="#" aria-label="Documentation link placeholder"
+                >Docs/One-Pager: [URL]</a
+              >
+            </div>
+          </article>
+
+          <article class="project-card">
+            <h3>[Project Name - 4]</h3>
+            <p>One-line description of what it does and who it is for.</p>
+            <h4>Highlights</h4>
+            <ul>
+              <li>[Key capability #1]</li>
+              <li>[Key capability #2]</li>
+              <li>
+                [Production/scale detail: serverless/CI/CD/guardrails/observability]
+              </li>
+            </ul>
+            <h4>Tech Stack</h4>
+            <p>[FastAPI/Next.js/React/TypeScript/AWS/Terraform/etc.]</p>
+            <div class="links-grid compact">
+              <a href="#" aria-label="Live app link placeholder">Live App: [URL]</a>
+              <a href="#" aria-label="Repository link placeholder">Repo: [URL]</a>
+              <a href="#" aria-label="Documentation link placeholder"
+                >Docs/One-Pager: [URL]</a
+              >
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="skills" class="section reveal">
+        <h2>Skills / Stack</h2>
+        <div class="skills-grid">
+          <article>
+            <h3>Languages</h3>
+            <p>Python, TypeScript, Java</p>
+          </article>
+          <article>
+            <h3>Backend</h3>
+            <p>FastAPI, Django, REST APIs</p>
+          </article>
+          <article>
+            <h3>Frontend</h3>
+            <p>Next.js, React</p>
+          </article>
+          <article>
+            <h3>AI / LLM</h3>
+            <p>LLM integration, tool orchestration, structured outputs, agents</p>
+          </article>
+          <article>
+            <h3>Cloud / DevOps</h3>
+            <p>AWS (Lambda, API Gateway, S3, CloudFront), Terraform, CI/CD</p>
+          </article>
+          <article>
+            <h3>Data / Infra</h3>
+            <p>Redis, reporting automation, observability/monitoring</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="contact" class="section reveal">
+        <h2>Contact</h2>
+        <p>Open to full-time Software Engineer / Full-Stack AI roles.</p>
+        <div class="contact-list">
+          <a href="#" aria-label="LinkedIn link placeholder">LinkedIn: [URL]</a>
+          <a href="#" aria-label="Email placeholder">Email: [email]</a>
+          <a href="#" aria-label="GitHub link placeholder">GitHub: [URL]</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Built for GitHub Pages. <span id="year"></span></p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
