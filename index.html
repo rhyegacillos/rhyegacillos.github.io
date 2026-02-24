@@ -34,7 +34,7 @@
         <p class="eyebrow">Software Engineer</p>
         <h1>Agentic AI <span class="nowrap">Full-Stack</span> Engineer</h1>
         <p class="hero-copy">
-          Building production-ready AI apps with tool orchestration, serverless AWS
+          Building production-ready AI apps with tool orchestration, AWS
           deployments, and reliability guardrails.
         </p>
         <div class="hero-proof" aria-label="Core technology proof">
@@ -65,14 +65,14 @@
       <section id="featured" class="section reveal">
         <div class="section-header">
           <h2>Featured Project</h2>
-          <span class="pill">Top Project</span>
+          <span class="pill">Featured Project</span>
         </div>
         <article class="project-card featured-card">
-          <h3>Serverless Agentic AI Digital Assistant</h3>
+          <h3>Digital Assistant (Agentic AI) — Serverless on AWS</h3>
           <p class="project-summary">
-            Serverless AI assistant with tool orchestration (search, PDF export,
-            email, uploads) and user-approved memory. Designed with async job
-            execution, daily usage quotas, and observability for reliable operation.
+            Serverless agentic AI assistant with tool orchestration (web search,
+            PDF export, email delivery, file ingestion) and user-approved memory,
+            built with async job execution, daily quotas, and observability.
           </p>
 
           <div class="project-grid">
@@ -80,18 +80,22 @@
               <h4>Highlights</h4>
               <ul>
                 <li>
-                  Tool orchestration: web search, PDF export, email delivery, file
-                  ingestion
+                  Tool orchestration: Search, PDF export, Email delivery, Upload
+                  ingestion, user-approved memory
                 </li>
                 <li>
-                  Async job execution (API + worker pattern) to avoid tool-heavy
+                  Async execution (API + worker pattern) to prevent tool-heavy
                   request timeouts
                 </li>
                 <li>
-                  Serverless AWS deployment: Lambda, API Gateway, S3, CloudFront
-                  (IaC via Terraform + CI/CD)
+                  Server-side daily quota governance (tokens/PDF/email) with
+                  real-time UI counters
                 </li>
-                <li>State + coordination: S3 artifacts/memory + Redis for jobs/quotas</li>
+                <li>
+                  AWS serverless deployment: Lambda + API Gateway, S3 + CloudFront,
+                  container images in ECR; provisioned via Terraform and automated
+                  via CI/CD
+                </li>
               </ul>
             </div>
             <div>
@@ -105,9 +109,10 @@
                 <span>API Gateway</span>
                 <span>S3</span>
                 <span>CloudFront</span>
+                <span>ECR</span>
                 <span>Terraform</span>
-                <span>Redis</span>
-                <span>Observability</span>
+                <span>Redis/Upstash</span>
+                <span>OpenTelemetry</span>
               </div>
             </div>
           </div>
@@ -166,28 +171,84 @@
       <section id="projects" class="section reveal">
         <h2>Other Projects</h2>
         <p class="section-copy">
-          One project is active now. Three additional project slots are ready for
-          upcoming releases.
+          Two projects are active now. Additional slots are ready for upcoming
+          releases.
         </p>
         <div class="project-list">
           <article class="project-card">
-            <h3>[Project Name - 2]</h3>
-            <p>One-line description of what it does and who it is for.</p>
+            <h3>IdeaGen — Agentic Multi-Model Decision Platform</h3>
+            <p>
+              Multi-step decision workflow that turns LLM ideation into
+              decision-grade outputs with persistence, comparisons,
+              stakeholder-ready reports, and execution planning.
+            </p>
+            <h4>Core Workflow</h4>
+            <p>
+              Generate -> Compare -> Decision Summary -> Execution Plan
+              (Investment Readiness Assessment)
+            </p>
             <h4>Highlights</h4>
             <ul>
-              <li>[Key capability #1]</li>
-              <li>[Key capability #2]</li>
               <li>
-                [Production/scale detail: serverless/CI/CD/guardrails/observability]
+                Multi-provider generation with ordered fallback routing (OpenAI,
+                Gemini, DeepSeek, Grok)
+              </li>
+              <li>
+                Per-run ranking with a structured rubric + run-to-run comparison
+                (winner + tradeoff rationale)
+              </li>
+              <li>
+                Decision Summary across selected runs (1-5) and Execution Plan
+                generation
+              </li>
+              <li>
+                Persistence for runs/comparisons/reports + saved artifact lifecycle
+              </li>
+              <li>Reporting & delivery: PDF rendering + email delivery</li>
+              <li>
+                Guardrails: plan-aware quotas, contract-first structured outputs,
+                schema validation + retries, cache-before-infer, snapshot durability,
+                deterministic fallbacks
               </li>
             </ul>
             <h4>Tech Stack</h4>
-            <p>[FastAPI/Next.js/React/TypeScript/AWS/Terraform/etc.]</p>
+            <div class="chips">
+              <span>Next.js</span>
+              <span>React</span>
+              <span>TypeScript</span>
+              <span>FastAPI (Python)</span>
+              <span>SQLite</span>
+              <span>WeasyPrint</span>
+              <span>Resend</span>
+              <span>Clerk</span>
+              <span>Docker</span>
+              <span>AWS App Runner (ECR)</span>
+              <span>Route 53</span>
+            </div>
             <div class="links-grid compact">
-              <a href="#" aria-label="Live app link placeholder">Live App: [URL]</a>
-              <a href="#" aria-label="Repository link placeholder">Repo: [URL]</a>
-              <a href="#" aria-label="Documentation link placeholder"
-                >Docs/One-Pager: [URL]</a
+              <a
+                href="https://ideagen.agentairg.site/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Live App: https://ideagen.agentairg.site/</a
+              >
+              <a
+                href="one-pager/ideagen/IdeaGen%20Project%20One-Pager.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                >One-Pager (PDF)</a
+              >
+              <a
+                href="images/ideagen/ideagen.png"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Architecture Diagram</a
+              >
+              <a
+                href="one-pager/ideagen/ideagen-thumbnail.png"
+                target="_blank"
+                rel="noopener noreferrer"
+                >One-Pager Thumbnail</a
               >
             </div>
           </article>
