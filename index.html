@@ -374,6 +374,120 @@
               </figure>
             </div>
           </article>
+
+          <article class="project-card featured-card">
+            <h3>MediNotes — Agentic Clinical Documentation Platform</h3>
+            <p class="project-summary">
+              Agentic healthcare SaaS that converts multimodal visit inputs into
+              structured, verifiable summaries with evidence mapping, SSE streaming
+              + resumable jobs, and a scoped clinical chat assistant bounded to each
+              patient's visit summaries and consultation context.
+            </p>
+
+            <div class="project-grid">
+              <div>
+                <h4>Highlights</h4>
+                <ul>
+                  <li>
+                    Multimodal intake: notes + docs/PDF + audio + images
+                    (OCR/transcription)
+                  </li>
+                  <li>
+                    Streaming output via SSE with resumable job events (reconnect
+                    support)
+                  </li>
+                  <li>
+                    Hub-and-spoke orchestration: summary orchestrator + specialized
+                    agents (extraction, research via MCP, critic, evidence mapping,
+                    memory/RAG, email)
+                  </li>
+                  <li>
+                    Critic QA loop + regeneration to reduce hallucinations and
+                    missed facts
+                  </li>
+                  <li>
+                    Evidence-linked summaries mapped back to source snippets for
+                    auditability
+                  </li>
+                  <li>
+                    Scoped chat assistant: context-aware Q&A restricted to each
+                    patient's visit summaries + current consultation (no
+                    out-of-context answers)
+                  </li>
+                  <li>
+                    Delivery: email dispatch via Resend; persistence via vector store
+                    (RAG memory) + Redis job store
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h4>Tech Stack</h4>
+                <div class="chips">
+                  <span>FastAPI</span>
+                  <span>Python</span>
+                  <span>Next.js/React</span>
+                  <span>TypeScript</span>
+                  <span>SSE</span>
+                  <span>Vector Store (RAG)</span>
+                  <span>Upstash Redis</span>
+                  <span>MCP (Brave Search)</span>
+                  <span>Resend</span>
+                  <span>Clerk</span>
+                  <span>Docker</span>
+                  <span>AWS App Runner/ECR</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="links-grid featured-links">
+              <a
+                href="https://medinotes.agentairg.site/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Live App: https://medinotes.agentairg.site/</a
+              >
+            </div>
+            <div class="featured-media-grid">
+              <figure class="onepager-figure">
+                <figcaption>
+                  <a
+                    href="one-pager/medinotes/MediNotes%20Project%20One-Pager.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >One-Pager Thumbnail Preview</a
+                  >
+                </figcaption>
+                <a
+                  href="one-pager/medinotes/MediNotes%20Project%20One-Pager.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Open MediNotes one-pager PDF"
+                >
+                  <img
+                    class="media-thumb"
+                    src="one-pager/medinotes/medinotes-thumbnail.png"
+                    alt="One-pager thumbnail for the MediNotes project"
+                  />
+                </a>
+              </figure>
+
+              <figure class="architecture-figure">
+                <figcaption>
+                  <a
+                    href="images/medinotes/medinotes.png"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >Architecture Image</a
+                  >
+                </figcaption>
+                <img
+                  class="media-thumb"
+                  src="images/medinotes/medinotes.png"
+                  alt="Architecture diagram for the MediNotes project"
+                />
+              </figure>
+            </div>
+          </article>
         </div>
       </section>
 
