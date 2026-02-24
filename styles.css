@@ -503,6 +503,10 @@ body.lightbox-open {
   gap: 10px;
 }
 
+.contact-availability {
+  margin-top: 12px;
+}
+
 .site-footer {
   width: min(1080px, calc(100% - 40px));
   margin: 0 auto 34px;
