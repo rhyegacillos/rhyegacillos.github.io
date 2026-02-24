@@ -243,6 +243,11 @@ h1 .nowrap {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.project-panels {
+  display: grid;
+  gap: 18px;
+}
+
 .project-card {
   padding: 20px;
   border-radius: 14px;
