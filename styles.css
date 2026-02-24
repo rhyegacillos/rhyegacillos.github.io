@@ -336,6 +336,16 @@ ul {
   background: rgba(103, 247, 204, 0.1);
 }
 
+.contact-list .contact-location {
+  color: var(--text);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.84rem;
+  border: 1px solid rgba(149, 175, 219, 0.3);
+  border-radius: 12px;
+  padding: 9px 11px;
+  background: rgba(149, 175, 219, 0.06);
+}
+
 .links-grid a.placeholder-link {
   color: rgba(231, 237, 248, 0.72);
   border-style: dashed;
