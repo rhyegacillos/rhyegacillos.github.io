@@ -271,6 +271,109 @@
               </figure>
             </div>
           </article>
+
+          <article class="project-card featured-card">
+            <h3>Autonomous Agentic Trader</h3>
+            <p class="project-summary">
+              Production-style multi-agent trading simulation with MCP tool
+              boundaries + resilience guardrails, delivered with a live control-desk
+              UI and automated AWS deployment.
+            </p>
+
+            <div class="project-grid">
+              <div>
+                <h4>Highlights</h4>
+                <ul>
+                  <li>
+                    Multi-agent runtime with 4 trader personas running scheduled
+                    trade/rebalance cycles
+                  </li>
+                  <li>
+                    MCP tool boundaries for accounts/trades/prices/research/memory
+                    (no direct DB writes from agents)
+                  </li>
+                  <li>
+                    Resilience guardrails: layered price resolution (Polygon ->
+                    cache -> web -> unavailable) + trade blocking on
+                    missing/invalid prices
+                  </li>
+                  <li>
+                    Full-stack control desk UI: live logs, holdings, transactions
+                    ledger, and portfolio timeline
+                  </li>
+                  <li>
+                    Automated deployment: Docker image to AWS (ECR/EC2) via
+                    Terraform + GitHub Actions (OIDC), redeploy via SSM
+                  </li>
+                  <li>Research/education simulation; not financial advice</li>
+                </ul>
+              </div>
+              <div>
+                <h4>Tech Stack</h4>
+                <div class="chips">
+                  <span>FastAPI</span>
+                  <span>Next.js (static export)</span>
+                  <span>TypeScript</span>
+                  <span>SQLite</span>
+                  <span>MCP</span>
+                  <span>Docker</span>
+                  <span>AWS EC2/ECR</span>
+                  <span>Terraform</span>
+                  <span>GitHub Actions</span>
+                  <span>SSM</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="links-grid featured-links">
+              <a
+                href="https://autonomous-trader.agentairg.site/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Live App: https://autonomous-trader.agentairg.site/</a
+              >
+            </div>
+            <div class="featured-media-grid">
+              <figure class="onepager-figure">
+                <figcaption>
+                  <a
+                    href="one-pager/autonomous-agentic-trader/autonomous-one-page.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >One-Pager Thumbnail Preview</a
+                  >
+                </figcaption>
+                <a
+                  href="one-pager/autonomous-agentic-trader/autonomous-one-page.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Open Autonomous Agentic Trader one-pager PDF"
+                >
+                  <img
+                    class="media-thumb"
+                    src="one-pager/autonomous-agentic-trader/autonomous-thumbnail.png"
+                    alt="One-pager thumbnail for the Autonomous Agentic Trader project"
+                  />
+                </a>
+              </figure>
+
+              <figure class="architecture-figure">
+                <figcaption>
+                  <a
+                    href="images/autonomous-agentic-trader/autonomous-architecture-diagram.png"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >Architecture Image</a
+                  >
+                </figcaption>
+                <img
+                  class="media-thumb"
+                  src="images/autonomous-agentic-trader/autonomous-architecture-diagram.png"
+                  alt="Architecture diagram for the Autonomous Agentic Trader project"
+                />
+              </figure>
+            </div>
+          </article>
         </div>
       </section>
 
