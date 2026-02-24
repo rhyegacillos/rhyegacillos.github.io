@@ -308,6 +308,10 @@ ul {
   gap: 10px;
 }
 
+.links-grid.featured-links {
+  grid-template-columns: 1fr;
+}
+
 .links-grid a,
 .contact-list a {
   color: var(--text);
@@ -372,18 +376,31 @@ ul {
   background: rgba(149, 175, 219, 0.06);
 }
 
-.pdf-preview {
+.architecture-figure figcaption {
+  padding: 10px 12px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  color: var(--accent-2);
+  border-bottom: 1px solid rgba(149, 175, 219, 0.2);
+  background: rgba(149, 175, 219, 0.06);
+}
+
+.onepager-figure figcaption a,
+.architecture-figure figcaption a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.onepager-figure figcaption a:hover,
+.architecture-figure figcaption a:hover {
+  text-decoration: underline;
+}
+
+.media-thumb {
   display: block;
   width: 100%;
   height: 360px;
-  border: 0;
-  background: #0c1428;
-}
-
-.architecture-figure img {
-  display: block;
-  width: 100%;
-  height: 100%;
   object-fit: contain;
   background: #0c1428;
 }
@@ -448,7 +465,7 @@ ul {
     grid-template-columns: 1fr;
   }
 
-  .pdf-preview {
+  .media-thumb {
     height: 300px;
   }
 }
