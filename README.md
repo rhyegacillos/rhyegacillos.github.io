@@ -7,7 +7,7 @@ Live demos, architecture diagrams, and one-page summaries are linked below.
 
 ---
 
-## Featured Projects
+## Projects
 
 ### 1) Digital Assistant (Agentic AI) — Serverless on AWS
 Serverless AI assistant with tool orchestration (search, PDF export, email, uploads) and user-approved memory.
@@ -76,4 +76,4 @@ Architecture diagrams, one-pagers, and live demos are provided here. Code sample
 ## Contact
 - LinkedIn: https://www.linkedin.com/in/rhyegacillos/
 - Email: gacillos.rhye@gmail.com
-- GitHub: https://github.com/rhyegacillos
+- GitHub: https://github.com/rhyegacillos/rhyegacillos.github.io

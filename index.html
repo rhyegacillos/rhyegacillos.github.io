@@ -82,6 +82,15 @@
                     ingestion, user-approved memory
                   </li>
                   <li>
+                    MCP tool servers for search, PDF export, email delivery, upload
+                    ingestion, and memory workflows
+                  </li>
+                  <li>
+                    Context-specific persona behavior: assistant adapts responses
+                    based on user role/context while enforcing safety and tool
+                    boundaries
+                  </li>
+                  <li>
                     Async execution (API + worker pattern) to prevent tool-heavy
                     request timeouts
                   </li>
@@ -309,6 +318,10 @@
                     (no direct DB writes from agents)
                   </li>
                   <li>
+                    Research tooling: MCP-backed web search (Brave) + memory context
+                    for evidence-aware trading decisions
+                  </li>
+                  <li>
                     Resilience guardrails: layered price resolution (Polygon ->
                     cache -> web -> unavailable) + trade blocking on
                     missing/invalid prices
@@ -331,7 +344,9 @@
                   <span>Next.js (static export)</span>
                   <span>TypeScript</span>
                   <span>SQLite</span>
+                  <span>OpenAI Agents SDK</span>
                   <span>MCP</span>
+                  <span>Polygon API</span>
                   <span>Docker</span>
                   <span>AWS EC2/ECR</span>
                   <span>Terraform</span>
@@ -417,6 +432,10 @@
                   <li>
                     Streaming output via SSE with resumable job events (reconnect
                     support)
+                  </li>
+                  <li>
+                    Model routing with fallback chains across summary, critic, and
+                    chat paths for resiliency
                   </li>
                   <li>
                     Hub-and-spoke orchestration: summary orchestrator + specialized
