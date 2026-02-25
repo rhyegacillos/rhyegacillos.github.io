@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rayan Gacillos — Resume</title>
+  <style>
+    :root{
+      --ink:#0f172a;
+      --muted:#475569;
+      --accent:#2563eb;
+      --line:#e2e8f0;
+      --soft:#f8fafc;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      color:var(--ink);
+      background:#fff;
+    }
+    a{ color: var(--accent); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    .page{
+      width: 8.5in;
+      min-height: 11in;
+      padding: 0.65in;
+      margin: 0 auto;
+    }
+    h1{
+      margin:0;
+      font-size: 26px;
+      line-height: 1.15;
+      letter-spacing: -0.2px;
+    }
+    .tagline{
+      margin: 4px 0 14px 0;
+      color:var(--muted);
+      font-size: 13px;
+    }
+    .contact{
+      width:100%;
+      border-collapse:collapse;
+      margin-bottom: 14px;
+      table-layout: fixed;
+    }
+    .contact td{
+      padding: 2px 10px 2px 0;
+      color:var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: top;
+    }
+    .section{
+      margin-top: 14px;
+    }
+    .section h2{
+      margin:0;
+      font-size: 14px;
+      color:var(--accent);
+      letter-spacing: 0.2px;
+    }
+    .rule{
+      border:0;
+      border-top:1px solid var(--line);
+      margin: 6px 0 10px 0;
+    }
+    p{
+      margin:0 0 8px 0;
+      font-size: 12.6px;
+      line-height: 1.45;
+    }
+    .skills{
+      width:100%;
+      border-collapse:collapse;
+      border: 1px solid var(--line);
+      margin-top: 2px;
+    }
+    .skills tr:nth-child(even){ background: var(--soft); }
+    .skills td{
+      padding: 8px 10px;
+      border-top: 1px solid var(--line);
+      vertical-align: top;
+      font-size: 12.2px;
+      line-height: 1.35;
+    }
+    .skills td.key{
+      width: 1.55in;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .meta{
+      color: var(--muted);
+      font-size: 12px;
+      margin: 2px 0 6px 0;
+    }
+    .item{
+      margin-bottom: 10px;
+    }
+    .item-title{
+      font-weight: 700;
+      font-size: 13px;
+      margin:0;
+    }
+    ul{
+      margin: 6px 0 0 0;
+      padding-left: 18px;
+    }
+    li{
+      margin: 0 0 4px 0;
+      font-size: 12.2px;
+      line-height: 1.35;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <h1>Rayan Gacillos</h1>
+      <div class="tagline">Software Engineer | Full-Stack &amp; AI (LLM Integration)</div>
+
+      <!-- Header shows portfolio only (no live app links here) -->
+      <table class="contact">
+        <tr>
+          <td>Calabarzon, Philippines (Open to Remote/Hybrid)</td>
+          <td>Email: gacillos.rhye@gmail.com</td>
+          <td>Mobile: 0927726333793</td>
+        </tr>
+        <tr>
+          <td>Portfolio: <a href="https://rhyegacillos.github.io" target="_blank" rel="noreferrer">rhyegacillos.github.io</a></td>
+          <td>LinkedIn: <a href="https://linkedin.com/in/rhyegacillos" target="_blank" rel="noreferrer">linkedin.com/in/rhyegacillos</a></td>
+          <td>GitHub: <a href="https://github.com/rhyegacillos" target="_blank" rel="noreferrer">github.com/rhyegacillos</a></td>
+        </tr>
+      </table>
+    </header>
+
+    <section class="section">
+      <h2>Summary</h2>
+      <hr class="rule" />
+      <p>
+        Software engineer with 7+ years of experience in backend development and API integrations, now building
+        production-oriented full-stack AI applications. Experienced in Java (Spring Boot) and Python (Django/FastAPI),
+        AWS deployments (serverless and container-based), and agentic/LLM workflows with reliability guardrails
+        (async jobs, quotas, validation/fallbacks, observability).
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>Core Skills</h2>
+      <hr class="rule" />
+      <table class="skills">
+        <tr><td class="key">Languages</td><td>Python, TypeScript, Java</td></tr>
+        <tr><td class="key">Backend</td><td>FastAPI, Django, Spring Boot, REST APIs, async orchestration, SSE</td></tr>
+        <tr><td class="key">Frontend</td><td>Next.js, React</td></tr>
+        <tr><td class="key">AI/LLM</td><td>LLM integration, tool orchestration, agents, RAG, structured outputs, provider routing + fallbacks</td></tr>
+        <tr><td class="key">Cloud/DevOps</td><td>AWS (Lambda, API Gateway, S3, CloudFront, ECR, EC2, App Runner), Docker, Terraform, GitHub Actions (OIDC), CI/CD</td></tr>
+        <tr><td class="key">Data/Infra</td><td>Redis (Upstash), SQLite, vector store (RAG), observability (OpenTelemetry to Sentry, CloudWatch)</td></tr>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>Portfolio Projects</h2>
+      <hr class="rule" />
+
+      <div class="item">
+        <div class="item-title">Digital Assistant (Agentic AI) — Serverless on AWS</div>
+        <div class="meta">FastAPI + Next.js/React · AWS Lambda/API Gateway/S3/CloudFront · Terraform · Upstash Redis · MCP · OpenTelemetry → Sentry</div>
+        <div class="meta">
+          Live app: <a href="https://digital-assistant.agentairg.site/" target="_blank" rel="noreferrer">digital-assistant.agentairg.site</a>
+        </div>
+        <ul>
+          <li>Serverless agentic assistant with tool orchestration (web search, PDF export, email delivery, file ingestion) and user-approved memory.</li>
+          <li>Context-specific persona behavior adapts responses by role/context while enforcing safety and tool boundaries.</li>
+          <li>MCP tool servers isolate search, PDF, email, upload, and memory capabilities from core orchestration logic.</li>
+          <li>Async job execution (API returns job_id; worker completes long tool chains) to prevent tool-heavy request timeouts.</li>
+          <li>Daily quota governance (tokens/PDF/email) with real-time UI counters and deterministic limits.</li>
+          <li>Observability: OpenTelemetry instrumentation exported to Sentry for tracing/logs; CloudWatch for AWS runtime metrics/logs.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <div class="item-title">IdeaGen — Agentic Multi-Model Decision Platform</div>
+        <div class="meta">FastAPI + Next.js/React · Multi-provider routing · SQLite · WeasyPrint · Resend · Clerk · AWS App Runner</div>
+        <div class="meta">
+          Live app: <a href="https://ideagen.agentairg.site/" target="_blank" rel="noreferrer">ideagen.agentairg.site</a>
+        </div>
+        <ul>
+          <li>Multi-step workflow: Generate → Compare → Decision Summary → Execution Plan, with persistence and stakeholder-ready exports (PDF/email).</li>
+          <li>Reliability guardrails: contract-first structured outputs, validation + retries, ordered provider fallback routing, cache-before-infer, snapshot durability.</li>
+          <li>Plan-aware usage controls (auth, quotas, plan gating) and deterministic finance computations with narrative synthesis.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Autonomous Agentic Trader — Multi-Agent Trading Simulation</div>
+        <div class="meta">FastAPI + static Next.js UI · MCP tool boundaries · Polygon market data · SQLite · Docker · AWS EC2/ECR · Terraform + GitHub Actions (OIDC)</div>
+        <div class="meta">
+          Live app: <a href="https://autonomous-trader.agentairg.site/" target="_blank" rel="noreferrer">autonomous-trader.agentairg.site</a>
+        </div>
+        <ul>
+          <li>Multi-agent trading simulation with 4 trader personas running scheduled trade/rebalance cycles (research/education; not financial advice).</li>
+          <li>Tool-gated execution via MCP (accounts/trades/prices/research/memory), preventing direct database writes and improving auditability.</li>
+          <li>MCP-backed research tooling (Brave web search + memory context) supports evidence-aware trading decisions.</li>
+          <li>Resilience guardrails: layered price resolution (Polygon → cache → web → unavailable) and trade blocking on missing/invalid prices.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <div class="item-title">MediNotes — Agentic Clinical Documentation Platform</div>
+        <div class="meta">FastAPI · Next.js/React · SSE streaming + resumable jobs (Redis) · RAG vector store · MCP research tools · Resend · Clerk · AWS App Runner</div>
+        <div class="meta">
+          Live app: <a href="https://medinotes.agentairg.site/" target="_blank" rel="noreferrer">medinotes.agentairg.site</a>
+        </div>
+        <ul>
+          <li>Multimodal intake (notes/docs/audio/images) to structured, verifiable visit summaries with critic QA loop and evidence mapping to source context.</li>
+          <li>Streaming output via SSE with resumable job events; RAG memory store for continuity and retrieval.</li>
+          <li>Persistent critic-derived format guardrails improve summary quality over time across repeated runs.</li>
+          <li>Scoped clinical chat assistant for context-aware Q&amp;A, bounded to each patient's visit summaries and consultation context.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Education</h2>
+      <hr class="rule" />
+      <div class="item">
+        <div class="item-title">University of Batangas</div>
+        <div class="meta">Bachelor of Science - BS, Computer Engineering · 2016–2017</div>
+      </div>
+      <div class="item">
+        <div class="item-title">Technological University of the Philippines</div>
+        <div class="meta">Vocational, Computer Engineering Technology/Technician · 2003–2007</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Professional Experience</h2>
+      <hr class="rule" />
+
+      <div class="item">
+        <div class="item-title">Software Engineer (Full-Stack Development &amp; LLM Integration) — Independent / Self-Directed Projects</div>
+        <div class="meta">2026–Present · Remote</div>
+        <ul>
+          <li>Built and deployed multiple full-stack AI applications with LLM tool orchestration, persistence, exports, and production guardrails.</li>
+          <li>Deployed workloads on AWS (serverless and container-based) using Docker, Terraform, and CI/CD (GitHub Actions).</li>
+          <li>Portfolio: <a href="https://rhyegacillos.github.io" target="_blank" rel="noreferrer">rhyegacillos.github.io</a></li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Java Developer — Backend Services &amp; API Integrations</div>
+        <div class="meta">7+ years · Business applications (fintech, lead management, reporting automation)</div>
+        <ul>
+          <li>Developed and maintained REST APIs and backend services using Java (Spring Boot) for business and fintech applications.</li>
+          <li>Integrated external marketing and analytics platforms via APIs to support data analysis and reporting workflows.</li>
+          <li>Automated data extraction and reporting pipelines, transforming multi-source data into structured outputs (e.g., Google Sheets dashboards).</li>
+          <li>Performed data analysis and machine learning prototypes (regression modeling) to generate insights from extracted datasets.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Systems Technical Support — Toshiba</div>
+        <div class="meta">Nov 2007 – Jan 2018 · Region IV-A (CALABARZON), Philippines</div>
+        <ul>
+          <li>Provided end-to-end IT hardware support for manufacturing operations (troubleshooting, repair, preventive maintenance, parts management).</li>
+          <li>Assessed production-ready hardware/peripherals and supported cost optimization by identifying local alternatives for imported components.</li>
+          <li>Created equipment documentation and SOPs to improve user adoption, consistency, and operational efficiency.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

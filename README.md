@@ -58,6 +58,7 @@ Agentic healthcare documentation app with multimodal intake, evidence-linked sum
 
 - SSE streaming with resumable jobs (reconnect support)
 - Critic QA loop + evidence mapping to source context
+- Persistent critic-derived format guardrails to improve summary quality over time
 - RAG memory + scoped chat (bounded to patient visit summaries + consultation context)
 - AWS: Dockerized deployment via ECR + App Runner
 
