@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rhye Gacillos - Comprehensive CV</title>
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #475569;
+      --accent: #1d4ed8;
+      --line: #dbe3ef;
+      --soft: #f8fafc;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--ink);
+      background: #ffffff;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 28px 28px 36px;
+    }
+    .header {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 12px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 36px;
+      letter-spacing: -0.3px;
+      line-height: 1.15;
+    }
+    .subtitle {
+      margin-top: 4px;
+      font-size: 18px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .contact {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px 16px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .section {
+      margin-top: 18px;
+    }
+    h2 {
+      margin: 0;
+      font-size: 22px;
+      color: var(--accent);
+      letter-spacing: 0.2px;
+    }
+    .rule {
+      border: 0;
+      border-top: 1px solid var(--line);
+      margin: 6px 0 10px;
+    }
+    p {
+      margin: 0 0 8px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 2.8fr;
+      border: 1px solid var(--line);
+    }
+    .grid .k,
+    .grid .v {
+      padding: 9px 10px;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .grid .k {
+      font-weight: 700;
+      background: var(--soft);
+      border-right: 1px solid var(--line);
+    }
+    .grid .k.first,
+    .grid .v.first {
+      border-top: 0;
+    }
+    .item {
+      margin-bottom: 12px;
+    }
+    .item-title {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+    .meta {
+      margin: 2px 0 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    ul {
+      margin: 6px 0 0;
+      padding-left: 18px;
+    }
+    li {
+      margin: 0 0 5px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .project-links {
+      margin-top: 4px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .project-links span {
+      display: inline-block;
+      margin-right: 14px;
+      margin-bottom: 4px;
+    }
+    @media print {
+      .page {
+        max-width: none;
+        margin: 0;
+        padding: 0.45in;
+      }
+      a { text-decoration: none; color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <h1>Rhye Gacillos</h1>
+      <div class="subtitle">Software Engineer | Full-Stack AI | LLM Integration | AWS Deployments</div>
+      <div class="contact">
+        <div>Location: Calabarzon, Philippines (Open to Remote/Hybrid)</div>
+        <div>Email: gacillos.rhye@gmail.com</div>
+        <div>LinkedIn: <a href="https://www.linkedin.com/in/rhyegacillos/" target="_blank" rel="noreferrer">linkedin.com/in/rhyegacillos</a></div>
+        <div>Portfolio: <a href="https://rhyegacillos.github.io/" target="_blank" rel="noreferrer">rhyegacillos.github.io</a></div>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Professional Profile</h2>
+      <hr class="rule" />
+      <p>
+        Software Engineer with 7+ years in backend development and API integrations, now focused on
+        production-oriented full-stack AI applications. Strong in Java (Spring Boot), Python (FastAPI/Django),
+        and TypeScript/React stacks, with practical experience in agent/tool orchestration, structured outputs,
+        async execution patterns, usage guardrails, and observability.
+      </p>
+      <p>
+        Builds and deploys cloud-native workloads on AWS using serverless and container-based architectures,
+        Docker, Terraform, and GitHub Actions CI/CD. Recent portfolio work demonstrates end-to-end delivery from
+        architecture and implementation to live deployment, operational controls, and documentation.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>Core Skills</h2>
+      <hr class="rule" />
+      <div class="grid">
+        <div class="k first">Languages</div>
+        <div class="v first">Python, TypeScript, Java</div>
+        <div class="k">Backend</div>
+        <div class="v">FastAPI, Django, Spring Boot, REST APIs, async job orchestration, SSE streaming</div>
+        <div class="k">Frontend</div>
+        <div class="v">Next.js, React, TypeScript</div>
+        <div class="k">AI / LLM</div>
+        <div class="v">LLM integration, tool orchestration, agents, RAG, multi-provider routing + fallback, validation/guardrails, structured outputs</div>
+        <div class="k">Cloud / DevOps</div>
+        <div class="v">AWS (Lambda, API Gateway, S3, CloudFront, ECR, EC2, App Runner), Docker, Terraform, CI/CD (GitHub Actions, OIDC)</div>
+        <div class="k">Data / Infra</div>
+        <div class="v">Redis (Upstash), SQLite, vector store (RAG), MCP tool servers, OpenTelemetry -> Sentry, CloudWatch</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Portfolio Projects</h2>
+      <hr class="rule" />
+
+      <div class="item">
+        <p class="item-title">Digital Assistant (Agentic AI) - Serverless on AWS</p>
+        <div class="project-links">
+          <span>Live: <a href="https://digital-assistant.agentairg.site/" target="_blank" rel="noreferrer">digital-assistant.agentairg.site</a></span>
+          <span>One-Pager: <a href="https://rhyegacillos.github.io/assets/digital-assistant/onepager.pdf" target="_blank" rel="noreferrer">assets/digital-assistant/onepager.pdf</a></span>
+          <span>Architecture: <a href="https://rhyegacillos.github.io/assets/digital-assistant/architecture.png" target="_blank" rel="noreferrer">assets/digital-assistant/architecture.png</a></span>
+        </div>
+        <ul>
+          <li>Serverless assistant with tool orchestration (search, PDF export, email, uploads) and user-approved memory.</li>
+          <li>MCP tool-server boundaries isolate search/PDF/email/upload/memory capabilities from core orchestration.</li>
+          <li>Context-specific persona behavior adapts output by role/context while enforcing safety/tool constraints.</li>
+          <li>Async API + worker execution, daily quota governance, and OpenTelemetry -> Sentry observability.</li>
+          <li>AWS delivery: Lambda, API Gateway, S3, CloudFront, ECR with Terraform + CI/CD automation.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <p class="item-title">IdeaGen - Agentic Multi-Model Decision Platform</p>
+        <div class="project-links">
+          <span>Live: <a href="https://ideagen.agentairg.site/" target="_blank" rel="noreferrer">ideagen.agentairg.site</a></span>
+          <span>One-Pager: <a href="https://rhyegacillos.github.io/assets/ideagen/onepager.pdf" target="_blank" rel="noreferrer">assets/ideagen/onepager.pdf</a></span>
+          <span>Architecture: <a href="https://rhyegacillos.github.io/assets/ideagen/architecture.png" target="_blank" rel="noreferrer">assets/ideagen/architecture.png</a></span>
+        </div>
+        <ul>
+          <li>Decision workflow: Generate -> Compare -> Decision Summary -> Execution Plan (Investment Readiness Assessment).</li>
+          <li>Multi-provider model routing with fallback chains (OpenAI, Gemini, DeepSeek, Grok).</li>
+          <li>Contract-first outputs with validation/retries, cache-before-infer, snapshot durability, and plan-aware quotas.</li>
+          <li>Delivery pipeline includes PDF rendering, email delivery, and durable run/comparison/report persistence.</li>
+          <li>AWS deployment on App Runner from ECR with Route 53 custom domain support.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <p class="item-title">Autonomous Agentic Trader - Multi-Agent Trading Simulation</p>
+        <div class="project-links">
+          <span>Live: <a href="https://autonomous-trader.agentairg.site/" target="_blank" rel="noreferrer">autonomous-trader.agentairg.site</a></span>
+          <span>One-Pager: <a href="https://rhyegacillos.github.io/assets/autonomous-trader/onepager.pdf" target="_blank" rel="noreferrer">assets/autonomous-trader/onepager.pdf</a></span>
+          <span>Architecture: <a href="https://rhyegacillos.github.io/assets/autonomous-trader/architecture.png" target="_blank" rel="noreferrer">assets/autonomous-trader/architecture.png</a></span>
+        </div>
+        <ul>
+          <li>Production-style simulation with 4 trader personas executing scheduled trade/rebalance cycles.</li>
+          <li>OpenAI Agents SDK runtime with MCP boundaries for accounts/trades/prices/research/memory.</li>
+          <li>MCP-backed web research (Brave) plus memory context supports evidence-aware decisions.</li>
+          <li>Resilience controls: layered pricing fallback (Polygon -> cache -> web -> unavailable) and trade blocking on invalid price data.</li>
+          <li>AWS deployment automation: Docker to ECR/EC2 via Terraform + GitHub Actions (OIDC) with SSM redeploy.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <p class="item-title">MediNotes - Agentic Clinical Documentation Platform</p>
+        <div class="project-links">
+          <span>Live: <a href="https://medinotes.agentairg.site/" target="_blank" rel="noreferrer">medinotes.agentairg.site</a></span>
+          <span>One-Pager: <a href="https://rhyegacillos.github.io/assets/medinotes/onepager.pdf" target="_blank" rel="noreferrer">assets/medinotes/onepager.pdf</a></span>
+          <span>Architecture: <a href="https://rhyegacillos.github.io/assets/medinotes/architecture.png" target="_blank" rel="noreferrer">assets/medinotes/architecture.png</a></span>
+        </div>
+        <ul>
+          <li>Multimodal intake (notes, documents, audio, images) into structured, verifiable summaries with evidence mapping.</li>
+          <li>SSE streaming + resumable jobs for long-running summary generation and reconnect-safe UX.</li>
+          <li>Hub-and-spoke orchestration with extraction, research (MCP), critic, evidence, memory (RAG), and email agents.</li>
+          <li>Scoped clinical chat bounded to patient visit summaries and current consultation context.</li>
+          <li>Persistent critic-derived format guardrails improve summary quality over repeated runs.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Professional Experience</h2>
+      <hr class="rule" />
+
+      <div class="item">
+        <p class="item-title">Independent / Self-Directed Projects - Software Engineer (Full-Stack &amp; LLM Integration)</p>
+        <div class="meta">Jan 2026 - Present | Remote</div>
+        <ul>
+          <li>Built and deployed multiple AI applications with LLM orchestration, tool boundaries, persistence, exports, and reliability guardrails.</li>
+          <li>Implemented production controls including async workers, quota enforcement, fallback routing, and observability pipelines.</li>
+          <li>Delivered AWS workloads using serverless and container patterns with Terraform and GitHub Actions-based CI/CD.</li>
+          <li>Published live portfolio with architecture diagrams and one-pager documentation for recruiter/interview review.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <p class="item-title">Propelrr - Java Software Developer</p>
+        <div class="meta">Jan 2018 - Oct 2025 | Makati City, Philippines</div>
+        <ul>
+          <li>Developed and maintained backend services and REST APIs for fintech and business applications using Java and Spring Boot.</li>
+          <li>Integrated third-party platforms (Meta/Facebook, Google, TikTok) to support analytics and reporting workflows.</li>
+          <li>Built reporting automation pipelines that transformed multi-source data into structured outputs and dashboards.</li>
+          <li>Contributed to cross-functional feature delivery, including backend integration support for Angular/React UIs.</li>
+          <li>Prototyped regression-based data analysis workflows to support insight generation for business reporting.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <p class="item-title">Toshiba - Systems Technical Support</p>
+        <div class="meta">Nov 2007 - Jan 2018 | Region IV-A (CALABARZON), Philippines</div>
+        <ul>
+          <li>Provided end-to-end IT hardware support for manufacturing operations (troubleshooting, repair, preventive maintenance, parts management).</li>
+          <li>Prepared equipment documentation and SOPs to improve user adoption, consistency, and operational efficiency.</li>
+          <li>Supported cost optimization by identifying suitable local alternatives for imported components and peripherals.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Education</h2>
+      <hr class="rule" />
+      <div class="item">
+        <p class="item-title">University of Batangas</p>
+        <div class="meta">Bachelor of Science, Computer Engineering | 2016 - 2017</div>
+      </div>
+      <div class="item">
+        <p class="item-title">Technological University of the Philippines</p>
+        <div class="meta">Computer Engineering Technology/Technician (Vocational) | 2003 - 2007</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Certifications</h2>
+      <hr class="rule" />
+      <ul>
+        <li>AI Engineer Agentic Track: The Complete Agent &amp; MCP Course</li>
+        <li>AI Engineer Core Track: LLM Engineering, RAG, QLoRA, Agents</li>
+        <li>Spring Framework Masterclass: Beginner to Professional</li>
+        <li>Learn Spring Boot in 100 Steps - Beginner to Expert</li>
+        <li>Build Modern Responsive Website with HTML5, CSS3 &amp; Bootstrap</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Languages</h2>
+      <hr class="rule" />
+      <p>Tagalog (Native/Bilingual), English (Professional Working)</p>
+    </section>
+  </main>
+</body>
+</html>

@@ -318,7 +318,8 @@ ul {
 }
 
 .links-grid a,
-.contact-list a {
+.contact-list a,
+.contact-list .contact-item {
   color: var(--text);
   text-decoration: none;
   font-family: "IBM Plex Mono", monospace;
