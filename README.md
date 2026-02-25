@@ -77,4 +77,3 @@ Architecture diagrams, one-pagers, and live demos are provided here. Code sample
 ## Contact
 - LinkedIn: https://www.linkedin.com/in/rhyegacillos/
 - Email: gacillos.rhye@gmail.com
-- GitHub: https://github.com/rhyegacillos/rhyegacillos.github.io
