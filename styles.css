@@ -34,6 +34,7 @@ body {
     radial-gradient(circle at 20% 88%, rgba(255, 196, 94, 0.14), transparent 30%),
     linear-gradient(165deg, var(--bg-0) 0%, var(--bg-1) 100%);
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 .background-grid {
@@ -56,7 +57,8 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-  width: min(1080px, calc(100% - 40px));
+  width: calc(100% - 40px);
+  max-width: 1080px;
   margin: 18px auto 0;
   padding: 14px 16px;
   border: 1px solid var(--line);
@@ -98,7 +100,8 @@ body {
 main {
   position: relative;
   z-index: 1;
-  width: min(1080px, calc(100% - 40px));
+  width: calc(100% - 40px);
+  max-width: 1080px;
   margin: 20px auto 80px;
   display: grid;
   gap: 34px;
@@ -137,6 +140,7 @@ h1 {
   font-size: clamp(1.9rem, 5.4vw, 3.2rem);
   max-width: 20ch;
   text-wrap: balance;
+  overflow-wrap: anywhere;
 }
 
 h1 .nowrap {
@@ -147,6 +151,7 @@ h1 .nowrap {
   margin: 14px 0 0;
   max-width: 66ch;
   color: var(--muted);
+  overflow-wrap: anywhere;
 }
 
 .hero-proof {
@@ -213,6 +218,7 @@ h1 .nowrap {
 .section p {
   margin: 0;
   color: var(--muted);
+  overflow-wrap: anywhere;
 }
 
 .section-copy {
@@ -275,6 +281,7 @@ h1 .nowrap {
 
 .project-summary {
   margin-top: 4px;
+  overflow-wrap: anywhere;
 }
 
 .project-grid {
@@ -329,6 +336,8 @@ ul {
   padding: 9px 11px;
   background: rgba(149, 175, 219, 0.06);
   transition: border-color 0.2s ease, background-color 0.2s ease;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .links-grid a:hover,
@@ -509,7 +518,8 @@ body.lightbox-open {
 }
 
 .site-footer {
-  width: min(1080px, calc(100% - 40px));
+  width: calc(100% - 40px);
+  max-width: 1080px;
   margin: 0 auto 34px;
   color: var(--muted);
   font-size: 0.9rem;
@@ -549,7 +559,7 @@ body.lightbox-open {
   }
 
   .media-thumb {
-    height: 300px;
+    height: 250px;
   }
 
   .lightbox {
@@ -563,12 +573,104 @@ body.lightbox-open {
 }
 
 @media (max-width: 720px) {
+  body {
+    line-height: 1.55;
+  }
+
+  .background-grid {
+    background-size: 44px 44px;
+    opacity: 0.8;
+  }
+
+  .site-header {
+    width: calc(100% - 20px);
+    margin-top: 10px;
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .brand {
+    font-size: 1.02rem;
+  }
+
+  .site-nav {
+    width: 100%;
+    flex-wrap: nowrap;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+
+  .site-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .site-nav a {
+    flex: 0 0 auto;
+    font-size: 0.86rem;
+    padding: 7px 11px;
+  }
+
+  main {
+    width: calc(100% - 20px);
+    margin-top: 14px;
+    gap: 18px;
+  }
+
+  .hero,
+  .section {
+    border-radius: 14px;
+  }
+
+  .hero {
+    padding: 22px 16px 18px;
+  }
+
   h1 {
-    max-width: 14ch;
+    max-width: 100%;
+    font-size: clamp(1.9rem, 9vw, 2.3rem);
+    line-height: 1.12;
+    text-wrap: pretty;
+  }
+
+  h1 .nowrap {
+    white-space: normal;
+  }
+
+  .hero-copy {
+    margin-top: 10px;
+    font-size: 0.99rem;
+  }
+
+  .hero-proof {
+    margin-top: 12px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .hero-proof::-webkit-scrollbar {
+    display: none;
   }
 
   .hero-proof span {
     font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  .hero-actions {
+    margin-top: 18px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .hero-actions .button {
+    width: 100%;
+    min-height: 44px;
   }
 
   .site-header {
@@ -576,8 +678,94 @@ body.lightbox-open {
     align-items: flex-start;
   }
 
-  .site-nav {
-    gap: 8px 6px;
+  .section {
+    padding: 18px 14px;
+  }
+
+  .section h2 {
+    margin-bottom: 12px;
+    font-size: 1.6rem;
+  }
+
+  .project-panels {
+    gap: 12px;
+  }
+
+  .project-card {
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  .project-card h3 {
+    font-size: 1.1rem;
+    line-height: 1.25;
+  }
+
+  .project-card h4 {
+    margin-top: 12px;
+    font-size: 0.88rem;
+    letter-spacing: 0.01em;
+  }
+
+  .project-summary {
+    font-size: 0.94rem;
+  }
+
+  .project-grid {
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  ul {
+    padding-left: 16px;
+  }
+
+  li {
+    margin-bottom: 6px;
+  }
+
+  .chips {
+    gap: 6px;
+  }
+
+  .chips span {
+    font-size: 0.72rem;
+    padding: 5px 8px;
+  }
+
+  .links-grid {
+    margin-top: 12px;
+    gap: 8px;
+  }
+
+  .links-grid a,
+  .contact-list a,
+  .contact-list .contact-item,
+  .contact-list .contact-location {
+    font-size: 0.8rem;
+    padding: 9px 10px;
+    line-height: 1.35;
+    border-radius: 10px;
+  }
+
+  .featured-media-grid {
+    margin-top: 12px;
+    gap: 10px;
+  }
+
+  .onepager-figure figcaption,
+  .architecture-figure figcaption {
+    padding: 8px 10px;
+    font-size: 0.72rem;
+  }
+
+  .media-thumb {
+    height: 220px;
+  }
+
+  .contact-list {
+    margin-top: 12px;
+    gap: 8px;
   }
 
   .skills-grid {
