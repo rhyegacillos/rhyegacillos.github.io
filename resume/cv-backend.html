@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rhye Gacillos - Comprehensive CV</title>
+  <title>Rayan Gacillos - Comprehensive CV</title>
   <style>
     :root {
       --ink: #0f172a;
@@ -126,19 +126,48 @@
       margin-bottom: 4px;
     }
     @media print {
+      @page {
+        size: A4;
+        margin: 0.45in;
+      }
+
       .page {
         max-width: none;
         margin: 0;
-        padding: 0.45in;
+        padding: 0;
       }
+
       a { text-decoration: none; color: inherit; }
+
+      h2,
+      .rule {
+        break-after: avoid-page;
+        page-break-after: avoid;
+      }
+
+      .project-links,
+      .item-title {
+        break-after: avoid-page;
+        page-break-after: avoid;
+      }
+
+      .item {
+        break-inside: avoid-page;
+        page-break-inside: avoid;
+      }
+
+      p,
+      li {
+        orphans: 3;
+        widows: 3;
+      }
     }
   </style>
 </head>
 <body>
   <main class="page">
     <header class="header">
-      <h1>Rhye Gacillos</h1>
+      <h1>Rayan Gacillos</h1>
       <div class="subtitle">Software Engineer | Full-Stack AI | LLM Integration | AWS Deployments</div>
       <div class="contact">
         <div>Location: Calabarzon, Philippines (Open to Remote/Hybrid)</div>
