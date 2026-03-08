@@ -21,11 +21,16 @@
 
 html {
   scroll-behavior: smooth;
+  width: 100%;
+  max-width: 100%;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  padding-inline: 20px;
   font-family: "Space Grotesk", "Segoe UI", sans-serif;
   color: var(--text);
   background:
@@ -57,7 +62,7 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-  width: calc(100% - 40px);
+  width: 100%;
   max-width: 1080px;
   margin: 18px auto 0;
   padding: 14px 16px;
@@ -100,7 +105,7 @@ body {
 main {
   position: relative;
   z-index: 1;
-  width: calc(100% - 40px);
+  width: 100%;
   max-width: 1080px;
   margin: 20px auto 80px;
   display: grid;
@@ -324,6 +329,21 @@ ul {
   grid-template-columns: 1fr;
 }
 
+.live-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.live-link .url {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #c8f6ff;
+}
+
 .links-grid a,
 .contact-list a,
 .contact-list .contact-item {
@@ -518,7 +538,7 @@ body.lightbox-open {
 }
 
 .site-footer {
-  width: calc(100% - 40px);
+  width: 100%;
   max-width: 1080px;
   margin: 0 auto 34px;
   color: var(--muted);
@@ -575,6 +595,7 @@ body.lightbox-open {
 @media (max-width: 720px) {
   body {
     line-height: 1.55;
+    padding-inline: 10px;
   }
 
   .background-grid {
@@ -583,7 +604,7 @@ body.lightbox-open {
   }
 
   .site-header {
-    width: calc(100% - 20px);
+    width: 100%;
     margin-top: 10px;
     padding: 10px 12px;
     gap: 10px;
@@ -613,7 +634,7 @@ body.lightbox-open {
   }
 
   main {
-    width: calc(100% - 20px);
+    width: 100%;
     margin-top: 14px;
     gap: 18px;
   }
@@ -746,6 +767,14 @@ body.lightbox-open {
     padding: 9px 10px;
     line-height: 1.35;
     border-radius: 10px;
+  }
+
+  .live-link {
+    gap: 6px;
+  }
+
+  .live-link .url {
+    font-size: 0.76rem;
   }
 
   .featured-media-grid {
