@@ -21,17 +21,13 @@
 
 html {
   scroll-behavior: smooth;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-  background-color: var(--bg-0);
+  overflow-x: clip;
+  background: #070d1a;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  width: 100%;
-  max-width: 100%;
   padding-inline: 20px;
   font-family: "Space Grotesk", "Segoe UI", sans-serif;
   color: var(--text);
@@ -41,7 +37,7 @@ body {
     radial-gradient(circle at 20% 88%, rgba(255, 196, 94, 0.14), transparent 30%),
     linear-gradient(165deg, var(--bg-0) 0%, var(--bg-1) 100%);
   line-height: 1.6;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .background-grid {
@@ -150,9 +146,6 @@ h1 {
   overflow-wrap: anywhere;
 }
 
-h1 .nowrap {
-  white-space: nowrap;
-}
 
 .hero-copy {
   margin: 14px 0 0;
@@ -594,9 +587,29 @@ body.lightbox-open {
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 900px) {
   body {
     line-height: 1.55;
+    padding-inline: 0;
+  }
+
+  .site-header,
+  main,
+  .site-footer {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .site-header {
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+    padding-inline: 10px;
+  }
+
+  main {
     padding-inline: 10px;
   }
 
@@ -606,9 +619,8 @@ body.lightbox-open {
   }
 
   .site-header {
-    width: 100%;
     margin-top: 10px;
-    padding: 10px 12px;
+    padding: 10px;
     gap: 10px;
   }
 
@@ -636,7 +648,6 @@ body.lightbox-open {
   }
 
   main {
-    width: 100%;
     margin-top: 14px;
     gap: 18px;
   }
@@ -657,9 +668,6 @@ body.lightbox-open {
     text-wrap: pretty;
   }
 
-  h1 .nowrap {
-    white-space: normal;
-  }
 
   .hero-copy {
     margin-top: 10px;
