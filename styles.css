@@ -824,19 +824,20 @@ body.lightbox-open {
 
   .site-nav {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 6px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 4px;
     overflow: visible;
     padding-bottom: 0;
   }
 
   .site-nav a {
     min-width: 0;
-    padding: 8px 6px;
+    padding: 7px 4px;
     text-align: center;
     white-space: normal;
     line-height: 1.2;
-    font-size: 0.8rem;
+    font-size: 0.72rem;
+    border-radius: 999px;
   }
 
   main {
