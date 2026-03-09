@@ -52,6 +52,9 @@
       font-size: 14px;
       color: var(--muted);
     }
+    .contact-location {
+      min-width: 0;
+    }
     .section {
       margin-top: 18px;
     }
@@ -137,6 +140,18 @@
         padding: 0;
       }
 
+      .contact {
+        grid-template-columns: minmax(0, 1.28fr) minmax(0, 0.72fr);
+        gap: 4px 14px;
+        font-size: 13px;
+      }
+
+      .contact-location {
+        white-space: nowrap;
+        font-size: 12.6px;
+        letter-spacing: -0.01em;
+      }
+
       a { text-decoration: none; color: inherit; }
 
       h2,
@@ -170,7 +185,7 @@
       <h1>Rayan Gacillos</h1>
       <div class="subtitle">Software Engineer | Full-Stack AI | LLM Integration | AWS Deployments</div>
       <div class="contact">
-        <div>Location: Calabarzon, Philippines (Open to Remote/Hybrid)</div>
+        <div class="contact-location">Location: Calabarzon, Philippines (Open to Remote/Hybrid)</div>
         <div>Email: gacillos.rhye@gmail.com</div>
         <div>LinkedIn: <a href="https://www.linkedin.com/in/rhyegacillos/" target="_blank" rel="noreferrer">linkedin.com/in/rhyegacillos</a></div>
         <div>Portfolio: <a href="https://rhyegacillos.github.io/" target="_blank" rel="noreferrer">rhyegacillos.github.io</a></div>
