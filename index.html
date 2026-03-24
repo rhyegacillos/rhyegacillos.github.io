@@ -310,11 +310,11 @@
           <article class="project-card featured-card">
             <h3>Autonomous Agentic Trader</h3>
             <p class="project-summary">
-              Autonomous Agentic Trader is an enterprise-grade trading simulation platform. 
-              It orchestrates four distinct LLM-driven personas within a secure "proposal-and-approval" framework. 
-              By enforcing Model Context Protocol (MCP) boundaries and portfolio guardrails, 
-              the system ensures that AI-driven strategies are validated against deterministic risk rules before execution. 
-              The entire suite includes a real-time operator dashboard and is fully automated for AWS deployment.
+              Autonomous Agentic Trader is a production-style agentic trading platform that combines a scheduler-managed multi-agent runtime, a portfolio-control workflow, 
+              and a live operator dashboard in one system. The architecture is designed around deterministic execution boundaries, persisted auditability, 
+              and operator-controlled actions rather than opaque automation. It uses a FastAPI control plane, 
+              PostgreSQL as the shared source of truth, MCP-isolated tool access, and real-time update flows to support safer execution, recovery, 
+              and human oversight in active trading workflows.
 
             </p>
 
@@ -323,31 +323,44 @@
                 <h4>Highlights</h4>
                 <ul>
                   <li>
-                    Multi-agent runtime with 4 trader personas running scheduled
-                    trade/rebalance cycles
+                    Built and deployed a production-style Autonomous Agentic Trader that combines a multi-agent trading runtime, portfolio-control workflow, and live operator dashboard in one system.
                   </li>
                   <li>
-                    MCP tool boundaries for accounts/trades/prices/research/memory
-                    (no direct DB writes from agents)
+                    Architected a FastAPI control plane to manage scheduler lifecycle, serve the frontend, expose runtime APIs, and coordinate live state updates.
                   </li>
                   <li>
-                    Research tooling: MCP-backed web search (Brave) + memory context
-                    for evidence-aware trading decisions
+                    Designed PostgreSQL as the source of truth for trader state, proposals, decisions, executions, audit records, and read-model versioning to support correctness, recovery, and replayability.
                   </li>
                   <li>
-                    Resilience guardrails: layered price resolution (Polygon ->
-                    cache -> web -> unavailable) + trade blocking on
-                    missing/invalid prices
+                    Implemented a scheduler-managed trading engine that runs concurrent trader cycles, applies market-gate rules, and executes bounded agent workflows with explicit lifecycle control.
                   </li>
                   <li>
-                    Full-stack control desk UI: live logs, holdings, transactions
-                    ledger, and portfolio timeline
+                    Integrated MCP-based tool boundaries for accounts, market data, and memory access, isolating LLM reasoning from side-effectful operations for safer execution.
                   </li>
                   <li>
-                    Automated deployment: Docker image to AWS (ECR/EC2) via
-                    Terraform + GitHub Actions (OIDC), redeploy via SSM
+                    Built a deterministic portfolio-control pipeline covering proposal intake, decision evaluation, execution queuing, approval/rejection flows, and persisted lifecycle tracking.
                   </li>
-                  <li>Research/education simulation; not financial advice</li>
+                  <li>Supported proposal-only, approval-required, and auto-execute modes while preserving operator oversight and queryable audit history.</li>
+                  <li>
+                    Implemented SSE-first real-time updates with replay, resync handling, stale-surface refresh, and disconnected-only fallback polling for resilient live UX.
+                  </li>
+                  <li>
+                    Developed a Next.js dashboard with manager and trader workspaces, pagination-safe server-side search, cache-aware filtering, and non-blocking background refresh.
+                  </li>
+                  <li>
+                    Added context-rich status surfaces and runtime chips so operators can quickly understand trader, symbol, decision, and execution status without opening detail views.
+                  </li>
+                  <li>
+                    Enforced operator safety controls through explicit scheduler start/stop actions, read-only mutation locks, typed confirmations for destructive actions, and opt-in after-hours trading.
+                  </li>
+                  <li>
+                    Improved operational clarity through event-driven UI mapping, allowing live system events to surface as understandable workflow states for faster decision-making.
+                  <li>
+                    Prioritized correctness, auditability, and resilience by anchoring user-visible outcomes to persisted records and enabling deterministic investigation of system behavior.
+                  </li>
+                  <li>
+                    Structured the platform for production-style reliability by separating control-plane responsibilities, trading execution, persistence, and live monitoring concerns across well-defined components.
+                  </li>
                 </ul>
               </div>
               <div>
@@ -360,6 +373,7 @@
                   <span>OpenAI Agents SDK</span>
                   <span>MCP</span>
                   <span>Polygon API</span>
+                  <span>Alpaca API</span>
                   <span>Docker</span>
                   <span>AWS EC2/ECR, RDS, Secrets Manager</span>
                   <span>Terraform</span>

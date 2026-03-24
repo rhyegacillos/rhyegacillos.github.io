@@ -1,378 +1,74 @@
 %PDF-1.4
-%âãÏÓ
+%“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
-<< /Type /Catalog /Pages 2 0 R >>
+<<
+/F1 2 0 R /F2 3 0 R
+>>
 endobj
 2 0 obj
-<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+<<
+/BaseFont /Helvetica /Encoding /WinAnsiEncoding /Name /F1 /Subtype /Type1 /Type /Font
+>>
 endobj
 3 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> /Contents 4 0 R >>
+<<
+/BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding /Name /F2 /Subtype /Type1 /Type /Font
+>>
 endobj
 4 0 obj
-<< /Length 6536 >>
-stream
-0.9804 0.9843 0.9922 rg
-0.9804 0.9843 0.9922 RG
-0.00 w
-0.00 0.00 612.00 792.00 re B
-BT
-/F2 24 Tf
-0.0706 0.1216 0.1804 rg
-1 0 0 1 28.00 748.00 Tm
-(Autonomous Agentic Trader - Project One-Pager) Tj
-ET
-BT
-/F1 11 Tf
-0.2627 0.3137 0.3725 rg
-1 0 0 1 28.00 731.00 Tm
-(Multi-agent trading simulation platform with tool-gated execution and operator visibility.) Tj
-ET
-BT
-/F1 10 Tf
-0.2627 0.3137 0.3725 rg
-1 0 0 1 28.00 716.00 Tm
-(Research/education simulation; not financial advice.) Tj
-ET
-0.9490 0.9608 0.9765 rg
-0.7647 0.8157 0.8667 RG
-1.00 w
-16.00 410.00 285.00 300.00 re B
-BT
-/F2 12 Tf
-0.0314 0.4902 0.4275 rg
-1 0 0 1 26.00 684.00 Tm
-(PROBLEM) Tj
-ET
-BT
-/F1 11 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 26.00 661.00 Tm
-(Most trading demos are either chat-only with) Tj
-ET
-BT
-/F1 11 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 26.00 646.00 Tm
-(no execution path or hardcoded scripts with) Tj
-ET
-BT
-/F1 11 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 26.00 631.00 Tm
-(limited transparency. Reviewers struggle to) Tj
-ET
-BT
-/F1 11 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 26.00 616.00 Tm
-(see how agent reasoning becomes controlled) Tj
-ET
-BT
-/F1 11 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 26.00 601.00 Tm
-(actions, how failures are handled, and how) Tj
-ET
-BT
-/F1 11 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 26.00 586.00 Tm
-(portfolio outcomes are explained in real time.) Tj
-ET
-0.9490 0.9608 0.9765 rg
-0.7647 0.8157 0.8667 RG
-1.00 w
-311.00 410.00 285.00 300.00 re B
-BT
-/F2 12 Tf
-0.0314 0.4902 0.4275 rg
-1 0 0 1 321.00 684.00 Tm
-(SOLUTION FEATURES) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 321.00 662.00 Tm
-(- Four autonomous trader personas with alternating) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 321.00 649.00 Tm
-(  trade/rebalance cycles.) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 321.00 634.00 Tm
-(- MCP tool boundaries for accounts, market) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 321.00 621.00 Tm
-(  pricing, research, and memory.) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 321.00 606.00 Tm
-(- Resilient market pricing path: Polygon -> cache) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 321.00 593.00 Tm
-(  -> web -> unavailable.) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 321.00 578.00 Tm
-(- Execution safety checks block invalid quantities) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 321.00 565.00 Tm
-(  and unavailable prices.) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 321.00 550.00 Tm
-(- Control APIs for scheduler start, stop, status,) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 321.00 537.00 Tm
-(  and account reset.) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 321.00 522.00 Tm
-(- Dashboard with structured logs, trace events,) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 321.00 509.00 Tm
-(  holdings, and timeline views.) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 321.00 494.00 Tm
-(- Read-only and market-auto runtime modes for) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 321.00 481.00 Tm
-(  safer cloud demos.) Tj
-ET
-0.9490 0.9608 0.9765 rg
-0.7647 0.8157 0.8667 RG
-1.00 w
-16.00 240.00 580.00 160.00 re B
-BT
-/F2 12 Tf
-0.0314 0.4902 0.4275 rg
-1 0 0 1 26.00 374.00 Tm
-(ARCHITECTURE) Tj
-ET
-0.8980 0.9608 0.9451 rg
-0.7059 0.8392 0.8078 RG
-0.90 w
-26.00 270.00 560.00 94.00 re B
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 36.00 343.00 Tm
-(1. UI calls FastAPI for trader snapshots, logs, market status, and scheduler controls.) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 36.00 330.00 Tm
-(2. Scheduler manages the trading engine lifecycle and run cadence.) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 36.00 317.00 Tm
-(3. Trader Engine executes persona agents across trade and rebalance cycles.) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 36.00 304.00 Tm
-(4. Agents call MCP tool servers for accounts, market data, and optional research memory.) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 36.00 291.00 Tm
-(5. Tool calls persist transactions, logs, and market snapshots to State Store.) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 36.00 278.00 Tm
-(6. Dashboard refresh exposes portfolio movement and operational telemetry.) Tj
-ET
-0.9098 0.9686 0.9529 rg
-0.5216 0.8000 0.7373 RG
-0.80 w
-26.00 248.00 174.80 16.00 re B
-BT
-/F1 9 Tf
-0.0314 0.4902 0.4275 rg
-1 0 0 1 33.00 251.00 Tm
-(Control plane + data plane split) Tj
-ET
-0.9098 0.9686 0.9529 rg
-0.5216 0.8000 0.7373 RG
-0.80 w
-208.80 248.00 101.30 16.00 re B
-BT
-/F1 9 Tf
-0.0314 0.4902 0.4275 rg
-1 0 0 1 215.80 251.00 Tm
-(MCP tool boundary) Tj
-ET
-0.9098 0.9686 0.9529 rg
-0.5216 0.8000 0.7373 RG
-0.80 w
-318.10 248.00 135.60 16.00 re B
-BT
-/F1 9 Tf
-0.0314 0.4902 0.4275 rg
-1 0 0 1 325.10 251.00 Tm
-(Resilient price fallback) Tj
-ET
-0.9490 0.9608 0.9765 rg
-0.7647 0.8157 0.8667 RG
-1.00 w
-16.00 16.00 580.00 216.00 re B
-BT
-/F2 12 Tf
-0.0314 0.4902 0.4275 rg
-1 0 0 1 26.00 206.00 Tm
-(TECHNOLOGY STACK) Tj
-ET
-BT
-/F2 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 26.00 186.00 Tm
-(Frontend) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 134.00 186.00 Tm
-(Next.js static export, TypeScript dashboard, portfolio and log visualizations) Tj
-ET
-0.8039 0.8392 0.8784 RG
-0.60 w
-26.00 182.00 m 586.00 182.00 l S
-BT
-/F2 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 26.00 168.00 Tm
-(Backend) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 134.00 168.00 Tm
-(FastAPI, Uvicorn, Pydantic services, scheduler control API) Tj
-ET
-0.8039 0.8392 0.8784 RG
-0.60 w
-26.00 164.00 m 586.00 164.00 l S
-BT
-/F2 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 26.00 150.00 Tm
-(AI/Agents) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 134.00 150.00 Tm
-(OpenAI Agents SDK, multi-model routing, MCP tool servers over stdio) Tj
-ET
-0.8039 0.8392 0.8784 RG
-0.60 w
-26.00 146.00 m 586.00 146.00 l S
-BT
-/F2 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 26.00 132.00 Tm
-(Data/State) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 134.00 132.00 Tm
-(State Store \(SQLite + memory\), account ledgers, logs, market cache) Tj
-ET
-0.8039 0.8392 0.8784 RG
-0.60 w
-26.00 128.00 m 586.00 128.00 l S
-BT
-/F2 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 26.00 114.00 Tm
-(Integrations) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 134.00 114.00 Tm
-(Polygon market data, Brave Search, fetch/memory MCP services) Tj
-ET
-0.8039 0.8392 0.8784 RG
-0.60 w
-26.00 110.00 m 586.00 110.00 l S
-BT
-/F2 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 26.00 96.00 Tm
-(Deployment) Tj
-ET
-BT
-/F1 10 Tf
-0.1333 0.1804 0.2392 rg
-1 0 0 1 134.00 96.00 Tm
-(Docker, AWS ECR + EC2, Terraform, GitHub Actions, SSM deployment) Tj
-ET
-0.8039 0.8392 0.8784 RG
-0.60 w
-26.00 92.00 m 586.00 92.00 l S
-endstream
+<<
+/Contents 8 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 7 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
+>>
 endobj
 5 0 obj
-<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+<<
+/PageMode /UseNone /Pages 7 0 R /Type /Catalog
+>>
 endobj
 6 0 obj
-<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+<<
+/Author (\(anonymous\)) /CreationDate (D:20260324022700+00'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20260324022700+00'00') /Producer (ReportLab PDF Library - \(opensource\)) 
+  /Subject (\(unspecified\)) /Title (\(anonymous\)) /Trapped /False
+>>
+endobj
+7 0 obj
+<<
+/Count 1 /Kids [ 4 0 R ] /Type /Pages
+>>
+endobj
+8 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 3869
+>>
+stream
+Gb"/)>Ar7U(4OT5i+$@1X1I$U'Nh$[7=fQLC!qb?"rP]"D.t2P.Oc\:@"8*'LXa;'Pt'EN1jR^XBOY+*UsA*!c@m<\n`-&;P:^:JYLnd-*qOc&[:Wb/K^@uo]t6?$HK)>VL9BQ_d3<%XB]6mf&<GdSa.<*c0Og%Y/GodgrG^^b9;XTp&F&kgp^jsS&jGnm>/L#JJ^[[p/PEX>NFo@PU9*tI-[,/1]D@qd?7DHQeU>A:I`'LaG.`'<48q#-]U1^q*;c*ZLNX?OpMS#]9Cp#lg!*_uo=PV`qc&I+"lBU)rlm'[9Uhj'ANA64Xq5F('QlV"Zs?^BPBj_'2m""2_cE;48ud1hMd4O?=k61\lrL.PFWk\L(b\fgj>V\48gn#hrZt?=Y-XDS.\6.aXqTI>FqtIuXiHsa>L$NeHlW#L'X5p`4E2QgHW&kFODUC-Gn-&@+fo(<j'q1E^CpulHH)u3VRqfCO?(]NL:KmF-(E04/;26gb(No_@-aFhZ1N*=koP#s3WV,\)9#f=J<'XD8^0HT#^)>hgP9-c%NkAUI3,IF&"GX31W->D'SJ1-/Zfi98n@JE0($1<>:@bfUMpOS`HK<"O]anZ\VApdMp9g8J_`Eb1VM8FfQQ"mC!"gbj#'KjG*SC\ZT;#OYe7'V"qoj("lBW_IpqI_dRh'Se)*s7hg]CEp:EJ!SEV:4Bi>9pg[Z!Vf6bX(?'iKYHVYWDmuPXVp=Uq!7"Oa3oq%@J8lej]if']XaYa.;]!V5ZP(qtLD'\IMnhLgNRuo9*j'/1\30"2HT(+/PlSI+0bmIJqTquoB]?19:.`q6"IafdN\(b/f][$P/%:D;hCJoV`RQ@2[W.isf,qd'_rEJkSdq4/;MR>P&N>G:[[A\;.(5>'CY74NegMG./cGQe(K`P!_@7?m%%-SdSQ5!Np3t;?GUsO,@+9IuTR[5YdRVj9f1Jo/k<1cR?]05]%fLDOWMA&3p.JaLl76ql\NZZK#O').Ps+"Ks""uE*G*aCcYlp6aU?8_oVdHC7OC/=Lh[j1]kru_m*4K9#3H5qml#p8ds3iiEcq/EOqWA+I`4F=4!/Kln*CoLNs."Y1b[Nhfe'BoVfG,C7OIP'tD-FYX&6>mcd]l&Z='.F(KY:FW<l=!*5-W^)fR'de<u2q_T.,"6%cn41!YArkVL&k00"ZA*&+@XM"WDtC&R+'>a^7+#:/^rlT)JHHK%3a7qLoPc2@:)\nqGTd7Z#=GcL2M23FO<'o(!f*.=$p?>RODCH;VRXI#T7Wfe0ZEE8]ZLmd9`94ar%PpG`"8Nd8$f%d\%j>l*Du%@?\"m2dnB=fO3EP<5j'8hIf)MhP:C99%`20A/E$*E+l)2Ck:2X\l`9V1U;gU]rgk`J?m24Ce#+"ueMOK6[uhXV[jM:)LK1raVNRQqJ(22rY!Kk-*cKmJNs:>%%k;VA#UT>_LF&G=-0XZdX9T^gV8#ahb^+j\jM9j`E*El*DW%F\E(pk\1TX[j9/t5*f"rM](ALWLfj#aFC'*,f]6"+(:iKYA5+t,ZS9a=l$p&?;b*]PBfd#?O7@3DlY'Xo"*J9D]9+b)6YMFKW:MVMV\F/RHfdI3oLf\j[G1d@O7L!jXLLGk?8X?1j4?I&K\fs/4g]b\*]=#G`puFE[76nZaO+EMjgKTk17ec9l7ZaC0*r+`?\OVSckD;83GW]om7BD&+;>Wg^D7'he-2DJoO#_omuec(0GmO7h$T19kLO0R9q"aI:Qk-3f;b_,)9k]JOOaRlj2Z064_%g2V-Fo^Feh^G7.;gOB,'EJfoBBOSt1e=behfPSG?.6#gDJJ$u''d/mJROWc,`AJ=dti1Yg9Q3$H^al6<l!o9Q`dNVeOqT1?=+<AU")Pp86'tYpkoBleKi:#-%0ST(Ng+*ZZXRhjk'kJgD,^:1A8T<OpXO<>8*[_<a,KjtY"Sf22MMre2<82;LLXo!43]7[8kard+'5?2i5r)IN=D+n>XjXSmrcY![SU/L61;-D]F*#e5bP99D8dQ;^?(,<:gqX2)M_)\Thr7+i#"V"1WM1nK;Lrqu)G*@YeEE"O.^_,r2-3%"V(mF+?f/%Lnn'QI(2OR9pUY0*X=r(I,i5nRm7#clR':'REoR+cffu.R^1d+IW]@].b*98=-N$*Yh7[pW*PWAkP\Sr><U8/a<%I8``HT'YdsUHfjKK)(8Tmu85'4F;8%3ld&ABTU"sb]*hI\G!rMI!u_DI*]/KRY9aNsIc0HAT-$i%C=l*IRQ:clB@`6]=4V^UF1#/:\'d2V6<E5V9>WUAKTVhYB?ZeHHW)i1>i"L1^eX5/#ogLaAp[J`3[97r'AH;^X^etcK(mNQ`o>jShsn=8FkehRp.F$=g:e*ds6:EL5ORVAj4]"i"N9ge:c=!F3;UqH-JS^m:%]9SeMLc,6$MAfUD"oMdA$]5,WS8@IYDSK8=%%?eJBBkmPpm\KHF+C-^DMde."Z'9sjG5B/b`qnVjA<rQDqj]q!"nV"JY[0p$=hk'e=3G%cnm#AWr&8;P7Osn7dm6DmB!8hOpldjeT]Ho?L-!Zr_0a!Z&MSKVkNUR?73.Z1fV@i)piE_N00!Zj(i3!,7,n1$4MB,D4<WYMjhB0*Mh%UcmDN$U3W/;-sMg78_!;WP1Kg:ojCj6d-bB#Vghf0F\_2]QOi4q5I[C$p(>SM9\=B-00q]PJC0l?oRf+[6amT7Or8;pTlEed5.i@e?nBp\iW-?S8>)]7>e`B<iUnf*171pSVPN5+V!'/@q8Nb"V5)?,26i=?<pLGAnF'qAs#S$:UM8)?e_QfP7jX=6PU.V-/!9@k>ajoT&f%^LffE3G7QBo9WLf5pHHpXrHUmbOm).Skl(7kI,lgW'8("7`^.K6</Tec`TQK"kf75baZ$#>h-eAE+9<CP2,]./tXuoMl,jAU&0GoN3+tUuPo#FH,d1hNQX:iP!Q#5CLU*)<).3#E5GKt>H.SqoUN<sGOh<DGdMX+-6\WOGeg1L.-S#qO0N+9%62=76<NAC56?I[ZrE%p$B6`2>SIP6gGp%Y>R@fX?/9N]WQ(-B%cC.E?,RRSTZnTK`Ef,Z*B'>l6"D+[@YBQ@^r!0Tp<e9Y_ip5Yk@#pT.%KMPHRp`s\G)-GR7WC[,=DtDBc^aJL'IsfBU2tJc@q;4]PGH]m&n`eZsJ,Sp-e(](::t8@k3&3Ql#Z#;WW%=5K&lH/_,%>6!FBs*3K&AUs""mRtYo.`UrI4++7/+5-%Tg9"3``Nh-.p*G-LIWA.sTY)[$fb&2Vq*8f69AU>rP?\a)&?2[VsJIW'3!XFF:-_<^^"qY/0111*qU*`P&MT`*+,j!?a8'i)U#E%F$d<RI.R7R-dRL[k\9SF^>buh3,T/]'!:t1e<o/B3)UKE/X!sUpQ,ec!HquFXh=-@!N;If:q126>Ugt>b87tY.-<E%St;-V+oKAoMO^/[WaJb<uXm?*=Q]/]#)`^nI<,m\%1C!Rhm*RVr@NaSt]']8W`mC,ag5e/o*GoKRLGX(!0h;`:0+'$m.X+F1+#eCKisaBZ-#XF@RX;cbp\T:W32Z7s_<5n`*"2j(PPfI7D`;SamU)W;Zc&#dHN=_R1/&p,J3CU%1)j<,7!jHAWacS0(6sh-^F41SUn_1F1J+/c%NgN2=sEC-22-WHreMUUEp+VjH],GR3sfM^],O4FV2H3/TMIBA)VMCr;)&5/+S3(!=qO2:L*a;oR/[f%mYB@OmREGOqsdC3uTkm^r#g8VgdB/n2V9khA%U/5./EmDA*`PqO+uO?Rj!3L9'QfbWN^YH[nX<PuXne>^e2;usulAstuQ^&$)MB>q=%\Bb-.TBg]2<.!c:DdD0^d^jo@\)TAf7bA]14Y5l!'Y8.uD`-:AG&FRg&F"D!]!@P"!%,XPE<~>endstream
 endobj
 xref
-0 7
+0 9
 0000000000 65535 f 
-0000000015 00000 n 
-0000000064 00000 n 
-0000000121 00000 n 
-0000000257 00000 n 
-0000006844 00000 n 
-0000006914 00000 n 
+0000000061 00000 n 
+0000000102 00000 n 
+0000000209 00000 n 
+0000000321 00000 n 
+0000000524 00000 n 
+0000000592 00000 n 
+0000000872 00000 n 
+0000000931 00000 n 
 trailer
-<< /Size 7 /Root 1 0 R >>
+<<
+/ID 
+[<c2fc7401d4786f5945f57e3eafce92ce><c2fc7401d4786f5945f57e3eafce92ce>]
+% ReportLab generated PDF document -- digest (opensource)
+
+/Info 6 0 R
+/Root 5 0 R
+/Size 9
+>>
 startxref
-6989
+4891
 %%EOF
