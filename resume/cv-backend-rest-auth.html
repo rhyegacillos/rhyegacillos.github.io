@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rayan Gacillos - Backend API and Auth Flow CV</title>
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #475569;
+      --accent: #1d4ed8;
+      --line: #dbe3ef;
+      --soft: #f8fafc;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--ink);
+      background: #ffffff;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 28px 28px 36px;
+    }
+    .header {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 12px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 36px;
+      letter-spacing: -0.3px;
+      line-height: 1.15;
+    }
+    .subtitle {
+      margin-top: 4px;
+      font-size: 18px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .contact {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px 16px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .contact-location {
+      min-width: 0;
+    }
+    .section {
+      margin-top: 18px;
+    }
+    .compact-section {
+      break-inside: avoid-page;
+      page-break-inside: avoid;
+    }
+    h2 {
+      margin: 0;
+      font-size: 22px;
+      color: var(--accent);
+      letter-spacing: 0.2px;
+    }
+    .rule {
+      border: 0;
+      border-top: 1px solid var(--line);
+      margin: 6px 0 10px;
+    }
+    p {
+      margin: 0 0 8px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 2.8fr;
+      border: 1px solid var(--line);
+    }
+    .grid .k,
+    .grid .v {
+      padding: 9px 10px;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .grid .k {
+      font-weight: 700;
+      background: var(--soft);
+      border-right: 1px solid var(--line);
+    }
+    .grid .k.first,
+    .grid .v.first {
+      border-top: 0;
+    }
+    .item {
+      margin-bottom: 12px;
+    }
+    .item-title {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+    .meta {
+      margin: 2px 0 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    ul {
+      margin: 6px 0 0;
+      padding-left: 18px;
+    }
+    li {
+      margin: 0 0 5px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .project-links {
+      margin-top: 4px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .project-links span {
+      display: inline-block;
+      margin-right: 14px;
+      margin-bottom: 4px;
+    }
+    @media print {
+      @page {
+        size: A4;
+        margin: 0.45in;
+      }
+
+      .page {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .contact {
+        grid-template-columns: minmax(0, 1.28fr) minmax(0, 0.72fr);
+        gap: 4px 14px;
+        font-size: 13px;
+      }
+
+      .contact-location {
+        white-space: nowrap;
+        font-size: 12.6px;
+        letter-spacing: -0.01em;
+      }
+
+      a { text-decoration: none; color: inherit; }
+
+      h2,
+      .rule {
+        break-after: avoid-page;
+        page-break-after: avoid;
+      }
+
+      .project-links,
+      .item-title {
+        break-after: avoid-page;
+        page-break-after: avoid;
+      }
+
+      .item {
+        break-inside: avoid-page;
+        page-break-inside: avoid;
+      }
+
+      .compact-section {
+        break-inside: avoid-page;
+        page-break-inside: avoid;
+      }
+
+      p,
+      li {
+        orphans: 3;
+        widows: 3;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <h1>Rayan Gacillos</h1>
+      <div class="subtitle">Backend Software Engineer</div>
+      <div class="contact">
+        <div class="contact-location">Location: Calabarzon, Philippines (Open to Remote/Hybrid)</div>
+        <div>Email: gacillos.rhye@gmail.com</div>
+        <div>LinkedIn: <a href="https://www.linkedin.com/in/rhyegacillos/" target="_blank" rel="noreferrer">linkedin.com/in/rhyegacillos</a></div>
+        <div>Portfolio: <a href="https://rhyegacillos.github.io/" target="_blank" rel="noreferrer">rhyegacillos.github.io</a></div>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Professional Profile</h2>
+      <hr class="rule" />
+      <p>
+        Backend-focused Software Engineer with 7+ years of experience building and maintaining APIs,
+        integrations, and data-driven application backends. Strong in Java (Spring Boot) and Python
+        (FastAPI/Django), with practical portfolio work centered on REST API design, JWT-based auth
+        verification, API key-backed service integration, async job workflows, schema-aware persistence,
+        and production reliability.
+      </p>
+      <p>
+        Recent work includes authenticated API backends, Clerk JWT/JWKS verification, bearer-token route protection,
+        API key-managed provider integrations, user-scoped data access, RAG pipelines with embedding-backed retrieval,
+        and serverless/container deployment on AWS using Lambda, API Gateway, App Runner, Docker, Terraform, and
+        GitHub Actions. Brings practical experience in third-party API integration, backend troubleshooting,
+        deployment workflows, and technical documentation.
+      </p>
+    </section>
+
+    <section class="section compact-section">
+      <h2>Core Skills</h2>
+      <hr class="rule" />
+      <div class="grid">
+        <div class="k first">Languages</div>
+        <div class="v first">Python, Java, TypeScript, SQL</div>
+        <div class="k">Backend</div>
+        <div class="v">FastAPI, Django, Spring Boot, REST API design, async job orchestration, middleware patterns, SSE streaming</div>
+        <div class="k">Auth / Security</div>
+        <div class="v">Clerk JWT verification via JWKS, bearer-token API access patterns, user-scoped data access, API key-managed service access, quota enforcement, OIDC for CI/CD</div>
+        <div class="k">Frontend</div>
+        <div class="v">Next.js, React, TypeScript</div>
+        <div class="k">AI / LLM</div>
+        <div class="v">LLM integration, tool orchestration, agents (OpenAI Agents SDK), RAG, vector-store retrieval, embedding pipelines, multi-provider routing + fallback</div>
+        <div class="k">Cloud / DevOps</div>
+        <div class="v">AWS (Lambda, API Gateway, S3, CloudFront, ECR, EC2, App Runner), Docker, Terraform, GitHub Actions CI/CD, Route 53, ACM, OIDC</div>
+        <div class="k">Data / Infra</div>
+        <div class="v">SQLite, Redis (Upstash), vector store (RAG), embeddings, MCP tool servers, OpenTelemetry -> Sentry, CloudWatch</div>
+      </div>
+    </section>
+
+    <section class="section compact-section">
+      <h2>Backend Highlights</h2>
+      <hr class="rule" />
+      <div class="grid">
+        <div class="k first">REST APIs</div>
+        <div class="v first">Designed and implemented backend APIs for chat/jobs/memory/uploads, summary/chat/email/RAG flows, and multi-step decision/report workflows with clear response shaping and status handling.</div>
+        <div class="k">Auth Flow</div>
+        <div class="v">Implemented Clerk JWT verification against JWKS, route-level auth checks, user-scoped persistence, plan/quota gating, and deployment auth using GitHub Actions OIDC.</div>
+        <div class="k">Integrations</div>
+        <div class="v">Integrated model providers, Brave search, Resend email, Polygon market data, and analytics/reporting platform APIs; hands-on backend integration experience with Google, Meta, and TikTok data access, API key-managed service access, payload validation, and retry/fallback handling.</div>
+        <div class="k">Schema / Data</div>
+        <div class="v">Managed SQLite-backed usage and artifact persistence, user-scoped data stores, vector-store memory/RAG patterns, and schema-aware backend logic with safe change discipline.</div>
+        <div class="k">Serverless</div>
+        <div class="v">Strong equivalent serverless background through AWS Lambda, API Gateway, App Runner, CloudFront, and container-based deployments with Terraform and GitHub Actions.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Selected Backend Project Experience</h2>
+      <hr class="rule" />
+
+      <div class="item">
+        <p class="item-title">Digital Assistant (Agentic AI) - Serverless on AWS</p>
+        <div class="project-links">
+          <span>Live: <a href="https://digital-assistant.agentairg.site/" target="_blank" rel="noreferrer">digital-assistant.agentairg.site</a></span>
+          <span>One-Pager: <a href="https://rhyegacillos.github.io/assets/digital-assistant/onepager.pdf" target="_blank" rel="noreferrer">Open One-Pager</a></span>
+          <span>Architecture: <a href="https://rhyegacillos.github.io/assets/digital-assistant/architecture.png" target="_blank" rel="noreferrer">View Architecture</a></span>
+        </div>
+        <ul>
+          <li>Implemented FastAPI REST endpoints for chat, job status, memory approval, conversation history, and direct-to-S3 upload flow.</li>
+          <li>Designed async API + worker pattern where `POST /chat` returns a `job_id` and background execution completes long tool chains safely.</li>
+          <li>Added user-scoped memory approval flow, quota enforcement, and high-risk truth-gated rendering so API responses reflect verified tool outcomes.</li>
+          <li>Maintained backend integrations that depend on managed service credentials and API keys for search, PDF, email, uploads, and memory extraction workflows.</li>
+          <li>Deployed serverless backend on AWS Lambda + API Gateway with S3, CloudFront, ECR, Terraform, and GitHub Actions CI/CD.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <p class="item-title">IdeaGen - Agentic Multi-Model Decision Platform</p>
+        <div class="project-links">
+          <span>Live: <a href="https://ideagen.agentairg.site/" target="_blank" rel="noreferrer">ideagen.agentairg.site</a></span>
+          <span>One-Pager: <a href="https://rhyegacillos.github.io/assets/ideagen/onepager.pdf" target="_blank" rel="noreferrer">Open One-Pager</a></span>
+          <span>Architecture: <a href="https://rhyegacillos.github.io/assets/ideagen/architecture.png" target="_blank" rel="noreferrer">View Architecture</a></span>
+        </div>
+        <ul>
+          <li>Built FastAPI backend that orchestrates generate, compare, decision-summary, and execution-plan workflows with durable saved artifacts.</li>
+          <li>Implemented Clerk JWT verification via JWKS and route-level bearer-token gating for authenticated access, usage tracking, and plan-aware limits.</li>
+          <li>Handled multi-provider inference orchestration across OpenAI, Gemini, DeepSeek, and Grok with ordered fallback and contract validation.</li>
+          <li>Maintained SQLite-backed persistence for usage, reports, comparisons, and execution artifacts, including cache-before-infer patterns.</li>
+          <li>Worked with environment-managed API keys for model providers and Resend email delivery inside authenticated backend flows.</li>
+          <li>Packaged and deployed the application through Docker and AWS App Runner from ECR with custom-domain support.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <p class="item-title">MediNotes - Clinical Documentation and RAG Workflow Backend</p>
+        <div class="project-links">
+          <span>Live: <a href="https://medinotes.agentairg.site/" target="_blank" rel="noreferrer">medinotes.agentairg.site</a></span>
+          <span>One-Pager: <a href="https://rhyegacillos.github.io/assets/medinotes/onepager.pdf" target="_blank" rel="noreferrer">Open One-Pager</a></span>
+          <span>Architecture: <a href="https://rhyegacillos.github.io/assets/medinotes/architecture.png" target="_blank" rel="noreferrer">View Architecture</a></span>
+        </div>
+        <ul>
+          <li>Built authenticated REST endpoints for summary generation, scoped chat, email, and RAG-backed patient history retrieval.</li>
+          <li>Implemented Clerk JWT verification against JWKS and user-bound access to consultation, chat, and memory-backed workflows.</li>
+          <li>Maintained RAG pipeline with embedding-backed vector storage, retrieval of relevant patient history, and evidence-linked outputs.</li>
+          <li>Supported long-running backend operations through SSE streaming, resumable job IDs, and Upstash-backed async coordination patterns.</li>
+          <li>Managed provider and service credentials for model routing, transcription, vision, research, and email-related backend operations.</li>
+          <li>Added QA-driven regeneration, evidence mapping, and persistence of summary, notes, and evidence for later retrieval.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <p class="item-title">Autonomous Agentic Trader - API, Runtime Control, and Deployment Automation</p>
+        <div class="project-links">
+          <span>Live: <a href="https://autonomous-trader.agentairg.site/" target="_blank" rel="noreferrer">autonomous-trader.agentairg.site</a></span>
+          <span>One-Pager: <a href="https://rhyegacillos.github.io/assets/autonomous-trader/onepager.pdf" target="_blank" rel="noreferrer">Open One-Pager</a></span>
+          <span>Architecture: <a href="https://rhyegacillos.github.io/assets/autonomous-trader/architecture.png" target="_blank" rel="noreferrer">View Architecture</a></span>
+        </div>
+        <ul>
+          <li>Implemented FastAPI control APIs for scheduler lifecycle, market status, runtime control, and live operational visibility.</li>
+          <li>Built backend boundaries around tool-driven execution, price lookup, account state, and research access for safer runtime behavior.</li>
+          <li>Added layered failure handling for upstream data issues, including fallback pricing resolution and execution blocking on invalid state.</li>
+          <li>Delivered Docker-to-ECR deployment path with EC2 rollout automation through Terraform, GitHub Actions, OIDC, and SSM redeploy.</li>
+          <li>Maintained operational control surfaces that expose logs, holdings, transactions, and runtime state for debugging and monitoring.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Professional Experience</h2>
+      <hr class="rule" />
+
+      <div class="item">
+        <p class="item-title">Independent / Self-Directed Projects - Software Engineer (Full-Stack &amp; LLM Integration)</p>
+        <div class="meta">Jan 2026 - Present | Remote</div>
+        <ul>
+          <li>Designed and implemented authenticated backend APIs in FastAPI for multi-step application flows, async job handling, RAG retrieval, email delivery, and user-scoped persistence.</li>
+          <li>Built auth-related controls including Clerk JWT verification via JWKS, route-level bearer-token gating, quota enforcement, and user-specific data boundaries.</li>
+          <li>Worked with API key-managed provider integrations and environment-based secret handling for model access, search, email, and other backend services.</li>
+          <li>Maintained backend persistence and retrieval patterns using SQLite, Redis, and vector-store style memory/RAG components with schema-aware logic.</li>
+          <li>Delivered AWS serverless and container workloads using Lambda, API Gateway, App Runner, EC2, Terraform, and GitHub Actions CI/CD with OIDC.</li>
+          <li>Produced technical documentation, architecture references, and operational notes to support debugging, deployment, and interview review.</li>
+        </ul>
+      </div>
+
+        <div class="item">
+          <p class="item-title">Propelrr - Java Software Developer</p>
+          <div class="meta">Jan 2018 - Oct 2025 | Makati City, Philippines</div>
+          <ul>
+          <li>Developed and maintained backend services and REST APIs for fintech and business applications using Java and Spring Boot.</li>
+          <li>Integrated Google, Meta/Facebook, and TikTok platforms to pull analytics and reporting data for business dashboards, client reporting, and internal data workflows.</li>
+          <li>Worked on backend data flows that transformed multi-source analytics inputs into structured outputs, reports, and dashboards used by internal teams and clients.</li>
+          <li>Supported frontend integration points with Angular and React applications by keeping API behavior, payloads, and backend logic clear and predictable.</li>
+          <li>Contributed to issue investigation, backend fixes, and practical delivery work in a production environment with cross-functional collaboration.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <p class="item-title">Toshiba - Systems Technical Support</p>
+        <div class="meta">Nov 2007 - Jan 2018 | Region IV-A (CALABARZON), Philippines</div>
+        <ul>
+          <li>Provided end-to-end IT hardware support for manufacturing operations (troubleshooting, repair, preventive maintenance, parts management).</li>
+          <li>Prepared equipment documentation and SOPs to improve user adoption, consistency, and operational efficiency.</li>
+          <li>Supported cost optimization by identifying suitable local alternatives for imported components and peripherals.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Education</h2>
+      <hr class="rule" />
+      <div class="item">
+        <p class="item-title">University of Batangas</p>
+        <div class="meta">Bachelor of Science, Computer Engineering | 2016 - 2017</div>
+      </div>
+      <div class="item">
+        <p class="item-title">Technological University of the Philippines</p>
+        <div class="meta">Computer Engineering Technology/Technician (Vocational) | 2003 - 2007</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Certifications</h2>
+      <hr class="rule" />
+      <ul>
+        <li>AI Engineer Agentic Track: The Complete Agent &amp; MCP Course</li>
+        <li>AI Engineer Core Track: LLM Engineering, RAG, QLoRA, Agents</li>
+        <li>Spring Framework Masterclass: Beginner to Professional</li>
+        <li>Learn Spring Boot in 100 Steps - Beginner to Expert</li>
+        <li>Build Modern Responsive Website with HTML5, CSS3 &amp; Bootstrap</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Languages</h2>
+      <hr class="rule" />
+      <p>Tagalog (Native/Bilingual), English (Professional Working)</p>
+    </section>
+  </main>
+</body>
+</html>

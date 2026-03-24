@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Digital Assistant — Case Study</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="header">
+        <h1>Digital Assistant — Case Study</h1>
+        <p class="subtitle">Persona-driven, serverless assistant with contract-first truth gating and safe tool orchestration.</p>
+      </header>
+
+      <section class="section">
+        <h2>Role</h2>
+        <p>Built orchestrator, tool integrations, async-worker pipeline, and truth-gating flow.</p>
+
+        <h2>Problem</h2>
+        <p>Users need an assistant that can call real tools (search, generate PDFs, send email) without producing unverifiable claims or performing unsafe actions. Tool-driven workflows are high-risk and require validation before delivery.</p>
+
+        <h2>Approach</h2>
+        <p>
+          We classify each request by risk: low-risk chat remains conversational; high-risk actions (PDF/email/research) follow a contract-first flow. The LLM returns a strict intent payload, the server executes tools and captures canonical facts (artifact URLs, statuses, sources), and a truth gate validates those facts against the intent. Only when the truth gate passes does the server render and deliver the final output. Long-running jobs run via background workers so the UI remains responsive. Persona behavior and quotas enforce safety and cost controls.
+        </p>
+
+        <h2>Why this approach</h2>
+        <ul>
+          <li><strong>Safety:</strong> Outputs that claim actions or citations are only published when canonical proof exists.</li>
+          <li><strong>Reliability:</strong> Background workers prevent timeouts for multi-step workflows.</li>
+          <li><strong>Control:</strong> Quotas and gating limit risky or expensive operations.</li>
+          <li><strong>Auditability:</strong> Canonical artifacts and verdicts make outputs traceable and reproducible.</li>
+        </ul>
+
+        <h2>Tech</h2>
+        <p>FastAPI · Next.js/React · TypeScript · AWS Lambda/API Gateway · S3/CloudFront · Terraform · Redis/Upstash · OpenTelemetry → Sentry</p>
+
+        <h2>Outcome</h2>
+        <p>Delivered a production-ready persona agent that safely executes and validates high-risk tool workflows (PDF/email/research) with server-side quota governance and observability. See architecture and one-pager for implementation details.</p>
+
+        <h2>How to try</h2>
+        <p>
+          Live demo: <a href="https://digital-assistant.agentairg.site/" target="_blank" rel="noopener noreferrer">digital-assistant.agentairg.site</a><br />
+          One-pager (PDF): <a href="/assets/digital-assistant/onepager.pdf" target="_blank" rel="noopener noreferrer">assets/digital-assistant/onepager.pdf</a><br />
+          Architecture image: <a href="/images/digital-assistant/digital%20assistant.png" target="_blank" rel="noopener noreferrer">images/digital-assistant/digital assistant.png</a><br />
+          Truth Gate spec: <a href="/portfolio-documents/digital-assistant/OUTPUT_TRUTH_GATE_SPEC.md" target="_blank" rel="noopener noreferrer">OUTPUT_TRUTH_GATE_SPEC.md</a>
+        </p>
+
+      </section>
+
+    </main>
+  </body>
+</html>
