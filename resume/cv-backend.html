@@ -183,7 +183,7 @@
   <main class="page">
     <header class="header">
       <h1>Rayan Gacillos</h1>
-      <div class="subtitle">Software Engineer | Full-Stack AI | LLM Integration | AWS Deployments</div>
+      <div class="subtitle">Software Engineer (Full-Stack &amp; AI)</div>
       <div class="contact">
         <div class="contact-location">Location: Calabarzon, Philippines (Open to Remote/Hybrid)</div>
         <div>Email: gacillos.rhye@gmail.com</div>
@@ -196,20 +196,15 @@
       <h2>Professional Profile</h2>
       <hr class="rule" />
       <p>
-        Software Engineer with 7+ years in backend development and API integrations, now focused on
-        production-oriented full-stack AI applications. Strong in Java (Spring Boot), Python (FastAPI/Django),
-        and TypeScript/React stacks, with practical experience in agent/tool orchestration, structured outputs,
-        async execution patterns, usage guardrails, and observability.
+        Software Engineer with 7+ years of experience in backend architecture and API integration, now dedicated to building full-stack AI applications where reliability and system integrity are the primary benchmarks of success. I focus on implementing rigorous control layers—including structured validation, fallback orchestration, and observability—to bridge the gap between experimental models and trustworthy products.
       </p>
       <p>
-        Builds and deploys cloud-native workloads on AWS using serverless and container-based architectures,
-        Docker, Terraform, and GitHub Actions CI/CD. Recent portfolio work demonstrates end-to-end delivery from
-        architecture and implementation to live deployment, operational controls, and documentation.
+        Experienced in Java (Spring Boot), Python (FastAPI/Django), and TypeScript/React, I specialize in designing asynchronous, serverless architectures on AWS that maintain high performance and clear user feedback even during complex, tool-heavy workflows. I aim to contribute to high-stakes environments that require a disciplined approach to AI model output verification  and server side rules for deterministic. My goal is to deliver end-to-end solutions that are technically sound, operationally transparent, and optimized for seamless stakeholder navigation.
       </p>
     </section>
 
     <section class="section">
-      <h2>Core Skills</h2>
+      <h2>Tech Stack</h2>
       <hr class="rule" />
       <div class="grid">
         <div class="k first">Languages</div>
@@ -226,6 +221,8 @@
         <div class="v">Redis (Upstash), SQLite, PostgreSQL, SQLAlchemy, Alembic, vector store (RAG), MCP tool servers, OpenTelemetry -> Sentry, CloudWatch</div>
         <div class="k">AI-Assisted Tool</div>
         <div class="v">Claude Code, ChatGPT Codex, Gemini CLI, Github Copilot</div>
+        <div class="k">AI Native IDEs</div>
+        <div class="v">Cursor, Windsurf, IntelliJ, VS Code</div>
       </div>
     </section>
 
@@ -234,59 +231,95 @@
       <hr class="rule" />
 
       <div class="item">
-        <p class="item-title">Digital Assistant (Agentic AI) - Serverless on AWS</p>
+        <p class="item-title">Digital Assistant (Agentic AI)</p>
         <div class="project-links">
           <span>Live: <a href="https://digital-assistant.agentairg.site/" target="_blank" rel="noreferrer">digital-assistant.agentairg.site</a></span>
         </div>
-        <ul>
-          <li>Serverless assistant with tool orchestration (search, PDF export, email, uploads) and user-approved memory.</li>
-          <li>MCP tool-server boundaries isolate search/PDF/email/upload/memory capabilities from core orchestration.</li>
-          <li>Context-specific persona behavior adapts output by role/context while enforcing safety/tool constraints.</li>
-          <li>Async API + worker execution, daily quota governance, and OpenTelemetry -> Sentry observability.</li>
-          <li>AWS delivery: Lambda, API Gateway, S3, CloudFront, ECR with Terraform + CI/CD automation.</li>
-        </ul>
+        <div class="item-subsection">
+          <div class="item-subtitle" style="font-weight:600; margin-top:10px; margin-bottom:2px; color:var(--accent);">Project Overview</div>
+          <p style="margin:0 0 10px 0; font-size:15px; line-height:1.6;">
+            A high-autonomy serverless assistant built to handle complex workflows through secure tool orchestration. The system manages tasks like real-time search, document processing, and email automation, all governed by a user-approved memory layer to ensure personalized yet safe interactions.
+          </p>
+        </div>
+        <div class="item-subsection">
+          <div class="item-subtitle" style="font-weight:600; margin-top:8px; margin-bottom:2px; color:var(--accent);">Key Technical Details</div>
+          <ul style="margin-top:0;">
+            <li><b>Secure Orchestration:</b> Implements MCP tool-server boundaries to strictly isolate external capabilities (Search, PDF, Email) from the core LLM logic.</li>
+            <li><b>Reliable Architecture:</b> Built on an Async API + Worker model to handle long-running tasks without timeouts, monitored via OpenTelemetry and Sentry.</li>
+            <li><b>Infrastructure as Code:</b> Fully automated AWS deployment (Lambda, ECR, S3) managed through Terraform and a robust CI/CD pipeline.</li>
+            <li><b>Governance:</b> Features a built-in quota management system to control costs and prevent API abuse.</li>
+          </ul>
+        </div>
+        <hr class="rule" />
       </div>
 
       <div class="item">
-        <p class="item-title">IdeaGen - Agentic Multi-Model Decision Platform</p>
+        <p class="item-title">IdeaGen — Agentic Multi-Model Decision Platform</p>
         <div class="project-links">
           <span>Live: <a href="https://ideagen.agentairg.site/" target="_blank" rel="noreferrer">ideagen.agentairg.site</a></span>
         </div>
-        <ul>
-          <li>Decision workflow: Generate -> Compare -> Decision Summary -> Execution Plan (Investment Readiness Assessment).</li>
-          <li>Multi-provider model routing with fallback chains (OpenAI, Gemini, DeepSeek, Grok).</li>
-          <li>Contract-first outputs with validation/retries, cache-before-infer, snapshot durability, and plan-aware quotas.</li>
-          <li>Delivery pipeline includes PDF rendering, email delivery, and durable run/comparison/report persistence.</li>
-          <li>AWS deployment on App Runner from ECR with Route 53 custom domain support.</li>
-        </ul>
-      </div>
-
-      <div class="item">
-        <p class="item-title">Autonomous Agentic Trader - Multi-Agent Trading Simulation</p>
-        <div class="project-links">
-          <span>Live: <a href="https://autonomous-trader.agentairg.site/" target="_blank" rel="noreferrer">autonomous-trader.agentairg.site</a></span>
+        <div class="item-subsection">
+          <div class="item-subtitle" style="font-weight:600; margin-top:10px; margin-bottom:2px; color:var(--accent);">Project Overview</div>
+          <p style="margin:0 0 10px 0; font-size:15px; line-height:1.6;">
+            A Multi-Decision engine that automates the transition from raw concepts to investment-ready execution plans. By utilizing a structured Generate → Compare → Summarize → Plan workflow, the platform removes human bias and provides objective, data-driven assessments for complex business scenarios.
+          </p>
         </div>
-        <ul>
-          <li>Production-style simulation with 4 trader personas executing scheduled trade/rebalance cycles.</li>
-          <li>OpenAI Agents SDK runtime with MCP boundaries for accounts/trades/prices/research/memory.</li>
-          <li>MCP-backed web research (Brave) plus memory context supports evidence-aware decisions.</li>
-          <li>Resilience controls: layered pricing fallback (Polygon -> cache -> web -> unavailable) and trade blocking on invalid price data.</li>
-          <li>AWS deployment automation: Docker to ECR/EC2 via Terraform + GitHub Actions (OIDC) with SSM redeploy.</li>
-        </ul>
+        <div class="item-subsection">
+          <div class="item-subtitle" style="font-weight:600; margin-top:8px; margin-bottom:2px; color:var(--accent);">Key Technical Details</div>
+          <ul style="margin-top:0;">
+            <li><b>Intelligent Model Routing:</b> Employs an adaptive fallback chain across OpenAI, Gemini, DeepSeek, and Grok to ensure 100% uptime and cost-optimized inference.</li>
+            <li><b>Contract-First Validation:</b> Enforces strict output schemas with automated retries and a "cache-before-infer" layer to minimize latency and redundant API costs.</li>
+            <li><b>Durable Persistence:</b> Implements snapshot durability for all runs and comparisons, allowing for professional PDF rendering and historical audit trails.</li>
+            <li><b>Scalable Delivery:</b> Deployed as a containerized service on AWS App Runner via ECR, utilizing Route 53 for custom domain management and integrated email delivery.</li>
+          </ul>
+        </div>
+        <hr class="rule" />
       </div>
 
       <div class="item">
-        <p class="item-title">MediNotes - Agentic Clinical Documentation Platform</p>
+        <p class="item-title">Autonomous Agentic Trader</p>
+        <div class="project-links">
+          <span>Live: <a href="https://manager-trader.agentairg.site/" target="_blank" rel="noreferrer">manager-trader.agentairg.site</a></span>
+        </div>
+        <div class="item-subsection">
+          <div class="item-subtitle" style="font-weight:600; margin-top:10px; margin-bottom:2px; color:var(--accent);">Project Overview</div>
+          <p style="margin:0 0 10px 0; font-size:15px; line-height:1.6;">
+            A multi-agent trading simulation that replaces "black-box" AI decision-making with a four-gate portfolio-control pipeline. The system orchestrates four distinct LLM personas—Warren (Conservative), George (Aggressive), Ray (Balanced), and Cathie (Growth)—each operating under a global risk policy that enforces 14+ deterministic rules to ensure capital preservation and auditability.
+          </p>
+        </div>
+        <div class="item-subsection">
+          <div class="item-subtitle" style="font-weight:600; margin-top:8px; margin-bottom:2px; color:var(--accent);">Key Technical Details</div>
+          <ul style="margin-top:0;">
+            <li><b>Deterministic Risk Gatekeeping:</b> Implements a rigorous validation layer that evaluates every trade proposal against real-time portfolio snapshots, enforcing constraints like a 10% drawdown block, re-entry cooldowns, and position exposure limits.</li>
+            <li><b>MCP Isolation Contract:</b> Utilizes Model Context Protocol (MCP) boundaries to ensure agents never have direct brokerage access. Instead, they interact with typed tool contracts for accounts, multi-source market pricing (Polygon/Alpaca/Brave), and per-trader PostgreSQL memory graphs.</li>
+            <li><b>SSE-First Real-Time Architecture:</b> Features a resilient dashboard powered by Server-Sent Events (SSE) with a 300-event ring buffer. This allows the UI to handle disconnections gracefully via Last-Event-ID replay and automated REST resyncing, maintaining a "live" state even during engine restarts.</li>
+            <li><b>Automated Cloud Infrastructure:</b> Managed via Terraform and deployed on AWS EC2 using Docker and GitHub Actions. The stack includes a dedicated read-model layer to ensure dashboard consistency regardless of whether the trading engine is active or offline.</li>
+          </ul>
+        </div>
+        <hr class="rule" />
+      </div>
+
+      <div class="item">
+        <p class="item-title">MediNotes — Agentic Clinical Documentation Platform</p>
         <div class="project-links">
           <span>Live: <a href="https://medinotes.agentairg.site/" target="_blank" rel="noreferrer">medinotes.agentairg.site</a></span>
         </div>
-        <ul>
-          <li>Multimodal intake (notes, documents, audio, images) into structured, verifiable summaries with evidence mapping.</li>
-          <li>SSE streaming + resumable jobs for long-running summary generation and reconnect-safe UX.</li>
-          <li>Hub-and-spoke orchestration with extraction, research (MCP), critic, evidence, memory (RAG), and email agents.</li>
-          <li>Scoped clinical chat bounded to patient visit summaries and current consultation context.</li>
-          <li>Persistent critic-derived format guardrails improve summary quality over repeated runs.</li>
-        </ul>
+        <div class="item-subsection">
+          <div class="item-subtitle" style="font-weight:600; margin-top:10px; margin-bottom:2px; color:var(--accent);">Project Overview</div>
+          <p style="margin:0 0 10px 0; font-size:15px; line-height:1.6;">
+            A sophisticated intake engine that transforms multimodal medical data into structured, verifiable summaries. By anchoring clinical narratives in raw evidence—including audio and imagery—the platform eliminates ambiguity and ensures every output adheres to rigorous healthcare formatting standards.
+          </p>
+        </div>
+        <div class="item-subsection">
+          <div class="item-subtitle" style="font-weight:600; margin-top:8px; margin-bottom:2px; color:var(--accent);">Key Technical Details</div>
+          <ul style="margin-top:0;">
+            <li><b>Hub-and-Spoke Orchestration:</b> Manages a specialized agent fleet (RAG, MCP, Critic) to cross-reference patient data with real-time research and extraction logic.</li>
+            <li><b>Resilient UX Layer:</b> Employs SSE streaming and resumable jobs to maintain state during long-running generations, providing a stable experience across unstable connections.</li>
+            <li><b>Scoped Clinical Context:</b> Limits the internal chat interface to specific consultation data, preventing hallucinations by grounding responses strictly in current visit records.</li>
+            <li><b>Persistent Quality Guardrails:</b> Utilizes a feedback loop to enforce structural constraints, refining summary accuracy over successive iterations.</li>
+          </ul>
+        </div>
+        <hr class="rule" />
       </div>
     </section>
 
@@ -295,35 +328,38 @@
       <hr class="rule" />
 
       <div class="item">
-        <p class="item-title">Independent / Self-Directed Projects - Software Engineer (Full-Stack &amp; LLM Integration)</p>
-        <div class="meta">Jan 2026 - Present | Remote</div>
+        <p class="item-title">Independent / Self-Directed Projects — Software Engineer (Full-Stack &amp; AI)</p>
+        <div class="meta">Jan 2026 – Present | Remote</div>
         <ul>
-          <li>Built and deployed multiple AI applications with LLM orchestration, tool boundaries, persistence, exports, and reliability guardrails.</li>
-          <li>Implemented production controls including async workers, quota enforcement, fallback routing, and observability pipelines.</li>
-          <li>Delivered AWS workloads using serverless and container patterns with Terraform and GitHub Actions-based CI/CD.</li>
-          <li>Published live portfolio with architecture diagrams and one-pager documentation for recruiter/interview review.</li>
+          <li><b>Architected and deployed full-stack AI applications</b> by treating the model as a single system component, prioritizing <b>AI model output verification</b> and <b>server side rules for deterministic</b> behavior to ensure production-grade reliability.</li>
+          <li><b>Engineered asynchronous execution patterns</b> (API/Worker split) using a "202 Accepted" and Job ID polling workflow to manage tool-heavy requests and eliminate timeouts in serverless environments.</li>
+          <li><b>Implemented "Truth-Gated Rendering"</b> and canonical logic paths to normalize tool outcomes, ensuring that user-facing responses are validated against actual execution facts rather than model claims.</li>
+          <li><b>Developed multi-provider routing with ordered fallback chains</b>, treating AI outputs as structured contracts to maintain quality and continuity during upstream API instability or tool failures.</li>
+          <li><b>Designed hybrid memory systems</b> featuring user-approved memory candidates and approval layers to maintain useful context without introducing noise or security risks.</li>
+          <li><b>Deployed cloud-native workloads on AWS</b> using Terraform and GitHub Actions, utilizing <b>OIDC</b> for secure credentialing and <b>OpenTelemetry</b> for end-to-end tracing across API, worker, and tool layers.</li>
+          <li><b>Applied separation of concerns</b> in high-stakes domains (e.g., finance/clinical) by keeping calculations in deterministic code while using AI strictly for narrative explanation and summarization.</li>
         </ul>
       </div>
 
       <div class="item">
-        <p class="item-title">Propelrr - Java Software Developer</p>
-        <div class="meta">Jan 2018 - Oct 2025 | Makati City, Philippines</div>
+        <p class="item-title">Propelrr — Java Software Developer</p>
+        <div class="meta">Jan 2018 – Oct 2025 | Makati City, Philippines</div>
         <ul>
-          <li>Developed and maintained backend services and REST APIs for fintech and business applications using Java and Spring Boot.</li>
-          <li>Integrated third-party platforms (Meta/Facebook, Google, TikTok) to support analytics and reporting workflows.</li>
-          <li>Built reporting automation pipelines that transformed multi-source data into structured outputs and dashboards.</li>
-          <li>Contributed to cross-functional feature delivery, including backend integration support for Angular/React UIs.</li>
-          <li>Prototyped regression-based data analysis workflows to support insight generation for business reporting.</li>
+          <li>Developed and maintained robust backend services and REST APIs for fintech and enterprise applications using Java and Spring Boot.</li>
+          <li>Integrated high-scale third-party platforms (Meta, Google, TikTok) to support automated analytics and complex data reporting workflows.</li>
+          <li>Built deterministic data pipelines that transformed fragmented, multi-source data into structured outputs and actionable business dashboards.</li>
+          <li>Collaborated on cross-functional features, providing backend infrastructure and API support for Angular and React frontends.</li>
+          <li>Prototyped regression-based analysis workflows to improve data-driven insight generation for business reporting.</li>
         </ul>
       </div>
 
       <div class="item">
-        <p class="item-title">Toshiba - Systems Technical Support</p>
-        <div class="meta">Nov 2007 - Jan 2018 | Region IV-A (CALABARZON), Philippines</div>
+        <p class="item-title">Toshiba — Systems Technical Support</p>
+        <div class="meta">Nov 2007 – Jan 2018 | Region IV-A (CALABARZON), Philippines</div>
         <ul>
-          <li>Provided end-to-end IT hardware support for manufacturing operations (troubleshooting, repair, preventive maintenance, parts management).</li>
-          <li>Prepared equipment documentation and SOPs to improve user adoption, consistency, and operational efficiency.</li>
-          <li>Supported cost optimization by identifying suitable local alternatives for imported components and peripherals.</li>
+          <li>Managed end-to-end IT hardware support and preventive maintenance for large-scale manufacturing operations.</li>
+          <li>Drafted standard operating procedures (SOPs) and technical documentation to improve system adoption and operational consistency.</li>
+          <li>Identified local hardware alternatives for imported components, contributing to significant cost optimization for regional operations.</li>
         </ul>
       </div>
     </section>
