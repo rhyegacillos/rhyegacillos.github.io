@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IdeaGen — Case Study | Rhye Gacillos</title>
+    <meta
+      name="description"
+      content="Engineering case study: multi-model decision intelligence platform — contract-first validation across four LLM providers, deterministic financial modeling, and persistent artifact lifecycle on AWS App Runner."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <div class="background-grid" aria-hidden="true"></div>
+
+    <div class="cs-layout">
+    <header class="cs-site-header">
+      <a class="cs-back" href="../../index.html">&#8592; Rhye Gacillos</a>
+      <a
+        class="button button-primary"
+        href="https://ideagen.agentairg.site/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Live App &#8594;</a
+      >
+    </header>
+
+    <main class="cs-page">
+
+      <!-- HERO -->
+      <section class="cs-hero reveal">
+        <p class="eyebrow">Case Study &middot; 02</p>
+        <h1>IdeaGen</h1>
+        <p class="cs-hero-sub">Multi-Model Decision Intelligence Platform</p>
+        <p class="hero-copy">
+          Engineering a multi-model decision workflow requires solving for output comparability, not
+          just generation volume. This case study covers the contract-first validation architecture
+          that enforces structured outputs across four LLM providers, the deterministic financial
+          modeling layer that prevents hallucinated investment projections, and the artifact lifecycle
+          that makes every analysis persistent and re-exploitable.
+        </p>
+        <div class="cs-hero-meta">
+          <a
+            class="portal-live-chip"
+            href="https://ideagen.agentairg.site/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Live: ideagen.agentairg.site</a
+          >
+        </div>
+        <div class="cs-badges">
+          <span class="cs-badge">FastAPI</span>
+          <span class="cs-badge">Next.js</span>
+          <span class="cs-badge">PostgreSQL</span>
+          <span class="cs-badge">OpenAI</span>
+          <span class="cs-badge">Gemini</span>
+          <span class="cs-badge">DeepSeek</span>
+          <span class="cs-badge">Grok</span>
+          <span class="cs-badge">WeasyPrint</span>
+          <span class="cs-badge">AWS App Runner</span>
+          <span class="cs-badge">Clerk</span>
+        </div>
+      </section>
+
+      <!-- CHAPTER I: STRATEGIC CONTEXT -->
+      <section class="cs-section reveal">
+        <div class="cs-chapter-header">
+          <span class="cs-chapter-num">I</span>
+          <h2>The Strategic Context: Why Single-Model Ideation Fails</h2>
+        </div>
+        <div class="cs-story">
+          <p>
+            Single-model AI ideation gives one perspective shaped by one provider's training data,
+            RLHF preferences, and capability profile. When the output of a decision AI is a
+            recommendation to invest capital or pursue a strategy, that single-perspective limitation
+            is a material risk. Different frontier models reason differently: <strong>OpenAI</strong>
+            tends toward structured decomposition, <strong>Gemini</strong> toward pattern synthesis,
+            <strong>DeepSeek</strong> toward cost-efficient reasoning, <strong>Grok</strong> toward
+            real-time-aware analysis. Routing the same ideation task across all four and scoring the
+            outputs against a structured rubric gives something no single-model system can provide —
+            a <strong>cross-model consensus signal with visible disagreement</strong>.
+          </p>
+          <p>
+            The problem this project solves: make that multi-model output <strong>comparable,
+            auditable, and decision-ready</strong>, not just a collection of text blobs. That
+            requires contract-first schema enforcement so every model's output has the same shape,
+            deterministic computation so financial numbers are never pattern-matched hallucinations,
+            and a persistent artifact model so the analysis can be retrieved, re-exported, and
+            re-used weeks after it was generated.
+          </p>
+        </div>
+      </section>
+
+      <!-- CHAPTER II: ARCHITECTURE -->
+      <section class="cs-section reveal">
+        <div class="cs-chapter-header">
+          <span class="cs-chapter-num">II</span>
+          <h2>The Architecture: Multi-Model Orchestration &amp; Ordered Fallback</h2>
+        </div>
+        <div class="cs-story">
+          <p>
+            The generation layer is designed around three interlocking properties: every output has
+            a guaranteed structure, every provider failure is automatically recovered, and multiple
+            models can evaluate the same prompt simultaneously so their outputs can be ranked
+            head-to-head. These three properties are not independent — the schema enforcement is
+            what makes parallel scoring possible, and the fallback chain is what makes the schema
+            enforcement reliable under real-world provider availability.
+          </p>
+        </div>
+
+        <div class="cs-decision">
+          <h3>Contract-First Structured Outputs</h3>
+          <p>
+            Every LLM generation step produces a typed response validated against a
+            <strong>Pydantic JSON schema</strong>. If validation fails, the system retries with a
+            correction prompt that includes the specific schema violations extracted from the failed
+            response — field names, type mismatches, missing required properties. If retries exhaust
+            (maximum 3 attempts), the system falls back to a <strong>deterministic safe payload</strong>
+            that satisfies the schema with explicit null values and error annotations, rather than
+            propagating a malformed response to the frontend. The frontend always receives a
+            predictable structure regardless of LLM behavior — no UI crashes from unexpected model
+            output shapes, no partial renders, no silent missing fields.
+          </p>
+        </div>
+
+        <div class="cs-decision">
+          <h3>Ordered Fallback Routing</h3>
+          <p>
+            Generation requests follow an ordered provider chain:
+            <strong>OpenAI &rarr; Gemini &rarr; DeepSeek &rarr; Grok</strong>. If a provider is
+            unavailable, rate-limited, or returns a non-recoverable error (5xx, timeout, malformed
+            response that survives all retries), the next provider in the chain is attempted with
+            the same request. This provides resilience without manual operator intervention and
+            without surfacing provider failures to the user. The provider that ultimately fulfilled
+            the request is recorded in the artifact metadata for auditability — operators can see
+            which model produced which output.
+          </p>
+        </div>
+
+        <div class="cs-decision">
+          <h3>Parallel Multi-Model Generation</h3>
+          <p>
+            Up to 5 model configurations can generate outputs concurrently for the same ideation
+            prompt using <code>asyncio.gather</code>. Each run is scored independently against the
+            same structured rubric — <strong>novelty, feasibility, market size, competitive moat,
+            execution risk</strong> — producing numerical rankings that enable direct head-to-head
+            comparison across providers. Because every run is schema-validated before scoring,
+            the rubric evaluator always receives clean, comparable inputs regardless of which
+            model produced the output. This is the core property the contract-first layer enables:
+            comparability at the evaluation stage requires uniformity at the generation stage.
+          </p>
+        </div>
+      </section>
+
+      <!-- CHAPTER III: INTEGRITY LAYER -->
+      <section class="cs-section reveal">
+        <div class="cs-chapter-header">
+          <span class="cs-chapter-num">III</span>
+          <h2>The Integrity Layer: Deterministic Financial Modeling</h2>
+        </div>
+        <div class="cs-story">
+          <p>
+            The most dangerous failure mode in an AI investment platform is not a bad recommendation
+            — it is a confidently stated hallucinated number. An LLM will generate financial
+            projections with apparent precision: "Year 3 revenue: $4.2M, CAGR: 34%". These numbers
+            have no grounding. They are pattern-matched outputs that look like financial analysis but
+            are not computed from any model. They are statistically plausible because they resemble
+            financial data in the training set, not arithmetically derived from any explicit
+            assumption. In a decision context, that distinction is the difference between a tool and
+            a liability.
+          </p>
+          <p>
+            The <em>Execution Plan</em> module addresses this with a strict separation between what
+            the LLM is allowed to produce and what the system computes programmatically. The
+            boundary is enforced at the API layer — it is not a prompt-level suggestion but an
+            architectural constraint.
+          </p>
+        </div>
+
+        <div class="cs-decision">
+          <h3>Separation of Computation from Narration</h3>
+          <p>
+            The financial projections in <em>Execution Plans</em> are computed programmatically from
+            explicit formulas: revenue modeling by growth rate and initial market penetration, cost
+            structure by category ratios applied to the revenue base, break-even by contribution
+            margin calculation, sensitivity ranges by bounded parameter variation. The LLM
+            contributes <strong>narrative framing and assumption justification</strong> — it
+            describes what the numbers mean, interprets the sensitivity outputs in context, and
+            explains the strategic reasoning behind the assumption inputs. It does not produce the
+            numbers themselves. The generation prompt explicitly forbids numerical financial claims
+            and solicits structured assumption inputs that feed the computation engine as structured
+            data, not as text assertions.
+          </p>
+        </div>
+
+        <div class="cs-decision">
+          <h3>Go / Conditional / No-Go Decision Gates</h3>
+          <p>
+            The execution plan includes a <strong>deterministic gate evaluation</strong>: if IRR
+            falls below a configured threshold or break-even extends beyond N years, the gate
+            returns <strong>conditional</strong> or <strong>no-go</strong> with explicit reasoning
+            attached to each threshold violation. Profitability recovery logic identifies which
+            input assumptions would flip a no-go to a conditional — for example, reducing initial
+            headcount by 20% or extending the runway by 6 months — and surfaces those as named
+            levers. Sensitivity stress testing computes which input variables have the highest
+            elasticity on the final gate outcome, giving decision-makers a ranked list of what
+            to monitor and negotiate.
+          </p>
+        </div>
+
+        <div class="cs-decision">
+          <h3>Audit Trail by Construction</h3>
+          <p>
+            Because projections are computed from explicit inputs and formulas that are persisted
+            alongside the artifact in PostgreSQL, every number in the output can be re-derived from
+            first principles at any point after generation. There is no "the model said so" — every
+            projection has a traceable source equation. This makes the output defensible in a
+            due-diligence context: any stakeholder can inspect the assumption inputs, verify the
+            formula application, and reproduce the result independently without access to the
+            original LLM session.
+          </p>
+        </div>
+      </section>
+
+      <!-- CHAPTER IV: ARTIFACT LIFECYCLE -->
+      <section class="cs-section reveal">
+        <div class="cs-chapter-header">
+          <span class="cs-chapter-num">IV</span>
+          <h2>The Artifact Lifecycle: Persistent Decision Intelligence</h2>
+        </div>
+        <div class="cs-story">
+          <p>
+            Most AI tools produce ephemeral outputs — close the tab and the work is gone. IdeaGen
+            treats every output as a <strong>first-class persistent artifact</strong> with its own
+            lifecycle state, re-export surface, and downstream composition potential. A run generated
+            today can become the input for an execution plan next week without any manual
+            copy-paste — the artifact graph manages the dependency chain. The lifecycle state
+            model is designed so that artifacts can be re-surfaced in any downstream step without
+            ever being re-generated.
+          </p>
+        </div>
+
+        <div class="cs-decision">
+          <h3>Artifact Persistence Model</h3>
+          <p>
+            Every run, comparison, decision summary, and execution plan is persisted to
+            <strong>PostgreSQL</strong> with its own lifecycle state:
+            <code>draft</code> &rarr; <code>finalized</code> &rarr; <code>archived</code>. Artifacts
+            can be retrieved at any lifecycle stage, re-exported to PDF via <em>WeasyPrint</em>,
+            emailed via <em>Resend</em>, or used as inputs for downstream workflow steps. The
+            relational model captures dependency edges explicitly: a <em>Decision Summary</em>
+            references the run IDs it was built from; an <em>Execution Plan</em> references the
+            decision summary it was derived from. Every artifact in the system has a traceable
+            provenance chain back to the original ideation inputs and the specific model that
+            produced each component.
+          </p>
+        </div>
+
+        <div class="cs-decision">
+          <h3>Run-to-Run Comparison</h3>
+          <p>
+            Users select any two saved runs for head-to-head comparison. The system identifies the
+            winner across each rubric dimension independently, surfaces the trade-off rationale
+            (where model A outperformed on novelty but underperformed on execution risk and why),
+            and highlights where the two models disagreed on the same underlying concept with
+            contradictory positions. This comparison is itself a saved artifact with its own
+            lifecycle state — it can be retrieved, re-exported to PDF, or used as context for a
+            downstream <em>Decision Summary</em> that references both source runs.
+          </p>
+        </div>
+
+        <div class="cs-decision">
+          <h3>Cache-Before-Infer</h3>
+          <p>
+            Before calling an LLM for scoring or comparison, the system checks whether an identical
+            request has a cached result keyed by a deterministic hash of the input parameters and
+            schema version. This reduces latency and cost for repeated or similar inputs without
+            sacrificing result quality. Cache invalidation is artifact-scoped: re-finalizing an
+            artifact invalidates its downstream cache entries, ensuring that stale scoring results
+            are never served after a source artifact is updated.
+          </p>
+        </div>
+      </section>
+
+      <!-- ARCHITECTURE DIAGRAM -->
+      <section class="cs-section reveal">
+        <div class="cs-chapter-header">
+          <span class="cs-chapter-num">&mdash;</span>
+          <h2>Architecture Diagram</h2>
+        </div>
+        <div class="cs-arch-img-wrap">
+          <img
+            src="../../images/ideagen/ideagen.png"
+            alt="Architecture diagram for the IdeaGen platform"
+          />
+        </div>
+        <p class="cs-arch-caption">Scroll horizontally on small screens</p>
+      </section>
+
+      <!-- CHAPTER V: OPERATIONS -->
+      <section class="cs-section reveal">
+        <div class="cs-chapter-header">
+          <span class="cs-chapter-num">V</span>
+          <h2>Operations: App Runner, PostgreSQL, Auth</h2>
+        </div>
+        <div class="cs-stack-grid">
+          <div class="cs-stack-item">
+            <h4>FastAPI (Python)</h4>
+            <p>Orchestration layer for multi-model routing, retry logic, Pydantic schema validation, PDF generation, email delivery, and deterministic financial computation. Single async service handling all pipeline stages — no separate worker processes needed because App Runner handles horizontal scaling rather than per-request concurrency limits imposed by Lambda.</p>
+          </div>
+          <div class="cs-stack-item">
+            <h4>Next.js + TypeScript</h4>
+            <p>Adaptive frontend with guided flow mode (step-by-step ideation walkthrough) and status flow mode (real-time generation progress). Per-step state managed via localStorage for recovery on page reload. Modal-driven artifact management for retrieving, comparing, and exporting saved runs without leaving the current flow.</p>
+          </div>
+          <div class="cs-stack-item">
+            <h4>PostgreSQL + SQLAlchemy + Alembic</h4>
+            <p>Persistence for all runs, comparisons, decision summaries, and execution plans. Relational model chosen over document storage for the complex artifact query patterns and multi-step lifecycle state transitions that require join-capable queries across the artifact dependency graph. Alembic manages schema migrations with zero-downtime roll-forward patterns applied automatically on container startup.</p>
+          </div>
+          <div class="cs-stack-item">
+            <h4>WeasyPrint</h4>
+            <p>Server-side HTML&rarr;PDF rendering for report exports. Reports use structured HTML templates populated from artifact data, not raw LLM text. This guarantees consistent formatting, correct pagination, and professional output regardless of LLM generation variance. The template layer also allows report styling to be updated independently of the generation pipeline.</p>
+          </div>
+          <div class="cs-stack-item">
+            <h4>Resend</h4>
+            <p>Email delivery for PDF report dispatch. Integrated with a verified-send pattern: the server confirms send receipt from the Resend API before recording delivery success in the artifact lifecycle state. A failed send is surfaced as an artifact state error, not silently dropped — the user sees the failure and can retry.</p>
+          </div>
+          <div class="cs-stack-item">
+            <h4>Clerk</h4>
+            <p>Authentication, session management, and organization scoping. User identity gates all artifact access — no cross-user artifact visibility is architecturally possible. Clerk JWTs are verified on every API request, and all artifact queries are scoped to the verified user ID before any database operation executes.</p>
+          </div>
+          <div class="cs-stack-item">
+            <h4>Docker + AWS App Runner + ECR</h4>
+            <p>Container-based deployment. App Runner handles automatic HTTPS, request-based scaling, and health check routing with no manual server management or capacity planning. ECR stores versioned container images; App Runner pulls the latest image on each deploy triggered by a GitHub Actions push to main.</p>
+          </div>
+          <div class="cs-stack-item">
+            <h4>AWS RDS (PostgreSQL)</h4>
+            <p>Managed database with automated backups and point-in-time recovery. Chosen over self-hosted PostgreSQL for durability guarantees and operational simplicity — RDS handles patching, failover, and backup retention without operator intervention. Connection pooling managed via SQLAlchemy's async engine with configurable pool sizing.</p>
+          </div>
+          <div class="cs-stack-item">
+            <h4>Route 53</h4>
+            <p>Custom domain routing for the App Runner service endpoint. ALIAS record maps the custom domain to the App Runner service URL, with certificate provisioning handled by App Runner's managed TLS. DNS health check failover configured at the Route 53 layer for additional resilience during App Runner service restarts.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    </div>
+    <script src="../../script.js"></script>
+  </body>
+</html>

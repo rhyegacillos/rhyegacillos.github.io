@@ -1,3 +1,6 @@
+/* =========================================================
+   DESIGN TOKENS
+   ========================================================= */
 :root {
   --bg-0: #070d1a;
   --bg-1: #0e1830;
@@ -13,6 +16,9 @@
   --shadow: 0 18px 45px rgba(2, 10, 25, 0.45);
 }
 
+/* =========================================================
+   RESET + BASE
+   ========================================================= */
 *,
 *::before,
 *::after {
@@ -40,6 +46,9 @@ body {
   overflow-x: clip;
 }
 
+/* =========================================================
+   BACKGROUND GRID
+   ========================================================= */
 .background-grid {
   position: fixed;
   inset: 0;
@@ -52,6 +61,9 @@ body {
   mask-image: radial-gradient(circle at center, black 25%, transparent 78%);
 }
 
+/* =========================================================
+   HEADER
+   ========================================================= */
 .site-header {
   position: sticky;
   top: 0;
@@ -100,6 +112,9 @@ body {
   background: rgba(77, 212, 255, 0.12);
 }
 
+/* =========================================================
+   MAIN LAYOUT
+   ========================================================= */
 main {
   position: relative;
   z-index: 1;
@@ -122,6 +137,9 @@ main {
   padding: clamp(28px, 6vw, 64px);
 }
 
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
 .eyebrow {
   margin: 0 0 10px;
   color: var(--accent-2);
@@ -146,7 +164,6 @@ h1 {
   overflow-wrap: anywhere;
 }
 
-
 .hero-copy {
   margin: 14px 0 0;
   max-width: 66ch;
@@ -154,6 +171,9 @@ h1 {
   overflow-wrap: anywhere;
 }
 
+/* =========================================================
+   HERO PROOF / ACTIONS
+   ========================================================= */
 .hero-proof {
   margin-top: 14px;
   display: flex;
@@ -179,6 +199,9 @@ h1 {
   flex-wrap: wrap;
 }
 
+/* =========================================================
+   BUTTONS
+   ========================================================= */
 .button {
   display: inline-flex;
   align-items: center;
@@ -206,6 +229,9 @@ h1 {
   background: rgba(149, 175, 219, 0.08);
 }
 
+/* =========================================================
+   SECTION
+   ========================================================= */
 .section {
   padding: clamp(22px, 4vw, 36px);
 }
@@ -243,266 +269,9 @@ h1 {
   border-radius: 999px;
 }
 
-.project-list {
-  display: grid;
-  gap: 16px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.project-panels {
-  display: grid;
-  gap: 18px;
-}
-
-.project-card {
-  padding: 20px;
-  border-radius: 14px;
-  border: 1px solid rgba(149, 175, 219, 0.22);
-  background: linear-gradient(165deg, rgba(16, 31, 61, 0.9), rgba(8, 16, 33, 0.85));
-}
-
-.featured-card {
-  border-color: rgba(77, 212, 255, 0.4);
-  background:
-    radial-gradient(circle at 90% 0%, rgba(77, 212, 255, 0.15), transparent 42%),
-    linear-gradient(165deg, rgba(16, 31, 61, 0.94), rgba(8, 16, 33, 0.92));
-}
-
-.project-card h3 {
-  margin-bottom: 8px;
-}
-
-.project-card h4 {
-  margin-top: 16px;
-  margin-bottom: 8px;
-  color: var(--accent);
-  font-size: 0.95rem;
-}
-
-.project-summary {
-  margin-top: 4px;
-  overflow-wrap: anywhere;
-}
-
-.project-grid {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 18px;
-  margin-top: 16px;
-}
-
-ul {
-  margin: 0;
-  padding-left: 18px;
-  color: var(--muted);
-}
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.chips span {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.78rem;
-  color: #b9f3ff;
-  padding: 6px 10px;
-  border: 1px solid rgba(77, 212, 255, 0.3);
-  border-radius: 999px;
-  background: rgba(77, 212, 255, 0.1);
-}
-
-.links-grid {
-  margin-top: 18px;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.links-grid.featured-links {
-  grid-template-columns: 1fr;
-}
-
-.live-link {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-}
-
-.live-link .url {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: #c8f6ff;
-}
-
-.links-grid a,
-.contact-list a,
-.contact-list .contact-item {
-  color: var(--text);
-  text-decoration: none;
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.84rem;
-  border: 1px solid rgba(149, 175, 219, 0.3);
-  border-radius: 12px;
-  padding: 9px 11px;
-  background: rgba(149, 175, 219, 0.06);
-  transition: border-color 0.2s ease, background-color 0.2s ease;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-
-.links-grid a:hover,
-.contact-list a:hover {
-  border-color: rgba(103, 247, 204, 0.55);
-  background: rgba(103, 247, 204, 0.1);
-}
-
-.contact-list .contact-location {
-  color: var(--text);
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.84rem;
-  border: 1px solid rgba(149, 175, 219, 0.3);
-  border-radius: 12px;
-  padding: 9px 11px;
-  background: rgba(149, 175, 219, 0.06);
-}
-
-.links-grid a.placeholder-link {
-  color: rgba(231, 237, 248, 0.72);
-  border-style: dashed;
-  border-color: rgba(149, 175, 219, 0.26);
-  background: rgba(149, 175, 219, 0.03);
-  pointer-events: none;
-  cursor: default;
-}
-
-.links-grid a.placeholder-link:hover {
-  border-color: rgba(149, 175, 219, 0.26);
-  background: rgba(149, 175, 219, 0.03);
-}
-
-.links-grid.compact {
-  margin-top: 12px;
-  grid-template-columns: 1fr;
-}
-
-.featured-media-grid {
-  margin-top: 16px;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.onepager-figure,
-.architecture-figure {
-  margin: 0;
-  border: 1px solid rgba(149, 175, 219, 0.28);
-  border-radius: 12px;
-  overflow: hidden;
-  background: rgba(149, 175, 219, 0.04);
-}
-
-.onepager-figure figcaption {
-  padding: 10px 12px;
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.78rem;
-  letter-spacing: 0.03em;
-  color: var(--accent-2);
-  border-bottom: 1px solid rgba(149, 175, 219, 0.2);
-  background: rgba(149, 175, 219, 0.06);
-}
-
-.architecture-figure figcaption {
-  padding: 10px 12px;
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.78rem;
-  letter-spacing: 0.03em;
-  color: var(--accent-2);
-  border-bottom: 1px solid rgba(149, 175, 219, 0.2);
-  background: rgba(149, 175, 219, 0.06);
-}
-
-.onepager-figure figcaption a,
-.architecture-figure figcaption a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.onepager-figure figcaption a:hover,
-.architecture-figure figcaption a:hover {
-  text-decoration: underline;
-}
-
-.image-lightbox-trigger {
-  display: block;
-  cursor: zoom-in;
-}
-
-.media-thumb {
-  display: block;
-  width: 100%;
-  height: 360px;
-  object-fit: contain;
-  background: #0c1428;
-}
-
-.image-lightbox-trigger .media-thumb {
-  transition: transform 0.2s ease, filter 0.2s ease;
-}
-
-.image-lightbox-trigger:hover .media-thumb {
-  transform: scale(1.01);
-  filter: brightness(1.04);
-}
-
-.lightbox {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background: rgba(2, 8, 20, 0.88);
-  backdrop-filter: blur(4px);
-}
-
-.lightbox.open {
-  display: flex;
-}
-
-.lightbox-close {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  border: 1px solid rgba(149, 175, 219, 0.4);
-  border-radius: 999px;
-  background: rgba(13, 24, 47, 0.9);
-  color: var(--text);
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.8rem;
-  padding: 8px 12px;
-  cursor: pointer;
-}
-
-.lightbox-image {
-  max-width: min(95vw, 1500px);
-  max-height: 88vh;
-  width: auto;
-  height: auto;
-  border-radius: 12px;
-  border: 1px solid rgba(149, 175, 219, 0.35);
-  background: #0b1427;
-}
-
-body.lightbox-open {
-  overflow: hidden;
-}
-
+/* =========================================================
+   SKILLS
+   ========================================================= */
 .skills-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -522,6 +291,9 @@ body.lightbox-open {
   margin-bottom: 6px;
 }
 
+/* =========================================================
+   CONTACT
+   ========================================================= */
 .contact-list {
   margin-top: 16px;
   display: grid;
@@ -532,6 +304,50 @@ body.lightbox-open {
   margin-top: 12px;
 }
 
+.contact-list a,
+.contact-list .contact-item,
+.contact-list .contact-location {
+  color: var(--text);
+  text-decoration: none;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.84rem;
+  border: 1px solid rgba(149, 175, 219, 0.3);
+  border-radius: 12px;
+  padding: 9px 11px;
+  background: rgba(149, 175, 219, 0.06);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  display: block;
+}
+
+.contact-list a:hover {
+  border-color: rgba(103, 247, 204, 0.55);
+  background: rgba(103, 247, 204, 0.1);
+}
+
+/* =========================================================
+   CHIPS
+   ========================================================= */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chips span {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  color: #b9f3ff;
+  padding: 6px 10px;
+  border: 1px solid rgba(77, 212, 255, 0.3);
+  border-radius: 999px;
+  background: rgba(77, 212, 255, 0.1);
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
 .site-footer {
   width: 100%;
   max-width: 1080px;
@@ -540,6 +356,9 @@ body.lightbox-open {
   font-size: 0.9rem;
 }
 
+/* =========================================================
+   REVEAL ANIMATION
+   ========================================================= */
 .reveal {
   opacity: 1;
   transform: translateY(0);
@@ -556,37 +375,399 @@ body.lightbox-open {
   transform: translateY(0);
 }
 
-@media (max-width: 940px) {
-  .project-list {
+/* =========================================================
+   PROJECT PORTAL GRID (index.html)
+   ========================================================= */
+.project-portal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.portal-card {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border-radius: 14px;
+  border: 1px solid rgba(77, 212, 255, 0.3);
+  background:
+    radial-gradient(circle at 90% 0%, rgba(77, 212, 255, 0.1), transparent 50%),
+    linear-gradient(165deg, rgba(16, 31, 61, 0.94), rgba(8, 16, 33, 0.92));
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.portal-card:hover {
+  border-color: rgba(77, 212, 255, 0.55);
+  box-shadow: 0 8px 32px rgba(77, 212, 255, 0.12);
+}
+
+.portal-card h3 {
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+  line-height: 1.3;
+  color: var(--text);
+}
+
+.portal-card-pitch {
+  margin: 0 0 16px;
+  font-size: 0.92rem;
+  color: var(--muted);
+  line-height: 1.55;
+  flex: 1;
+}
+
+.portal-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.portal-live-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  color: #c8f6ff;
+  border: 1px solid rgba(77, 212, 255, 0.28);
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: rgba(77, 212, 255, 0.08);
+  text-decoration: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.portal-live-chip:hover {
+  border-color: rgba(77, 212, 255, 0.6);
+  background: rgba(77, 212, 255, 0.16);
+}
+
+.portal-live-chip::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  flex-shrink: 0;
+}
+
+.portal-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #001521;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  border: 1px solid transparent;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  align-self: flex-start;
+}
+
+.portal-cta:hover {
+  transform: translateY(-1px);
+  opacity: 0.92;
+}
+
+/* =========================================================
+   CASE STUDY PAGE STYLES
+   ========================================================= */
+
+/* Shared layout wrapper — owns max-width and centering for case study pages */
+.cs-layout {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* Case study pages fill the layout wrapper */
+.cs-page {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  margin: 20px 0 80px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 28px;
+}
+
+/* Back navigation */
+.cs-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-family: "IBM Plex Mono", monospace;
+  transition: color 0.2s ease;
+}
+
+.cs-back:hover {
+  color: var(--accent);
+}
+
+/* Hero section at top of case study */
+.cs-hero {
+  border: 1px solid var(--line);
+  background: linear-gradient(160deg, rgba(14, 28, 54, 0.95), rgba(10, 18, 35, 0.88));
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: clamp(28px, 5vw, 48px);
+}
+
+.cs-hero .eyebrow {
+  margin-bottom: 8px;
+}
+
+.cs-hero h1 {
+  font-size: clamp(1.7rem, 4.5vw, 2.6rem);
+  max-width: 24ch;
+  margin-bottom: 14px;
+}
+
+.cs-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.cs-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 16px;
+}
+
+.cs-badge {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  color: #b9f3ff;
+  padding: 5px 9px;
+  border: 1px solid rgba(77, 212, 255, 0.3);
+  border-radius: 999px;
+  background: rgba(77, 212, 255, 0.1);
+}
+
+/* Narrative section wrapper */
+.cs-section {
+  border: 1px solid var(--line);
+  background: linear-gradient(160deg, rgba(14, 28, 54, 0.95), rgba(10, 18, 35, 0.88));
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: clamp(22px, 4vw, 36px);
+}
+
+.cs-section h2 {
+  font-size: clamp(1.2rem, 2.8vw, 1.6rem);
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+/* Story prose */
+.cs-story p {
+  margin: 0 0 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.cs-story p:last-child {
+  margin-bottom: 0;
+}
+
+/* Design decision block */
+.cs-decision {
+  border-left: 3px solid var(--accent);
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  background: rgba(77, 212, 255, 0.05);
+  border-radius: 0 10px 10px 0;
+}
+
+.cs-decision:last-child {
+  margin-bottom: 0;
+}
+
+.cs-decision h3 {
+  font-size: 1rem;
+  color: var(--accent);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.cs-decision p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.93rem;
+  line-height: 1.65;
+}
+
+/* Architecture diagram frame */
+.cs-diagram-frame {
+  overflow-x: auto;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(149, 175, 219, 0.22);
+  background: #050d1c;
+  margin-top: 12px;
+}
+
+.cs-diagram-frame iframe {
+  width: 2400px;
+  height: 970px;
+  border: none;
+  display: block;
+}
+
+.cs-diagram-caption {
+  margin-top: 8px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Architecture image (full-width scrollable) */
+.cs-arch-img-wrap {
+  overflow-x: auto;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(149, 175, 219, 0.22);
+  background: #050d1c;
+  margin-top: 12px;
+}
+
+.cs-arch-img-wrap img {
+  display: block;
+  max-width: none;
+  width: auto;
+  max-height: 680px;
+  height: auto;
+  min-width: 100%;
+  object-fit: contain;
+}
+
+.cs-arch-caption {
+  margin-top: 8px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Tech stack grid */
+.cs-stack-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.cs-stack-item {
+  border: 1px solid rgba(149, 175, 219, 0.2);
+  border-radius: 12px;
+  padding: 14px;
+  background: rgba(149, 175, 219, 0.04);
+}
+
+.cs-stack-item h4 {
+  font-size: 0.9rem;
+  color: var(--accent-2);
+  margin-bottom: 6px;
+}
+
+.cs-stack-item p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+/* Flow steps (numbered list for system walkthroughs) */
+.cs-flow-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.cs-flow-steps li {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 12px;
+  align-items: start;
+  color: var(--muted);
+  font-size: 0.93rem;
+  line-height: 1.6;
+}
+
+.cs-flow-steps li .step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(77, 212, 255, 0.15);
+  border: 1px solid rgba(77, 212, 255, 0.35);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  color: var(--accent);
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+/* Case study header fills the layout wrapper */
+.cs-site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  margin: 18px 0 0;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(10, 19, 38, 0.75);
+  backdrop-filter: blur(10px);
+  box-sizing: border-box;
+}
+
+/* ul / li resets for prose */
+ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+}
+
+/* =========================================================
+   RESPONSIVE — PORTAL GRID
+   ========================================================= */
+@media (max-width: 720px) {
+  .project-portal-grid {
     grid-template-columns: 1fr;
   }
 
-  .project-grid {
+  .cs-stack-grid {
     grid-template-columns: 1fr;
-  }
-
-  .links-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .featured-media-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .media-thumb {
-    height: 250px;
-  }
-
-  .lightbox {
-    padding: 14px;
-  }
-
-  .lightbox-close {
-    top: 10px;
-    right: 10px;
   }
 }
 
+/* =========================================================
+   RESPONSIVE — MAIN NAV + LAYOUT (≤ 900px)
+   ========================================================= */
 @media (max-width: 900px) {
   body {
     line-height: 1.55;
@@ -596,6 +777,9 @@ body.lightbox-open {
 
   .site-header,
   main,
+  .cs-layout,
+  .cs-site-header,
+  .cs-page,
   .site-footer {
     width: 100%;
     max-width: none;
@@ -603,26 +787,33 @@ body.lightbox-open {
     margin-right: 0;
   }
 
-  .site-header {
+  .cs-layout {
+    padding: 0;
+  }
+
+  .site-header,
+  .cs-site-header {
     border-left: 0;
     border-right: 0;
     border-radius: 0;
     padding-inline: 10px;
+    margin-top: 10px;
+    padding: 10px;
+    gap: 10px;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  main {
+  main,
+  .cs-page {
     padding-inline: 10px;
+    margin-top: 14px;
+    gap: 18px;
   }
 
   .background-grid {
     background-size: 44px 44px;
     opacity: 0.8;
-  }
-
-  .site-header {
-    margin-top: 10px;
-    padding: 10px;
-    gap: 10px;
   }
 
   .brand {
@@ -648,17 +839,18 @@ body.lightbox-open {
     padding: 7px 11px;
   }
 
-  main {
-    margin-top: 14px;
-    gap: 18px;
-  }
-
   .hero,
-  .section {
+  .section,
+  .cs-hero,
+  .cs-section {
     border-radius: 14px;
   }
 
   .hero {
+    padding: 22px 16px 18px;
+  }
+
+  .cs-hero {
     padding: 22px 16px 18px;
   }
 
@@ -668,7 +860,6 @@ body.lightbox-open {
     line-height: 1.12;
     text-wrap: pretty;
   }
-
 
   .hero-copy {
     margin-top: 10px;
@@ -705,11 +896,6 @@ body.lightbox-open {
     min-height: 44px;
   }
 
-  .site-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
   .section {
     padding: 18px 14px;
   }
@@ -719,58 +905,15 @@ body.lightbox-open {
     font-size: 1.6rem;
   }
 
-  .project-panels {
-    gap: 12px;
+  .skills-grid {
+    grid-template-columns: 1fr;
   }
 
-  .project-card {
-    padding: 14px;
-    border-radius: 12px;
-  }
-
-  .project-card h3 {
-    font-size: 1.1rem;
-    line-height: 1.25;
-  }
-
-  .project-card h4 {
-    margin-top: 12px;
-    font-size: 0.88rem;
-    letter-spacing: 0.01em;
-  }
-
-  .project-summary {
-    font-size: 0.94rem;
-  }
-
-  .project-grid {
-    gap: 12px;
-    margin-top: 12px;
-  }
-
-  ul {
-    padding-left: 16px;
-  }
-
-  li {
-    margin-bottom: 6px;
-  }
-
-  .chips {
-    gap: 6px;
-  }
-
-  .chips span {
-    font-size: 0.72rem;
-    padding: 5px 8px;
-  }
-
-  .links-grid {
+  .contact-list {
     margin-top: 12px;
     gap: 8px;
   }
 
-  .links-grid a,
   .contact-list a,
   .contact-list .contact-item,
   .contact-list .contact-location {
@@ -780,45 +923,38 @@ body.lightbox-open {
     border-radius: 10px;
   }
 
-  .live-link {
-    gap: 6px;
+  .portal-card {
+    padding: 18px;
   }
 
-  .live-link .url {
-    font-size: 0.76rem;
+  .cs-section {
+    padding: 18px 14px;
   }
 
-  .featured-media-grid {
-    margin-top: 12px;
-    gap: 10px;
+  .cs-diagram-frame iframe {
+    width: 1800px;
+    height: 820px;
   }
 
-  .onepager-figure figcaption,
-  .architecture-figure figcaption {
-    padding: 8px 10px;
-    font-size: 0.72rem;
-  }
-
-  .media-thumb {
-    height: 220px;
-  }
-
-  .contact-list {
-    margin-top: 12px;
-    gap: 8px;
-  }
-
-  .skills-grid {
+  .cs-stack-grid {
     grid-template-columns: 1fr;
+  }
+
+  .cs-flow-steps li {
+    font-size: 0.88rem;
   }
 }
 
+/* =========================================================
+   RESPONSIVE — SMALL SCREENS (≤ 640px)
+   ========================================================= */
 @media (max-width: 640px) {
   body {
     overflow-x: hidden;
   }
 
-  .site-header {
+  .site-header,
+  .cs-site-header {
     padding: 12px 10px 10px;
   }
 
@@ -840,14 +976,16 @@ body.lightbox-open {
     border-radius: 999px;
   }
 
-  main {
+  main,
+  .cs-page {
     padding-inline: 8px;
     gap: 14px;
   }
 
   .hero,
   .section,
-  .project-card {
+  .cs-hero,
+  .cs-section {
     overflow: hidden;
   }
 
@@ -895,35 +1033,76 @@ body.lightbox-open {
     font-size: 1.45rem;
   }
 
-  .project-panels {
-    gap: 10px;
+  .portal-card {
+    padding: 14px 12px;
   }
 
-  .project-card {
-    padding: 10px;
-  }
-
-  .project-card h3 {
+  .portal-card h3 {
     font-size: 0.96rem;
-    line-height: 1.2;
   }
 
-  .project-card h4 {
-    margin-top: 10px;
-    margin-bottom: 6px;
-    font-size: 0.82rem;
+  .portal-card-pitch {
+    font-size: 0.86rem;
   }
 
-  .project-summary,
-  .section p,
-  li {
-    font-size: 0.88rem;
-    line-height: 1.45;
+  .cs-section {
+    padding: 16px 12px;
   }
 
-  .project-grid {
-    gap: 10px;
-    margin-top: 10px;
+  .cs-section h2 {
+    font-size: 1.2rem;
+  }
+
+  .cs-decision {
+    padding: 12px 14px;
+  }
+
+  .cs-decision h3 {
+    font-size: 0.9rem;
+  }
+
+  .cs-decision p {
+    font-size: 0.86rem;
+  }
+
+  .cs-flow-steps li {
+    font-size: 0.84rem;
+  }
+
+  .cs-flow-steps li .step-num {
+    width: 24px;
+    height: 24px;
+    font-size: 0.68rem;
+  }
+
+  .cs-stack-item {
+    padding: 12px;
+  }
+
+  .cs-stack-item h4 {
+    font-size: 0.84rem;
+  }
+
+  .cs-stack-item p {
+    font-size: 0.8rem;
+  }
+
+  .cs-diagram-frame iframe {
+    width: 1400px;
+    height: 700px;
+  }
+
+  .cs-arch-img-wrap img {
+    max-height: 400px;
+  }
+
+  .cs-badges {
+    gap: 5px;
+  }
+
+  .cs-badge {
+    font-size: 0.66rem;
+    padding: 4px 7px;
   }
 
   ul {
@@ -932,71 +1111,478 @@ body.lightbox-open {
 
   li {
     margin-bottom: 4px;
+    font-size: 0.88rem;
+    line-height: 1.45;
   }
+}
 
-  .chips {
-    gap: 5px;
-  }
+/* =========================================================
+   CHAPTER HEADER (roman numeral + h2)
+   ========================================================= */
+.cs-chapter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 18px;
+}
 
-  .chips span {
-    font-size: 0.66rem;
-    padding: 4px 6px;
-  }
+.cs-chapter-num {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--accent-2);
+  letter-spacing: 0.12em;
+  opacity: 0.7;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
 
-  .links-grid,
-  .featured-media-grid,
-  .project-grid,
-  .contact-list {
-    min-width: 0;
-  }
+.cs-chapter-header h2 {
+  margin-bottom: 0;
+}
 
-  .links-grid a,
-  .contact-list a,
-  .contact-list .contact-item,
-  .contact-list .contact-location {
-    min-width: 0;
-    padding: 7px 8px;
-    font-size: 0.74rem;
-    border-radius: 9px;
-    line-height: 1.3;
-  }
+/* Hero subtitle line */
+.cs-hero-sub {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.82rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  margin: 6px 0 12px;
+}
 
-  .live-link {
+/* Inline code in prose */
+.cs-story code,
+.cs-decision code {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.84em;
+  color: var(--accent);
+  background: rgba(77, 212, 255, 0.1);
+  border: 1px solid rgba(77, 212, 255, 0.2);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+/* Strong in prose */
+.cs-story strong,
+.cs-decision strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* em in prose */
+.cs-story em,
+.cs-decision em {
+  color: var(--accent-2);
+  font-style: normal;
+  font-weight: 500;
+}
+
+/* =========================================================
+   SECTION LABEL (// comment style)
+   ========================================================= */
+.section-label {
+  margin: 0 0 6px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  color: var(--accent-2);
+  letter-spacing: 0.06em;
+  opacity: 0.7;
+}
+
+/* =========================================================
+   HERO STAT BAR
+   ========================================================= */
+.hero-stat-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-top: 24px;
+  border: 1px solid rgba(149, 175, 219, 0.2);
+  border-radius: 12px;
+  background: rgba(149, 175, 219, 0.04);
+  overflow: hidden;
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 22px;
+  flex: 1;
+  min-width: 100px;
+}
+
+.hero-stat-val {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.hero-stat-label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.hero-stat-divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(149, 175, 219, 0.2);
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   PROJECT LIST (index.html)
+   ========================================================= */
+.project-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.project-entry {
+  --entry-accent: var(--accent);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(149, 175, 219, 0.18);
+  border-left: 3px solid var(--entry-accent);
+  border-radius: 0 12px 12px 0;
+  background: rgba(10, 19, 38, 0.7);
+  padding: 18px 18px 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.project-entry:hover {
+  background: rgba(14, 26, 52, 0.9);
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.3);
+}
+
+/* Per-project accent colors */
+.project-entry[data-idx="01"] { --entry-accent: var(--accent); }
+.project-entry[data-idx="02"] { --entry-accent: var(--accent-2); }
+.project-entry[data-idx="03"] { --entry-accent: var(--warn); }
+.project-entry[data-idx="04"] { --entry-accent: #c084fc; }
+
+.project-entry-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.project-entry-num {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--entry-accent);
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+}
+
+.project-entry-type {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+}
+
+.project-entry-title {
+  font-size: 1.05rem;
+  color: var(--text);
+  margin: 0 0 10px;
+  line-height: 1.25;
+}
+
+.project-entry-desc {
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0 0 14px;
+  flex: 1;
+}
+
+.project-entry-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+
+.project-entry-tech span {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  border: 1px solid rgba(149, 175, 219, 0.22);
+  border-radius: 4px;
+  padding: 3px 7px;
+  background: rgba(149, 175, 219, 0.06);
+  letter-spacing: 0.02em;
+}
+
+.project-entry-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(149, 175, 219, 0.12);
+}
+
+.project-live-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  color: var(--accent-2);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.project-live-link:hover {
+  opacity: 0.8;
+}
+
+.live-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  flex-shrink: 0;
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.project-cs-link {
+  margin-left: auto;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--entry-accent);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s ease;
+}
+
+.project-cs-link:hover {
+  opacity: 0.75;
+}
+
+/* =========================================================
+   STACK MANIFEST (index.html)
+   ========================================================= */
+.stack-manifest {
+  display: grid;
+  gap: 0;
+  border: 1px solid rgba(149, 175, 219, 0.18);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.stack-row {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(149, 175, 219, 0.1);
+  transition: background 0.15s ease;
+}
+
+.stack-row:last-child {
+  border-bottom: none;
+}
+
+.stack-row:hover {
+  background: rgba(149, 175, 219, 0.04);
+}
+
+.stack-label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  color: var(--accent-2);
+  letter-spacing: 0.04em;
+  padding-top: 4px;
+  white-space: nowrap;
+}
+
+.stack-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.stack-pills span {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  color: var(--muted);
+  border: 1px solid rgba(149, 175, 219, 0.2);
+  border-radius: 4px;
+  padding: 3px 8px;
+  background: rgba(149, 175, 219, 0.05);
+  letter-spacing: 0.02em;
+}
+
+/* =========================================================
+   CONTACT GRID (index.html)
+   ========================================================= */
+.contact-intro {
+  color: var(--muted);
+  margin: 0 0 18px;
+  line-height: 1.6;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.contact-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border: 1px solid rgba(149, 175, 219, 0.2);
+  border-radius: 10px;
+  padding: 14px 16px;
+  background: rgba(149, 175, 219, 0.04);
+  text-decoration: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+a.contact-card:hover {
+  border-color: rgba(103, 247, 204, 0.45);
+  background: rgba(103, 247, 204, 0.07);
+}
+
+.contact-card-label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.65rem;
+  color: var(--accent-2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.contact-card-val {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.82rem;
+  color: var(--text);
+  word-break: break-all;
+}
+
+.contact-card-static {
+  cursor: default;
+}
+
+/* =========================================================
+   RESPONSIVE — NEW INDEX COMPONENTS (≤ 900px)
+   ========================================================= */
+@media (max-width: 900px) {
+  .hero-stat-bar {
     display: grid;
-    grid-template-columns: 1fr;
-    align-items: start;
-    gap: 2px;
-  }
-
-  .live-link .url {
-    font-size: 0.72rem;
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-    overflow-wrap: anywhere;
-  }
-
-  .featured-media-grid {
-    margin-top: 10px;
-    gap: 8px;
-  }
-
-  .onepager-figure,
-  .architecture-figure {
+    grid-template-columns: 1fr 1fr;
     border-radius: 10px;
   }
 
-  .onepager-figure figcaption,
-  .architecture-figure figcaption {
-    padding: 7px 8px;
-    font-size: 0.68rem;
+  .hero-stat-divider {
+    display: none;
   }
 
-  .media-thumb {
-    height: 150px;
+  .hero-stat {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(149, 175, 219, 0.12);
   }
 
-  .skills-grid article {
-    padding: 12px;
+  .hero-stat:nth-child(odd):not(:last-child),
+  .hero-stat:nth-child(even):not(:last-child) {
+    border-right: none;
+  }
+
+  .hero-stat:nth-child(1),
+  .hero-stat:nth-child(3) {
+    border-right: 1px solid rgba(149, 175, 219, 0.12);
+  }
+
+  .hero-stat:nth-child(3),
+  .hero-stat:nth-child(4) {
+    border-bottom: none;
+  }
+
+  .project-list {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .stack-row {
+    grid-template-columns: 100px 1fr;
+    gap: 10px;
+    padding: 10px 14px;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-stat-bar {
+    grid-template-columns: 1fr 1fr;
+    margin-top: 16px;
+  }
+
+  .hero-stat {
+    padding: 10px 12px;
+  }
+
+  .hero-stat-val {
+    font-size: 0.95rem;
+  }
+
+  .hero-stat-label {
+    font-size: 0.62rem;
+    white-space: normal;
+  }
+
+  .project-entry {
+    padding: 14px 14px 12px;
+  }
+
+  .project-entry-title {
+    font-size: 0.97rem;
+  }
+
+  .project-entry-desc {
+    font-size: 0.83rem;
+  }
+
+  .stack-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 10px 12px;
+  }
+
+  .stack-label {
+    padding-top: 0;
+  }
+
+  .contact-card {
+    padding: 12px 14px;
+  }
+
+  .contact-card-val {
+    font-size: 0.78rem;
   }
 }
