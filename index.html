@@ -35,11 +35,12 @@
       <!-- HERO -->
       <section class="hero reveal">
         <p class="eyebrow">Software Engineer</p>
-        <h1>Agentic AI<br />Full-Stack Engineer</h1>
-        <p class="hero-copy">
-          Building production-ready AI systems — tool orchestration, MCP boundaries,
-          multi-agent runtimes, and AWS deployments. Four live projects, each with a full case study.
-        </p>
+        <h1 style="font-size: clamp(1.14rem, 3.24vw, 1.92rem); max-width: none;">Agentic AI Full-Stack Engineer</h1>
+        <ul class="hero-copy">
+          <li>Architected production AI systems using multi-agent runtimes and MCP tool boundaries for controlled, auditable orchestration.</li>
+          <li>Deployed four live applications on AWS (Lambda, App Runner, EC2) with Terraform infrastructure and automated CI/CD pipelines.</li>
+          <li>Engineered resilient systems with deterministic risk rules, real-time SSE dashboards, and async job models built for production failure modes.</li>
+        </ul>
         <div class="hero-stat-bar">
           <div class="hero-stat">
             <span class="hero-stat-val">4</span>
@@ -75,7 +76,7 @@
           I am a software engineer dedicated to building AI applications where the model is treated as a single component within a larger, reliable system. My focus is on implementing rigorous AI model output verification and truth-gated workflows to ensure that AI behavior remains verifiable and trustworthy.
         </p>
         <p style="margin-bottom: 0;">
-          I specialize in designing asynchronous, serverless architectures that prioritize background execution and clear progress feedback for complex, tool-heavy tasks. I aim to contribute to high-stakes environments that require server side rules for deterministic behavior and a disciplined approach to failure handling. My goal is to deliver end-to-end solutions that are technically robust, operationally transparent, and easy for stakeholders to navigate.
+          I specialize in designing asynchronous, serverless architectures that prioritize background execution and clear progress feedback for complex, tool-heavy tasks. I aim to contribute to high-stakes environments that require server-side rules for deterministic behavior and a disciplined approach to failure handling. My goal is to deliver end-to-end solutions that are technically robust, operationally transparent, and easy for stakeholders to navigate.
         </p>
       </section>
 
@@ -115,8 +116,8 @@
             </div>
             <h3 class="project-entry-title">IdeaGen</h3>
             <div class="project-entry-desc">
-              <div class="project-goal" style="margin-bottom: 10px;"><b>Goal:</b> Automated decision engine for investment-readiness assessments using multi-model comparison.</div>
-              <div class="project-how"><b>How:</b> Implements adaptive routing across OpenAI, Gemini, and DeepSeek with contract-first validation to ensure schema accuracy. Deployed on AWS App Runner with cache-before-infer logic and snapshot durability.</div>
+              <div class="project-goal" style="margin-bottom: 10px;"><b>Goal:</b> Multi-model decision platform for investment-readiness assessments — cross-provider consensus with hallucination-free financial projections.</div>
+              <div class="project-how"><b>How:</b> Routes ideation across OpenAI, Gemini, DeepSeek, and Grok with contract-first schema enforcement. Financial projections are computed deterministically — the LLM contributes narrative, never numbers. Every run, comparison, and execution plan is a persistent artifact with a full audit trail.</div>
             </div>
             <div class="project-entry-tech">
               <span>FastAPI</span><span>Next.js</span><span>Multi-Provider LLM</span><span>PostgreSQL</span><span>AWS</span>
@@ -137,8 +138,8 @@
             </div>
             <h3 class="project-entry-title">Autonomous Agentic Trader</h3>
             <div class="project-entry-desc">
-              <div class="project-goal" style="margin-bottom: 10px;"><b>Goal:</b> High-integrity trading infrastructure using deterministic risk guardrails to govern LLM-driven trade proposals.</div>
-              <div class="project-how"><b>How:</b> Orchestrates a four-gate portfolio-control pipeline enforcing deterministic risk rules. The real-time dashboard uses an SSE-first architecture with a recent update memory to handle client reconnections and state resyncing.</div>
+              <div class="project-goal" style="margin-bottom: 10px;"><b>Goal:</b> Production trading infrastructure where four named LLM trader personas propose trades governed by deterministic risk guardrails — not prompt-level suggestions.</div>
+              <div class="project-how"><b>How:</b> Every trade proposal passes a four-gate portfolio-control pipeline enforcing 14 deterministic risk rules before execution. MCP isolates tool access to Alpaca and Polygon. The operator dashboard keeps a rolling history of recent updates so it instantly catches up to the current state when the connection drops and reconnects.</div>
             </div>
             <div class="project-entry-tech">
               <span>FastAPI</span><span>Next.js</span><span>OpenAI Agents SDK</span><span>MCP</span><span>Alpaca</span><span>PostgreSQL</span><span>AWS EC2</span>
@@ -159,11 +160,11 @@
             </div>
             <h3 class="project-entry-title">MediNotes</h3>
             <div class="project-entry-desc">
-              <div class="project-goal" style="margin-bottom: 10px;"><b>Goal:</b> Convert multimodal medical intake into evidence-mapped clinical summaries and provide real-time consultation support.</div>
-              <div class="project-how"><b>How:</b> Deploys a hub-and-spoke agent architecture (RAG + MCP) with a critic-derived QA loop. It grounds summaries in raw patient data using scoped context windows and includes a clinical chat assistant strictly bounded to the consultation context to prevent hallucinations.</div>
+              <div class="project-goal" style="margin-bottom: 10px;"><b>Goal:</b> Convert multimodal medical intake (text, audio, PDFs, prescription images) into evidence-mapped clinical summaries with a hallucination-caught QA loop before delivery.</div>
+              <div class="project-how"><b>How:</b> Hub-and-spoke multi-agent pipeline where a Critic agent catches hallucinations pre-delivery and Evidence Linking maps every claim to a source. Format guardrails persist across sessions. Clinical chat assistant is strictly bounded to the consultation context — no out-of-scope responses.</div>
             </div>
             <div class="project-entry-tech">
-              <span>FastAPI</span><span>Next.js</span><span>OpenAI Agents SDK</span><span>RAG</span><span>MCP</span><span>AWS</span>
+              <span>FastAPI</span><span>Next.js</span><span>OpenAI Agents SDK</span><span>RAG</span><span>MCP</span><span>AWS App Runner</span>
             </div>
             <div class="project-entry-footer">
               <a class="project-live-link" href="https://medinotes.agentairg.site/" target="_blank" rel="noopener noreferrer">
@@ -183,45 +184,31 @@
         <div class="stack-manifest">
           <div class="stack-row">
             <span class="stack-label">Languages</span>
-            <div class="stack-pills">
-              <span>Python</span><span>TypeScript</span><span>Java</span>
-            </div>
+            <div class="stack-pills"><span>Python</span><span>TypeScript</span><span>Java</span></div>
           </div>
           <div class="stack-row">
             <span class="stack-label">Backend</span>
-            <div class="stack-pills">
-              <span>FastAPI</span><span>Django</span><span>Spring Boot</span><span>REST APIs</span>
-            </div>
+            <div class="stack-pills"><span>FastAPI</span><span>Django</span><span>Spring Boot</span><span>REST APIs</span></div>
           </div>
           <div class="stack-row">
             <span class="stack-label">Frontend</span>
-            <div class="stack-pills">
-              <span>Next.js</span><span>React</span><span>Angular</span>
-            </div>
+            <div class="stack-pills"><span>Next.js</span><span>React</span><span>Angular</span></div>
           </div>
           <div class="stack-row">
             <span class="stack-label">AI / LLM</span>
-            <div class="stack-pills">
-              <span>OpenAI Agents SDK</span><span>MCP</span><span>RAG</span><span>Tool Orchestration</span><span>Structured Outputs</span><span>Multi-Provider Routing</span>
-            </div>
+            <div class="stack-pills"><span>OpenAI Agents SDK</span><span>MCP</span><span>RAG</span><span>Tool Orchestration</span><span>Structured Outputs</span><span>Multi-Provider Routing</span></div>
           </div>
           <div class="stack-row">
             <span class="stack-label">Cloud / AWS</span>
-            <div class="stack-pills">
-              <span>Lambda</span><span>API Gateway</span><span>EC2</span><span>ECR</span><span>S3</span><span>RDS</span><span>CloudFront</span><span>Route 53</span><span>Secrets Manager</span>
-            </div>
+            <div class="stack-pills"><span>Lambda</span><span>API Gateway</span><span>EC2</span><span>ECR</span><span>S3</span><span>RDS</span><span>CloudFront</span><span>Route 53</span><span>Secrets Manager</span></div>
           </div>
           <div class="stack-row">
             <span class="stack-label">DevOps</span>
-            <div class="stack-pills">
-              <span>Docker</span><span>Terraform</span><span>GitHub Actions</span>
-            </div>
+            <div class="stack-pills"><span>Docker</span><span>Terraform</span><span>GitHub Actions</span></div>
           </div>
           <div class="stack-row">
             <span class="stack-label">Data / Infra</span>
-            <div class="stack-pills">
-              <span>PostgreSQL</span><span>SQLite</span><span>Redis</span><span>SQLAlchemy</span><span>Alembic</span><span>Vector Store</span><span>SSE</span><span>OpenTelemetry</span>
-            </div>
+            <div class="stack-pills"><span>PostgreSQL</span><span>Redis</span><span>SQLAlchemy</span><span>Alembic</span><span>Vector Store</span><span>SSE</span><span>OpenTelemetry</span></div>
           </div>
           <div class="stack-row">
             <span class="stack-label">AI-Assisted Tool</span>

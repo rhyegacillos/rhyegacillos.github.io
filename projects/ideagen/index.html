@@ -22,13 +22,7 @@
     <div class="cs-layout">
     <header class="cs-site-header">
       <a class="cs-back" href="../../index.html">&#8592; Rhye Gacillos</a>
-      <a
-        class="button button-primary"
-        href="https://ideagen.agentairg.site/"
-        target="_blank"
-        rel="noopener noreferrer"
-        >Live App &#8594;</a
-      >
+      <a class="button button-primary" href="https://ideagen.agentairg.site/" target="_blank" rel="noopener noreferrer">Live App &#8594;</a>
     </header>
 
     <main class="cs-page">
@@ -46,13 +40,7 @@
           that makes every analysis persistent and re-exploitable.
         </p>
         <div class="cs-hero-meta">
-          <a
-            class="portal-live-chip"
-            href="https://ideagen.agentairg.site/"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Live: ideagen.agentairg.site</a
-          >
+          <a class="portal-live-chip" href="https://ideagen.agentairg.site/" target="_blank" rel="noopener noreferrer">Live: ideagen.agentairg.site</a>
         </div>
         <div class="cs-badges">
           <span class="cs-badge">FastAPI</span>
@@ -68,7 +56,7 @@
         </div>
       </section>
 
-      <!-- CHAPTER I: STRATEGIC CONTEXT -->
+      <!-- CHAPTER I -->
       <section class="cs-section reveal">
         <div class="cs-chapter-header">
           <span class="cs-chapter-num">I</span>
@@ -79,25 +67,28 @@
             Single-model AI ideation gives one perspective shaped by one provider's training data,
             RLHF preferences, and capability profile. When the output of a decision AI is a
             recommendation to invest capital or pursue a strategy, that single-perspective limitation
-            is a material risk. Different frontier models reason differently: <strong>OpenAI</strong>
-            tends toward structured decomposition, <strong>Gemini</strong> toward pattern synthesis,
-            <strong>DeepSeek</strong> toward cost-efficient reasoning, <strong>Grok</strong> toward
-            real-time-aware analysis. Routing the same ideation task across all four and scoring the
-            outputs against a structured rubric gives something no single-model system can provide —
-            a <strong>cross-model consensus signal with visible disagreement</strong>.
+            is a material risk. Different frontier models reason differently:
           </p>
+          <ul>
+            <li><strong>OpenAI</strong> tends toward structured decomposition</li>
+            <li><strong>Gemini</strong> toward pattern synthesis</li>
+            <li><strong>DeepSeek</strong> toward cost-efficient reasoning</li>
+            <li><strong>Grok</strong> toward real-time-aware analysis</li>
+          </ul>
           <p>
-            The problem this project solves: make that multi-model output <strong>comparable,
-            auditable, and decision-ready</strong>, not just a collection of text blobs. That
-            requires contract-first schema enforcement so every model's output has the same shape,
-            deterministic computation so financial numbers are never pattern-matched hallucinations,
-            and a persistent artifact model so the analysis can be retrieved, re-exported, and
-            re-used weeks after it was generated.
+            Routing the same ideation task across all four and scoring the outputs against a
+            structured rubric gives something no single-model system can provide — a
+            <strong>cross-model consensus signal with visible disagreement</strong>. The engineering
+            challenge is making that output <strong>comparable, auditable, and decision-ready</strong>
+            — not just a collection of text blobs. That requires contract-first schema enforcement
+            so every model's output has the same shape, deterministic computation so financial
+            numbers are never pattern-matched hallucinations, and a persistent artifact model so
+            the analysis can be retrieved and re-used weeks after it was generated.
           </p>
         </div>
       </section>
 
-      <!-- CHAPTER II: ARCHITECTURE -->
+      <!-- CHAPTER II -->
       <section class="cs-section reveal">
         <div class="cs-chapter-header">
           <span class="cs-chapter-num">II</span>
@@ -124,8 +115,8 @@
             (maximum 3 attempts), the system falls back to a <strong>deterministic safe payload</strong>
             that satisfies the schema with explicit null values and error annotations, rather than
             propagating a malformed response to the frontend. The frontend always receives a
-            predictable structure regardless of LLM behavior — no UI crashes from unexpected model
-            output shapes, no partial renders, no silent missing fields.
+            predictable structure regardless of LLM behavior — no UI crashes, no partial renders,
+            no silent missing fields.
           </p>
         </div>
 
@@ -134,12 +125,11 @@
           <p>
             Generation requests follow an ordered provider chain:
             <strong>OpenAI &rarr; Gemini &rarr; DeepSeek &rarr; Grok</strong>. If a provider is
-            unavailable, rate-limited, or returns a non-recoverable error (5xx, timeout, malformed
-            response that survives all retries), the next provider in the chain is attempted with
-            the same request. This provides resilience without manual operator intervention and
-            without surfacing provider failures to the user. The provider that ultimately fulfilled
-            the request is recorded in the artifact metadata for auditability — operators can see
-            which model produced which output.
+            unavailable, rate-limited, or returns a non-recoverable error, the next provider in
+            the chain is attempted with the same request. This provides resilience without manual
+            operator intervention and without surfacing provider failures to the user. The provider
+            that ultimately fulfilled the request is recorded in the artifact metadata for
+            auditability — operators can see which model produced which output.
           </p>
         </div>
 
@@ -158,7 +148,7 @@
         </div>
       </section>
 
-      <!-- CHAPTER III: INTEGRITY LAYER -->
+      <!-- CHAPTER III -->
       <section class="cs-section reveal">
         <div class="cs-chapter-header">
           <span class="cs-chapter-num">III</span>
@@ -168,34 +158,30 @@
           <p>
             The most dangerous failure mode in an AI investment platform is not a bad recommendation
             — it is a confidently stated hallucinated number. An LLM will generate financial
-            projections with apparent precision: "Year 3 revenue: $4.2M, CAGR: 34%". These numbers
-            have no grounding. They are pattern-matched outputs that look like financial analysis but
-            are not computed from any model. They are statistically plausible because they resemble
-            financial data in the training set, not arithmetically derived from any explicit
-            assumption. In a decision context, that distinction is the difference between a tool and
-            a liability.
+            projections with apparent precision: "Year 3 revenue: $4.2M, CAGR: 34%." These numbers
+            have no grounding. They are pattern-matched outputs that resemble financial analysis
+            but are not computed from any explicit model. In a decision context, that distinction
+            is the difference between a tool and a liability.
           </p>
           <p>
-            The <em>Execution Plan</em> module addresses this with a strict separation between what
-            the LLM is allowed to produce and what the system computes programmatically. The
-            boundary is enforced at the API layer — it is not a prompt-level suggestion but an
-            architectural constraint.
+            The <em>Execution Plan</em> module addresses this with a strict separation between
+            what the LLM is allowed to produce and what the system computes programmatically.
+            The boundary is enforced at the API layer — it is not a prompt-level suggestion but
+            an architectural constraint.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Separation of Computation from Narration</h3>
           <p>
-            The financial projections in <em>Execution Plans</em> are computed programmatically from
+            Financial projections in <em>Execution Plans</em> are computed programmatically from
             explicit formulas: revenue modeling by growth rate and initial market penetration, cost
             structure by category ratios applied to the revenue base, break-even by contribution
             margin calculation, sensitivity ranges by bounded parameter variation. The LLM
             contributes <strong>narrative framing and assumption justification</strong> — it
-            describes what the numbers mean, interprets the sensitivity outputs in context, and
-            explains the strategic reasoning behind the assumption inputs. It does not produce the
-            numbers themselves. The generation prompt explicitly forbids numerical financial claims
-            and solicits structured assumption inputs that feed the computation engine as structured
-            data, not as text assertions.
+            describes what the numbers mean, interprets sensitivity outputs, and explains the
+            strategic reasoning behind assumption inputs. It does not produce the numbers themselves.
+            The generation prompt explicitly forbids numerical financial claims.
           </p>
         </div>
 
@@ -228,7 +214,7 @@
         </div>
       </section>
 
-      <!-- CHAPTER IV: ARTIFACT LIFECYCLE -->
+      <!-- CHAPTER IV -->
       <section class="cs-section reveal">
         <div class="cs-chapter-header">
           <span class="cs-chapter-num">IV</span>
@@ -240,9 +226,7 @@
             treats every output as a <strong>first-class persistent artifact</strong> with its own
             lifecycle state, re-export surface, and downstream composition potential. A run generated
             today can become the input for an execution plan next week without any manual
-            copy-paste — the artifact graph manages the dependency chain. The lifecycle state
-            model is designed so that artifacts can be re-surfaced in any downstream step without
-            ever being re-generated.
+            copy-paste — the artifact graph manages the dependency chain.
           </p>
         </div>
 
@@ -254,11 +238,10 @@
             <code>draft</code> &rarr; <code>finalized</code> &rarr; <code>archived</code>. Artifacts
             can be retrieved at any lifecycle stage, re-exported to PDF via <em>WeasyPrint</em>,
             emailed via <em>Resend</em>, or used as inputs for downstream workflow steps. The
-            relational model captures dependency edges explicitly: a <em>Decision Summary</em>
+            relational model captures dependency edges explicitly — a <em>Decision Summary</em>
             references the run IDs it was built from; an <em>Execution Plan</em> references the
-            decision summary it was derived from. Every artifact in the system has a traceable
-            provenance chain back to the original ideation inputs and the specific model that
-            produced each component.
+            decision summary it was derived from. Every artifact has a traceable provenance chain
+            back to the original ideation inputs.
           </p>
         </div>
 
@@ -266,12 +249,11 @@
           <h3>Run-to-Run Comparison</h3>
           <p>
             Users select any two saved runs for head-to-head comparison. The system identifies the
-            winner across each rubric dimension independently, surfaces the trade-off rationale
-            (where model A outperformed on novelty but underperformed on execution risk and why),
-            and highlights where the two models disagreed on the same underlying concept with
-            contradictory positions. This comparison is itself a saved artifact with its own
-            lifecycle state — it can be retrieved, re-exported to PDF, or used as context for a
-            downstream <em>Decision Summary</em> that references both source runs.
+            winner across each rubric dimension independently, surfaces the trade-off rationale —
+            where model A outperformed on novelty but underperformed on execution risk and why —
+            and highlights where the two models contradicted each other on the same underlying concept.
+            This comparison is itself a saved artifact with its own lifecycle state, re-exportable
+            to PDF or usable as context for a downstream <em>Decision Summary</em>.
           </p>
         </div>
 
@@ -282,8 +264,8 @@
             request has a cached result keyed by a deterministic hash of the input parameters and
             schema version. This reduces latency and cost for repeated or similar inputs without
             sacrificing result quality. Cache invalidation is artifact-scoped: re-finalizing an
-            artifact invalidates its downstream cache entries, ensuring that stale scoring results
-            are never served after a source artifact is updated.
+            artifact invalidates its downstream cache entries, ensuring stale scoring results are
+            never served after a source artifact is updated.
           </p>
         </div>
       </section>
@@ -295,15 +277,12 @@
           <h2>Architecture Diagram</h2>
         </div>
         <div class="cs-arch-img-wrap">
-          <img
-            src="../../images/ideagen/ideagen.png"
-            alt="Architecture diagram for the IdeaGen platform"
-          />
+          <img src="../../images/ideagen/ideagen.png" alt="Architecture diagram for the IdeaGen platform" />
         </div>
         <p class="cs-arch-caption">Scroll horizontally on small screens</p>
       </section>
 
-      <!-- CHAPTER V: OPERATIONS -->
+      <!-- CHAPTER V -->
       <section class="cs-section reveal">
         <div class="cs-chapter-header">
           <span class="cs-chapter-num">V</span>
@@ -312,45 +291,44 @@
         <div class="cs-stack-grid">
           <div class="cs-stack-item">
             <h4>FastAPI (Python)</h4>
-            <p>Orchestration layer for multi-model routing, retry logic, Pydantic schema validation, PDF generation, email delivery, and deterministic financial computation. Single async service handling all pipeline stages — no separate worker processes needed because App Runner handles horizontal scaling rather than per-request concurrency limits imposed by Lambda.</p>
+            <p>Orchestration layer for multi-model routing, retry logic, Pydantic schema validation, PDF generation, email delivery, and deterministic financial computation. Single async service — App Runner handles horizontal scaling.</p>
           </div>
           <div class="cs-stack-item">
             <h4>Next.js + TypeScript</h4>
-            <p>Adaptive frontend with guided flow mode (step-by-step ideation walkthrough) and status flow mode (real-time generation progress). Per-step state managed via localStorage for recovery on page reload. Modal-driven artifact management for retrieving, comparing, and exporting saved runs without leaving the current flow.</p>
+            <p>Adaptive frontend with guided flow mode (step-by-step ideation walkthrough) and status flow mode (real-time generation progress). Per-step state managed via localStorage for recovery on page reload. Modal-driven artifact management for retrieving, comparing, and exporting saved runs.</p>
           </div>
           <div class="cs-stack-item">
             <h4>PostgreSQL + SQLAlchemy + Alembic</h4>
-            <p>Persistence for all runs, comparisons, decision summaries, and execution plans. Relational model chosen over document storage for the complex artifact query patterns and multi-step lifecycle state transitions that require join-capable queries across the artifact dependency graph. Alembic manages schema migrations with zero-downtime roll-forward patterns applied automatically on container startup.</p>
+            <p>Persistence for all runs, comparisons, decision summaries, and execution plans. Relational model chosen for complex artifact query patterns and multi-step lifecycle state transitions. Alembic migrations applied automatically on container startup.</p>
           </div>
           <div class="cs-stack-item">
             <h4>WeasyPrint</h4>
-            <p>Server-side HTML&rarr;PDF rendering for report exports. Reports use structured HTML templates populated from artifact data, not raw LLM text. This guarantees consistent formatting, correct pagination, and professional output regardless of LLM generation variance. The template layer also allows report styling to be updated independently of the generation pipeline.</p>
+            <p>Server-side HTML&rarr;PDF rendering for report exports. Reports use structured HTML templates populated from artifact data — consistent formatting regardless of LLM generation variance.</p>
           </div>
           <div class="cs-stack-item">
             <h4>Resend</h4>
-            <p>Email delivery for PDF report dispatch. Integrated with a verified-send pattern: the server confirms send receipt from the Resend API before recording delivery success in the artifact lifecycle state. A failed send is surfaced as an artifact state error, not silently dropped — the user sees the failure and can retry.</p>
+            <p>Email delivery for PDF report dispatch. Verified-send pattern: server confirms send receipt before recording delivery success in the artifact lifecycle state. Failed sends surface as artifact state errors, not silently dropped.</p>
           </div>
           <div class="cs-stack-item">
             <h4>Clerk</h4>
-            <p>Authentication, session management, and organization scoping. User identity gates all artifact access — no cross-user artifact visibility is architecturally possible. Clerk JWTs are verified on every API request, and all artifact queries are scoped to the verified user ID before any database operation executes.</p>
+            <p>Authentication, session management, and organization scoping. User identity gates all artifact access — no cross-user artifact visibility is architecturally possible. JWTs verified on every API request; all artifact queries scoped to the verified user ID.</p>
           </div>
           <div class="cs-stack-item">
             <h4>Docker + AWS App Runner + ECR</h4>
-            <p>Container-based deployment. App Runner handles automatic HTTPS, request-based scaling, and health check routing with no manual server management or capacity planning. ECR stores versioned container images; App Runner pulls the latest image on each deploy triggered by a GitHub Actions push to main.</p>
+            <p>Container-based deployment. App Runner handles automatic HTTPS, request-based scaling, and health check routing with no manual server management. ECR stores versioned images; App Runner pulls the latest on each deploy.</p>
           </div>
           <div class="cs-stack-item">
             <h4>AWS RDS (PostgreSQL)</h4>
-            <p>Managed database with automated backups and point-in-time recovery. Chosen over self-hosted PostgreSQL for durability guarantees and operational simplicity — RDS handles patching, failover, and backup retention without operator intervention. Connection pooling managed via SQLAlchemy's async engine with configurable pool sizing.</p>
+            <p>Managed database with automated backups and point-in-time recovery. Chosen over self-hosted PostgreSQL for durability guarantees and operational simplicity. Connection pooling via SQLAlchemy's async engine.</p>
           </div>
           <div class="cs-stack-item">
             <h4>Route 53</h4>
-            <p>Custom domain routing for the App Runner service endpoint. ALIAS record maps the custom domain to the App Runner service URL, with certificate provisioning handled by App Runner's managed TLS. DNS health check failover configured at the Route 53 layer for additional resilience during App Runner service restarts.</p>
+            <p>ALIAS record maps the custom domain to the App Runner service URL. Certificate provisioning handled by App Runner's managed TLS. DNS health check failover configured for additional resilience during service restarts.</p>
           </div>
         </div>
       </section>
 
     </main>
-
     </div>
     <script src="../../script.js"></script>
   </body>

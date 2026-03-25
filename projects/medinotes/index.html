@@ -22,13 +22,7 @@
     <div class="cs-layout">
     <header class="cs-site-header">
       <a class="cs-back" href="../../index.html">&#8592; Rhye Gacillos</a>
-      <a
-        class="button button-primary"
-        href="https://medinotes.agentairg.site/"
-        target="_blank"
-        rel="noopener noreferrer"
-        >Live App &#8594;</a
-      >
+      <a class="button button-primary" href="https://medinotes.agentairg.site/" target="_blank" rel="noopener noreferrer">Live App &#8594;</a>
     </header>
 
     <main class="cs-page">
@@ -43,17 +37,10 @@
           study covers the hub-and-spoke multi-agent pipeline that separates extraction from synthesis
           from critique, the Critic QA loop that catches hallucinations before they reach the clinician,
           the Evidence Linking protocol that maps every summary claim back to its source, and the
-          persistent format guardrails that improve output quality across sessions without manual prompt
-          tuning.
+          persistent format guardrails that improve output quality across sessions without manual prompt tuning.
         </p>
         <div class="cs-hero-meta">
-          <a
-            class="portal-live-chip"
-            href="https://medinotes.agentairg.site/"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Live: medinotes.agentairg.site</a
-          >
+          <a class="portal-live-chip" href="https://medinotes.agentairg.site/" target="_blank" rel="noopener noreferrer">Live: medinotes.agentairg.site</a>
         </div>
         <div class="cs-badges">
           <span class="cs-badge">FastAPI</span>
@@ -69,7 +56,7 @@
         </div>
       </section>
 
-      <!-- CHAPTER I: STRATEGIC CONTEXT -->
+      <!-- CHAPTER I -->
       <section class="cs-section reveal">
         <div class="cs-chapter-header">
           <span class="cs-chapter-num">I</span>
@@ -86,19 +73,22 @@
             before the output reaches the clinician.
           </p>
           <p>
-            The correctness requirements for <em>MediNotes</em> were defined at the outset: every
-            claim in the summary must be <strong>traceable to a source document</strong>;
-            hallucinations must be caught <strong>before delivery</strong>, not after; the system
-            must handle multimodal inputs (text, audio, scanned PDFs, prescription images) without
-            information loss during format conversion; and the pipeline must be
-            <strong>auditable at each stage</strong> — not just at the final output. These
-            requirements ruled out a single-prompt architecture from the start and drove the
+            The correctness requirements for MediNotes were defined at the outset:
+          </p>
+          <ul>
+            <li>Every claim in the summary must be <strong>traceable to a source document</strong></li>
+            <li>Hallucinations must be caught <strong>before delivery</strong>, not after</li>
+            <li>Multimodal inputs must be handled without information loss during format conversion</li>
+            <li>The pipeline must be <strong>auditable at each stage</strong> — not just at the final output</li>
+          </ul>
+          <p>
+            These requirements ruled out a single-prompt architecture from the start and drove the
             hub-and-spoke agent topology.
           </p>
         </div>
       </section>
 
-      <!-- CHAPTER II: HUB-AND-SPOKE TOPOLOGY -->
+      <!-- CHAPTER II -->
       <section class="cs-section reveal">
         <div class="cs-chapter-header">
           <span class="cs-chapter-num">II</span>
@@ -109,80 +99,79 @@
             Rather than a single monolithic prompt that handles extraction, synthesis, research,
             critique, and memory in one pass, the pipeline uses a
             <strong>hub-and-spoke topology</strong> where the <em>Summary Agent</em> orchestrates
-            specialized agents, each with a single clearly bounded responsibility. This makes each
-            stage independently observable, testable, and improvable — a failure in the
-            <em>Research Agent</em> does not contaminate the <em>Extraction Agent</em>'s output, and
-            a Critic failure triggers a targeted regeneration cycle, not a full pipeline restart.
+            specialized agents, each with a single clearly bounded responsibility. A failure in the
+            <em>Research Agent</em> does not contaminate the <em>Extraction Agent</em>'s output,
+            and a Critic failure triggers a targeted regeneration cycle — not a full pipeline restart.
           </p>
         </div>
 
         <div class="cs-decision">
-          <h3>Extraction Agent &mdash; Multimodal Input Normalization</h3>
+          <h3>Extraction Agent — Multimodal Input Normalization</h3>
           <p>
             Converts all input formats to a unified text representation before any summarization
-            occurs. OCR via vision model for prescription images and scanned documents where text
-            layer extraction is not available. <strong>OpenAI Whisper</strong> transcription for
-            audio recordings of consultation notes and patient-reported history. Text extraction
-            for PDFs with embedded text layers and DOCX documents. By normalizing inputs in a
-            dedicated extraction stage, the <em>Summary Agent</em> always works with clean, uniform
-            context — it never receives raw binary files, half-parsed PDFs, or unprocessed audio
-            blobs. The extraction output is a single structured document context that all
-            downstream agents consume from the same source.
+            occurs. OCR via vision model for prescription images and scanned documents where a text
+            layer is not available. <strong>OpenAI Whisper</strong> transcription for audio
+            recordings of consultation notes. Text extraction for PDFs with embedded text layers
+            and DOCX documents. By normalizing inputs in a dedicated extraction stage, the
+            <em>Summary Agent</em> always works with clean, uniform context — it never receives raw
+            binary files, half-parsed PDFs, or unprocessed audio blobs.
           </p>
         </div>
 
         <div class="cs-decision">
-          <h3>Research Agent &mdash; Conditional External Lookup</h3>
+          <h3>Research Agent — Conditional External Lookup</h3>
           <p>
             Conditionally triggered — not on every run, but when the visit context contains signals
             that warrant external verification: potential drug interactions, unfamiliar medication
-            names, dosage ranges that fall outside common clinical norms, or clinical guidelines
-            that require current evidence. Queries external clinical sources via the
-            <strong>Brave Search MCP server</strong>. Results are injected as supporting context
-            into the <em>Summary Agent</em>'s generation step — clearly marked as referenced
-            external evidence, not as direct clinical claims. This prevents the research step from
-            introducing new hallucinations while still enriching the summary with relevant external
-            context.
+            names, dosage ranges outside common clinical norms, or guidelines requiring current
+            evidence. Queries external clinical sources via the <strong>Brave Search MCP server</strong>.
+            Results are injected as clearly marked referenced external evidence into the
+            <em>Summary Agent</em>'s generation step — not as direct clinical claims. This prevents
+            the research step from introducing new hallucinations while still enriching the summary
+            with relevant external context.
           </p>
         </div>
 
         <div class="cs-decision">
-          <h3>Summary Agent &mdash; Orchestration Hub</h3>
+          <h3>Summary Agent — Orchestration Hub</h3>
           <p>
             Builds a unified visit context from all extracted inputs and any research evidence
             gathered by the <em>Research Agent</em>. Composes the structured 3-section HTML summary:
             <strong>chief complaint and assessment</strong>, <strong>clinical findings and
             observations</strong>, <strong>treatment plan and follow-up</strong>. Acts as the hub
-            that sequences and assembles the pipeline outputs — it coordinates the downstream
-            handoffs to the <em>Critic Agent</em> for QA and the <em>Evidence Agent</em> for source
-            mapping. The orchestration logic is explicit: handoffs are deterministic, not emergent
-            from an open-ended agent loop.
+            that sequences and assembles pipeline outputs — coordinating deterministic handoffs
+            to the <em>Critic Agent</em> for QA and the <em>Evidence Agent</em> for source mapping.
+            Orchestration logic is explicit: handoffs are deterministic, not emergent from an
+            open-ended agent loop.
           </p>
         </div>
 
         <div class="cs-decision">
-          <h3>Critic Agent &mdash; Pre-Delivery QA Gate</h3>
+          <h3>Critic Agent — Pre-Delivery QA Gate</h3>
           <p>
             Evaluates every generated summary before it reaches the clinician. The
-            <em>Critic Agent</em> checks for four failure categories: <strong>factual
-            contradictions</strong> with source documents (claims that directly conflict with the
-            extracted input), <strong>clinical omissions</strong> (findings present in the source
-            that are absent from the summary), <strong>hallucinated specifics</strong> (names,
-            dosages, dates, or measurements with no source support), and
-            <strong>structural violations</strong> against the expected 3-section format. If the
-            summary fails on any category, the system runs a <strong>tournament of up to 3
+            <em>Critic Agent</em> checks for four failure categories:
+          </p>
+          <ul>
+            <li><strong>Factual contradictions</strong> — claims that directly conflict with the extracted source input</li>
+            <li><strong>Clinical omissions</strong> — findings present in the source that are absent from the summary</li>
+            <li><strong>Hallucinated specifics</strong> — names, dosages, dates, or measurements with no source support</li>
+            <li><strong>Structural violations</strong> — deviations from the expected 3-section format</li>
+          </ul>
+          <p>
+            If the summary fails on any category, the system runs a <strong>tournament of up to 3
             regenerated candidates</strong> with the Critic's failure analysis injected as negative
-            constraints, and selects the best-scoring output from the tournament. This adds latency
-            but eliminates the delivery of unverified clinical claims to the clinician.
+            constraints, and selects the best-scoring output. This adds latency but eliminates the
+            delivery of unverified clinical claims to the clinician.
           </p>
         </div>
       </section>
 
-      <!-- CHAPTER III: INTEGRITY LAYER -->
+      <!-- CHAPTER III -->
       <section class="cs-section reveal">
         <div class="cs-chapter-header">
           <span class="cs-chapter-num">III</span>
-          <h2>The Integrity Layer: Evidence Linking</h2>
+          <h2>The Integrity Layer: Evidence Linking &amp; Format Guardrails</h2>
         </div>
         <div class="cs-story">
           <p>
@@ -195,15 +184,15 @@
         </div>
 
         <div class="cs-decision">
-          <h3>Evidence Agent &mdash; Source-to-Claim Mapping</h3>
+          <h3>Evidence Agent — Source-to-Claim Mapping</h3>
           <p>
             Every statement in the finalized summary is mapped back to the specific source chunk
             that supports it. The <em>Evidence Agent</em> processes the finalized summary and the
             original extraction output, producing a <strong>claim-to-source index</strong> that the
             clinician can inspect in the UI — any claim can be expanded to show the exact input
-            excerpt it was derived from. This is not cosmetic: in a clinical context, auditability
-            is a safety requirement. If a statement cannot be traced to a source, it is flagged as
-            unsupported and surfaced as an evidence gap, not silently included in the final output.
+            excerpt it was derived from. In a clinical context, auditability is a safety requirement.
+            If a statement cannot be traced to a source, it is flagged as unsupported and surfaced
+            as an evidence gap — not silently included in the final output.
           </p>
         </div>
 
@@ -216,8 +205,8 @@
             <strong>persisted as format guardrails</strong> for the current doctor's profile in the
             database. Future generation prompts for this doctor include the accumulated guardrails
             as explicit negative constraints injected into the system prompt. Output quality
-            improves across sessions without any manual prompt engineering: the pipeline learns from
-            its own Critic failures and encodes that learning as persistent, doctor-scoped
+            improves across sessions without any manual prompt engineering: the pipeline learns
+            from its own Critic failures and encodes that learning as persistent, doctor-scoped
             generation constraints.
           </p>
         </div>
@@ -225,14 +214,13 @@
         <div class="cs-decision">
           <h3>Zero Hallucination Contract</h3>
           <p>
-            The combination of <em>Critic QA</em> (catches hallucinations before delivery),
-            <em>Evidence Linking</em> (traces every surviving claim to a source document), and
-            <em>Persistent Guardrails</em> (prevents recurring structural errors from the same
-            doctor's generation history) implements a layered <strong>zero hallucination
-            contract</strong>. The Critic catches errors in the current run. Evidence Linking makes
-            any errors that survive the Critic visible to the clinician before they act on the
-            summary. Persistent Guardrails reduce the probability of the same class of errors
-            appearing in future runs. No single layer is sufficient; the contract requires all three.
+            The combination of <em>Critic QA</em>, <em>Evidence Linking</em>, and
+            <em>Persistent Guardrails</em> implements a layered
+            <strong>zero hallucination contract</strong>. The Critic catches errors in the current
+            run. Evidence Linking makes any errors that survive the Critic visible to the clinician
+            before they act on the summary. Persistent Guardrails reduce the probability of the
+            same class of errors appearing in future runs. No single layer is sufficient; the
+            contract requires all three working in sequence.
           </p>
         </div>
       </section>
@@ -244,15 +232,12 @@
           <h2>Architecture Diagram</h2>
         </div>
         <div class="cs-arch-img-wrap">
-          <img
-            src="../../images/medinotes/medinotes.png"
-            alt="Architecture diagram for the MediNotes platform"
-          />
+          <img src="../../images/medinotes/medinotes.png" alt="Architecture diagram for the MediNotes platform" />
         </div>
         <p class="cs-arch-caption">Scroll horizontally on small screens</p>
       </section>
 
-      <!-- CHAPTER IV: LONGITUDINAL MEMORY -->
+      <!-- CHAPTER IV -->
       <section class="cs-section reveal">
         <div class="cs-chapter-header">
           <span class="cs-chapter-num">IV</span>
@@ -275,11 +260,10 @@
             <strong>vector store keyed by patient ID</strong>. On subsequent visits for the same
             patient, semantically similar context from prior summaries is retrieved via similarity
             search and injected as background context into the <em>Summary Agent</em>'s generation
-            step — prior diagnoses, known allergies, current medication history, treatment patterns,
-            and documented clinical observations. The clinician does not need to re-provide history
-            that is already in the system. Retrieval is scoped strictly to the current patient's
-            indexed summaries — cross-patient retrieval is architecturally impossible because the
-            vector store queries are keyed by patient ID.
+            step — prior diagnoses, known allergies, current medication history, and documented
+            clinical observations. Retrieval is scoped strictly to the current patient's indexed
+            summaries — cross-patient retrieval is architecturally impossible because the vector
+            store queries are keyed by patient ID at the query layer.
           </p>
         </div>
 
@@ -288,17 +272,17 @@
           <p>
             The <em>Chat Agent</em> gives the clinician a conversational interface for asking
             questions about the current patient's history and the current visit context. It has
-            read access only to the current patient's visit summaries and consultation context —
-            it cannot answer questions outside this scope. Cross-patient data access is
-            architecturally impossible, not just policy-constrained: the chat session is initialized
-            with a patient-scoped context object that is the only data source available to the
-            agent. Clinical answers are always grounded in documented evidence — the
-            <em>Chat Agent</em> cannot speculate beyond what is in the patient's record.
+            read access only to the current patient's visit summaries and consultation context.
+            Cross-patient data access is architecturally impossible, not just policy-constrained:
+            the chat session is initialized with a patient-scoped context object that is the
+            only data source available to the agent. Clinical answers are always grounded in
+            documented evidence — the <em>Chat Agent</em> cannot speculate beyond what is in
+            the patient's record.
           </p>
         </div>
       </section>
 
-      <!-- CHAPTER V: STREAMING -->
+      <!-- CHAPTER V -->
       <section class="cs-section reveal">
         <div class="cs-chapter-header">
           <span class="cs-chapter-num">V</span>
@@ -309,24 +293,21 @@
             The full pipeline — extraction, optional research, summarization, Critic QA, evidence
             linking, and memory indexing — takes 30 to 60 seconds under typical load. Blocking
             the UI until completion is not acceptable: the clinician has no visibility into what
-            the pipeline is doing, cannot tell if it is progressing normally, and loses all work
-            if connectivity drops during the wait. The streaming architecture addresses both
-            problems.
+            the pipeline is doing, and loses all work if connectivity drops during the wait.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>SSE-Driven Incremental Updates</h3>
           <p>
-            Rather than blocking the UI until pipeline completion, each pipeline stage emits an
-            <strong>SSE event as it finishes</strong>: <code>extraction_complete</code>,
-            <code>research_done</code>, <code>summary_draft_ready</code>,
-            <code>critic_pass_complete</code>, <code>evidence_linked</code>,
-            <code>memory_indexed</code>. The frontend renders incrementally as stages complete,
-            giving the clinician real-time visibility into pipeline progress. If the Critic
-            triggers a regeneration tournament, a <code>critic_regenerating</code> event is
-            emitted so the clinician knows why the pipeline is taking longer than expected. The UI
-            is never in an ambiguous pending state.
+            Each pipeline stage emits an SSE event as it finishes:
+            <code>extraction_complete</code>, <code>research_done</code>,
+            <code>summary_draft_ready</code>, <code>critic_pass_complete</code>,
+            <code>evidence_linked</code>, <code>memory_indexed</code>.
+            The frontend renders incrementally as stages complete, giving the clinician real-time
+            visibility into pipeline progress. If the Critic triggers a regeneration tournament,
+            a <code>critic_regenerating</code> event is emitted so the clinician knows why the
+            pipeline is taking longer. The UI is never in an ambiguous pending state.
           </p>
         </div>
 
@@ -338,14 +319,13 @@
             mobile app backgrounded — the pipeline continues running on the server. The client
             reconnects with the <code>job_id</code> and resumes streaming from the last completed
             stage event. No work is re-executed; no stage outputs are lost. The Redis job record
-            tracks the completion state of each pipeline stage, so the resumption point is
-            exact — the client receives only the events it missed, not a full replay from the
-            beginning.
+            tracks the completion state of each pipeline stage, so the resumption point is exact —
+            the client receives only the events it missed, not a full replay from the beginning.
           </p>
         </div>
       </section>
 
-      <!-- CHAPTER VI: OPERATIONS -->
+      <!-- CHAPTER VI -->
       <section class="cs-section reveal">
         <div class="cs-chapter-header">
           <span class="cs-chapter-num">VI</span>
@@ -354,49 +334,48 @@
         <div class="cs-stack-grid">
           <div class="cs-stack-item">
             <h4>FastAPI (Python)</h4>
-            <p>Pipeline orchestration, SSE streaming host, multimodal file handling, and job state management. Handles the agent handoff coordination between pipeline stages and exposes the SSE endpoint that the frontend consumes for incremental progress updates.</p>
+            <p>Pipeline orchestration, SSE streaming host, multimodal file handling, and job state management. Handles agent handoff coordination between pipeline stages and exposes the SSE endpoint for incremental progress updates.</p>
           </div>
           <div class="cs-stack-item">
             <h4>Next.js / React + TypeScript</h4>
-            <p>Frontend with SSE event consumption and incremental stage rendering — each stage event triggers a UI update that reveals the completed stage output. Evidence linking UI lets clinicians expand any summary claim to inspect its source excerpt. Scoped chat interface scoped to the current patient session.</p>
+            <p>SSE event consumption and incremental stage rendering — each stage event triggers a UI update. Evidence linking UI lets clinicians expand any summary claim to inspect its source excerpt. Scoped chat interface per patient session.</p>
           </div>
           <div class="cs-stack-item">
             <h4>OpenAI Agents SDK</h4>
-            <p>Agent orchestration framework for the hub-and-spoke pipeline. Handoff coordination between the Summary Agent and its spoke agents — Extraction, Research, Critic, Evidence — is managed via the SDK's structured handoff primitives. Bounded agent runs prevent open-ended loops in the Critic regeneration tournament.</p>
+            <p>Hub-and-spoke orchestration. Handoffs between Summary, Extraction, Research, Critic, and Evidence agents via structured handoff primitives. Bounded agent runs prevent open-ended loops in the Critic regeneration tournament.</p>
           </div>
           <div class="cs-stack-item">
             <h4>OpenAI Whisper</h4>
-            <p>Audio transcription for voice-recorded consultation notes. Runs as a dedicated processing step within the Extraction Agent before any summarization occurs. Transcription output is normalized to the same text representation format as all other input types, so the Summary Agent sees a uniform context regardless of the original input modality.</p>
+            <p>Audio transcription for voice-recorded consultation notes. Runs within the Extraction Agent before any summarization; output normalized to the same text format as all other inputs so the Summary Agent sees a uniform context.</p>
           </div>
           <div class="cs-stack-item">
             <h4>Vector Store (RAG)</h4>
-            <p>Longitudinal patient memory via embedding and similarity retrieval. Summaries indexed by patient ID after each visit. Cross-visit context injection retrieves the most semantically relevant prior visit excerpts for the current consultation topic, not all prior visits indiscriminately. Scoping by patient ID enforced at the query layer — cross-patient retrieval is not possible.</p>
+            <p>Longitudinal patient memory via embedding and similarity retrieval. Summaries indexed by patient ID. Cross-patient retrieval is architecturally prevented at the query layer — not just by policy.</p>
           </div>
           <div class="cs-stack-item">
             <h4>Upstash Redis</h4>
-            <p>Job state persistence for resumable SSE sessions. Each pipeline job is stored as a Redis hash keyed by job_id with per-stage completion flags. Supports mid-pipeline reconnect and exact-stage resumption without re-execution. Upstash's HTTP-based Redis access is compatible with App Runner's container environment without requiring persistent TCP connections.</p>
+            <p>Job state persistence for resumable SSE sessions. Each pipeline job stored as a Redis hash keyed by job_id with per-stage completion flags. HTTP-based access compatible with App Runner without persistent TCP connections.</p>
           </div>
           <div class="cs-stack-item">
             <h4>MCP (Brave Search)</h4>
-            <p>Research Agent's external lookup mechanism for clinical guidelines and drug interaction data. The MCP boundary ensures the Research Agent's external access is typed and auditable — all external queries go through the tool contract, not direct HTTP calls. Tool call logs are captured for each pipeline run.</p>
+            <p>Research Agent's external lookup mechanism for clinical guidelines and drug interaction data. All external queries go through the typed tool contract; tool call logs captured per pipeline run for auditability.</p>
           </div>
           <div class="cs-stack-item">
             <h4>Resend</h4>
-            <p>Email delivery for summary dispatch to the clinician, referring provider, or patient records system. Integrated with a verified-send pattern: the server confirms send receipt before recording delivery success. Failed sends surface as delivery errors in the job state, not silent failures.</p>
+            <p>Email delivery for summary dispatch. Verified-send pattern: server confirms send receipt before recording delivery success. Failed sends surface as delivery errors in the job state — not silent failures.</p>
           </div>
           <div class="cs-stack-item">
             <h4>Clerk</h4>
-            <p>Authentication and user identity. Scopes all patient data access by authenticated user — a clinician can only access patients in their authenticated context. Clerk JWTs are verified on every API request. Patient vector store queries and job history queries are both scoped to the verified user identity before any data operation.</p>
+            <p>Authentication and user identity. Scopes all patient data access by authenticated user. JWTs verified on every API request. Patient vector store queries and job history queries both scoped to the verified user identity before any data operation.</p>
           </div>
           <div class="cs-stack-item">
             <h4>Docker + AWS App Runner + ECR</h4>
-            <p>Containerized deployment with App Runner for automatic HTTPS, health check routing, and request-based scaling. ECR stores versioned container images. App Runner eliminates the need for manual server management while providing the persistent compute environment needed for multi-stage pipeline jobs that run longer than typical Lambda timeouts would allow.</p>
+            <p>Containerized deployment with automatic HTTPS, health check routing, and request-based scaling. App Runner provides the persistent compute environment needed for multi-stage pipeline jobs that exceed Lambda timeout limits.</p>
           </div>
         </div>
       </section>
 
     </main>
-
     </div>
     <script src="../../script.js"></script>
   </body>

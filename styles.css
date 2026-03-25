@@ -171,6 +171,16 @@ h1 {
   overflow-wrap: anywhere;
 }
 
+ul.hero-copy {
+  padding-left: 1.2em;
+  list-style: disc;
+  max-width: none;
+}
+
+ul.hero-copy li {
+  margin-bottom: 6px;
+}
+
 /* =========================================================
    HERO PROOF / ACTIONS
    ========================================================= */
@@ -604,6 +614,39 @@ h1 {
   line-height: 1.3;
 }
 
+.cs-decision p,
+.cs-decision ul {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.93rem;
+  line-height: 1.65;
+}
+
+.cs-decision ul {
+  padding-left: 16px;
+  display: grid;
+  gap: 4px;
+}
+
+.cs-decision ul li {
+  line-height: 1.6;
+}
+
+/* cs-story bullets */
+.cs-story ul {
+  margin: 8px 0 12px;
+  padding-left: 16px;
+  color: var(--muted);
+  font-size: 0.93rem;
+  display: grid;
+  gap: 4px;
+}
+
+.cs-story ul li {
+  line-height: 1.6;
+}
+
+/* keep original p rule */
 .cs-decision p {
   margin: 0;
   color: var(--muted);

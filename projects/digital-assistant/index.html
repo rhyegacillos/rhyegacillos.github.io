@@ -22,13 +22,7 @@
     <div class="cs-layout">
     <header class="cs-site-header">
       <a class="cs-back" href="../../index.html">&#8592; Rhye Gacillos</a>
-      <a
-        class="button button-primary"
-        href="https://digital-assistant.agentairg.site/"
-        target="_blank"
-        rel="noopener noreferrer"
-        >Live App &#8594;</a
-      >
+      <a class="button button-primary" href="https://digital-assistant.agentairg.site/" target="_blank" rel="noopener noreferrer">Live App &#8594;</a>
     </header>
 
     <main class="cs-page">
@@ -45,13 +39,7 @@
           CAS-style quota governance that keeps the system cost-bounded at scale.
         </p>
         <div class="cs-hero-meta">
-          <a
-            class="portal-live-chip"
-            href="https://digital-assistant.agentairg.site/"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Live: digital-assistant.agentairg.site</a
-          >
+          <a class="portal-live-chip" href="https://digital-assistant.agentairg.site/" target="_blank" rel="noopener noreferrer">Live: digital-assistant.agentairg.site</a>
         </div>
         <div class="cs-badges">
           <span class="cs-badge">FastAPI</span>
@@ -67,7 +55,7 @@
         </div>
       </section>
 
-      <!-- CHAPTER I: STRATEGIC CONTEXT -->
+      <!-- CHAPTER I -->
       <section class="cs-section reveal">
         <div class="cs-chapter-header">
           <span class="cs-chapter-num">I</span>
@@ -95,7 +83,7 @@
         </div>
       </section>
 
-      <!-- CHAPTER II: ARCHITECTURE -->
+      <!-- CHAPTER II -->
       <section class="cs-section reveal">
         <div class="cs-chapter-header">
           <span class="cs-chapter-num">II</span>
@@ -124,7 +112,8 @@
             The FastAPI control plane receives the user intent, enqueues it into <strong>Upstash
             Redis</strong>, and returns a persistent <code>job_id</code> immediately — well within
             the API Gateway timeout window. The client never blocks on tool execution; it receives
-            a job handle and proceeds.
+            a job handle and proceeds. This single design decision is what makes the entire
+            architecture timeout-proof.
           </p>
         </div>
 
@@ -132,11 +121,17 @@
           <h3>The Decoupled Worker — Worker Lambda</h3>
           <p>
             A separate AWS Lambda worker function assumes full responsibility for the entire
-            execution lifecycle. It dequeues the job, runs the MCP-orchestrated tool chain
-            (Brave Search, WeasyPrint PDF, Resend email, file ingestion, memory extraction),
-            synthesizes the result through the LLM, and persists the output to S3. The worker
-            operates entirely outside the API Gateway's timeout domain — it can run for as long
-            as the work requires.
+            execution lifecycle. It dequeues the job and runs the MCP-orchestrated tool chain:
+          </p>
+          <ul>
+            <li>Brave Search for web research</li>
+            <li>WeasyPrint for PDF generation</li>
+            <li>Resend for email delivery</li>
+            <li>File ingestion and memory extraction</li>
+          </ul>
+          <p>
+            The worker operates entirely outside the API Gateway's timeout domain — it can run for
+            as long as the work requires, persisting output artifacts to S3 and progress state to Redis.
           </p>
         </div>
 
@@ -144,15 +139,15 @@
           <h3>Execution Durability &amp; Client Resync</h3>
           <p>
             This API + Worker pattern ensures that even if the client session is interrupted or
-            the browser is closed, the agent continues its work — persisting generated artifacts
-            to S3 and maintaining progress state in Redis. The client <strong>resyncs
-            seamlessly</strong> upon reconnection, pulling completed results without re-running
-            expensive LLM tool-chains. There is no lost state, no re-execution cost.
+            the browser is closed, the agent continues its work uninterrupted. The client
+            <strong>resyncs seamlessly</strong> upon reconnection, pulling completed results
+            without re-running expensive LLM tool-chains. There is no lost state, no re-execution
+            cost, no wasted compute.
           </p>
         </div>
       </section>
 
-      <!-- CHAPTER III: INTEGRITY LAYER -->
+      <!-- CHAPTER III -->
       <section class="cs-section reveal">
         <div class="cs-chapter-header">
           <span class="cs-chapter-num">III</span>
@@ -163,7 +158,8 @@
             To eliminate <strong>Action Hallucination</strong> — where an LLM claims a successful
             outcome (a generated download link, a sent email confirmation) that was never actually
             verified — I engineered the <strong>Truth-Gated Canonical Rendering</strong> protocol.
-            This contract-first architecture strictly separates Intent from Fact.
+            This contract-first architecture strictly separates Intent from Fact, ensuring a 0% rate
+            of placeholder links and zero unverified action claims in the final output.
           </p>
         </div>
 
@@ -173,7 +169,8 @@
             The LLM produces a strict <code>IntentEnvelope</code> defining the requested action
             type and parameters. It is <em>never</em> permitted to draft the final delivery prose
             or provide its own links. Its role ends at declaring what it wants to happen — not at
-            claiming that it happened.
+            claiming that it happened. This boundary is enforced at the API layer, not through
+            prompting alone.
           </p>
         </div>
 
@@ -183,7 +180,7 @@
             The server independently executes the tool — calling the Resend API, running the
             WeasyPrint PDF engine, or performing the Brave Search — and captures a verified
             <code>TruthContext</code> containing the actual file path, delivery confirmation
-            status, or structured result data. The LLM has no visibility into this execution.
+            status, or structured result data. The LLM has no visibility into this execution step.
           </p>
         </div>
 
@@ -191,10 +188,10 @@
           <h3>Step 3 — Deterministic Rendering</h3>
           <p>
             The final user-facing response is generated via server-side templates using
-            <em>only</em> the verified <code>TruthContext</code>. This enforces a
-            <strong>0% rate of placeholder links</strong> and zero unverified action claims.
-            If the tool fails, the Truth Gate blocks the success claim entirely and returns a
-            structured error — the AI cannot lie about its own progress.
+            <em>only</em> the verified <code>TruthContext</code>. If the tool fails, the Truth
+            Gate blocks the success claim entirely and returns a structured error — the AI cannot
+            lie about its own progress. The result is a system where every link in the UI is a
+            real, verified artifact path, and every action confirmation reflects a real execution result.
           </p>
         </div>
       </section>
@@ -206,15 +203,12 @@
           <h2>Architecture Diagram</h2>
         </div>
         <div class="cs-arch-img-wrap">
-          <img
-            src="../../images/digital-assistant/digital assistant.png"
-            alt="Architecture diagram for the Digital Assistant project"
-          />
+          <img src="../../images/digital-assistant/digital assistant.png" alt="Architecture diagram for the Digital Assistant project" />
         </div>
         <p class="cs-arch-caption">Scroll horizontally on small screens</p>
       </section>
 
-      <!-- CHAPTER IV: OPERATIONS -->
+      <!-- CHAPTER IV -->
       <section class="cs-section reveal">
         <div class="cs-chapter-header">
           <span class="cs-chapter-num">IV</span>
@@ -237,7 +231,7 @@
             This prevents <em>double-spend</em> in distributed environments where multiple
             concurrent Lambda invocations could race to consume the same quota slot. The system
             remains cost-aware and protected against runaway agentic loops, even under concurrent
-            load.
+            load. Real-time counters surface live quota state in the UI without a separate settings page.
           </p>
         </div>
 
@@ -248,17 +242,19 @@
             Memory tab for explicit approval or rejection — they are never automatically applied.
             Only approved memories are injected into the system prompt at the highest priority
             tier. This maintains user trust and eliminates the risk of contamination from
-            incorrectly extracted context.
+            incorrectly extracted or misinterpreted context.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Immutable Infrastructure &amp; Credential-Less CI/CD</h3>
           <p>
-            The entire infrastructure is provisioned as code via <strong>Terraform</strong>.
-            Deployments run through <strong>GitHub Actions with OIDC federation</strong> —
-            no long-lived AWS access keys exist anywhere in the pipeline. On every push to main:
-            the Docker image is built, pushed to ECR, and Lambda functions are updated atomically.
+            The entire infrastructure is provisioned as code via <strong>Terraform</strong> — Lambda,
+            API Gateway, S3, CloudFront, ECR, IAM, and Secrets Manager references, with no manual
+            console configuration. Deployments run through <strong>GitHub Actions with OIDC
+            federation</strong> — no long-lived AWS access keys exist anywhere in the pipeline.
+            On every push to main: the Docker image is built, pushed to ECR, and Lambda functions
+            are updated atomically.
           </p>
         </div>
       </section>
@@ -272,11 +268,11 @@
         <div class="cs-stack-grid">
           <div class="cs-stack-item">
             <h4>FastAPI on AWS Lambda</h4>
-            <p>Serverless backend running as container images in ECR. Lambda for zero server management and cost efficiency; FastAPI for clean async patterns and built-in OpenAPI docs.</p>
+            <p>Container images via ECR. Lambda for zero server management and cost efficiency; FastAPI for clean async patterns and built-in OpenAPI documentation.</p>
           </div>
           <div class="cs-stack-item">
             <h4>Next.js (static export) + S3 + CloudFront</h4>
-            <p>Frontend deployed as static files to S3, served globally via CloudFront CDN. No SSR costs. CloudFront handles HTTPS termination, custom domain, and edge caching.</p>
+            <p>Frontend deployed as static files to S3, served globally via CloudFront CDN. No SSR costs; CloudFront handles HTTPS termination, custom domain, and edge caching.</p>
           </div>
           <div class="cs-stack-item">
             <h4>API Gateway (REST)</h4>
@@ -314,7 +310,6 @@
       </section>
 
     </main>
-
     </div>
     <script src="../../script.js"></script>
   </body>

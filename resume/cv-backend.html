@@ -166,6 +166,21 @@
         page-break-after: avoid;
       }
 
+      .item-subtitle {
+        break-after: avoid-page;
+        page-break-after: avoid;
+      }
+
+      .section-break-before {
+        break-before: page;
+        page-break-before: always;
+      }
+
+      .item-subsection {
+        break-inside: avoid-page;
+        page-break-inside: avoid;
+      }
+
       .item {
         break-inside: avoid-page;
         page-break-inside: avoid;
@@ -199,7 +214,7 @@
         Software Engineer with 7+ years of experience in backend architecture and API integration, now dedicated to building full-stack AI applications where reliability and system integrity are the primary benchmarks of success. I focus on implementing rigorous control layers—including structured validation, fallback orchestration, and observability—to bridge the gap between experimental models and trustworthy products.
       </p>
       <p>
-        Experienced in Java (Spring Boot), Python (FastAPI/Django), and TypeScript/React, I specialize in designing asynchronous, serverless architectures on AWS that maintain high performance and clear user feedback even during complex, tool-heavy workflows. I aim to contribute to high-stakes environments that require a disciplined approach to AI model output verification  and server side rules for deterministic. My goal is to deliver end-to-end solutions that are technically sound, operationally transparent, and optimized for seamless stakeholder navigation.
+        Experienced in Java (Spring Boot), Python (FastAPI/Django), and TypeScript/React, I specialize in designing asynchronous, serverless architectures on AWS that maintain high performance and clear user feedback even during complex, tool-heavy workflows. I aim to contribute to high-stakes environments that require a disciplined approach to AI model output verification and server-side rules for deterministic behavior. My goal is to deliver end-to-end solutions that are technically sound, operationally transparent, and optimized for seamless stakeholder navigation.
       </p>
     </section>
 
@@ -276,7 +291,7 @@
         <hr class="rule" />
       </div>
 
-      <div class="item">
+      <div class="item section-break-before">
         <p class="item-title">Autonomous Agentic Trader</p>
         <div class="project-links">
           <span>Live: <a href="https://manager-trader.agentairg.site/" target="_blank" rel="noreferrer">manager-trader.agentairg.site</a></span>
@@ -323,7 +338,7 @@
       </div>
     </section>
 
-    <section class="section">
+    <section class="section section-break-before">
       <h2>Professional Experience</h2>
       <hr class="rule" />
 
@@ -331,7 +346,7 @@
         <p class="item-title">Independent / Self-Directed Projects — Software Engineer (Full-Stack &amp; AI)</p>
         <div class="meta">Jan 2026 – Present | Remote</div>
         <ul>
-          <li><b>Architected and deployed full-stack AI applications</b> by treating the model as a single system component, prioritizing <b>AI model output verification</b> and <b>server side rules for deterministic</b> behavior to ensure production-grade reliability.</li>
+          <li><b>Architected and deployed full-stack AI applications</b> by treating the model as a single system component, prioritizing <b>AI model output verification</b> and <b>server-side rules for deterministic behavior</b> to ensure production-grade reliability.</li>
           <li><b>Engineered asynchronous execution patterns</b> (API/Worker split) using a "202 Accepted" and Job ID polling workflow to manage tool-heavy requests and eliminate timeouts in serverless environments.</li>
           <li><b>Implemented "Truth-Gated Rendering"</b> and canonical logic paths to normalize tool outcomes, ensuring that user-facing responses are validated against actual execution facts rather than model claims.</li>
           <li><b>Developed multi-provider routing with ordered fallback chains</b>, treating AI outputs as structured contracts to maintain quality and continuity during upstream API instability or tool failures.</li>
