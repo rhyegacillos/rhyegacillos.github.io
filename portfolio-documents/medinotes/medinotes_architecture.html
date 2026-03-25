@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediNotes — Architecture Diagram</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: #050d1c; overflow: hidden; }
+    .wrap { display: flex; flex-direction: column; height: 100%; }
+    svg { width: 100%; flex: 1; min-height: 0; }
+    .node, .conn { transition: opacity 0.18s; }
+    .node > rect { transition: fill 0.18s, stroke 0.18s; }
+    .faded { opacity: 0.12 !important; }
+    .highlighted > rect:first-child { fill: #162b52 !important; stroke-opacity: 1 !important; stroke-width: 2.4px !important; }
+    .conn-dot { opacity: 0.55; transition: opacity 0.18s; pointer-events: none; }
+    .conn-dot.faded { opacity: 0 !important; }
+    .conn-dot.highlighted { opacity: 1 !important; }
+    #tooltip {
+      position: absolute;
+      background: rgba(5,13,28,0.96);
+      border: 1px solid rgba(149,175,219,0.28);
+      border-radius: 7px;
+      padding: 9px 13px;
+      color: #e2eaf8;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px;
+      line-height: 1.55;
+      max-width: 270px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 10;
+    }
+    #tooltip.vis { opacity: 1; }
+    #tooltip b { color: #3d7eff; display: block; margin-bottom: 3px; font-size: 12.5px; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+<!--
+  viewBox 1458×680  |  30px inter-column gaps
+  CLIENT x=18–200 (w=182) | FASTAPI x=230–482 (w=252)
+  PIPELINE x=512–944 (w=432) | STORAGE x=974–1440 (w=466)
+  Vertical: nodes span y=76–614, equal gaps per zone
+-->
+<svg viewBox="0 0 1274 680" preserveAspectRatio="xMidYMid meet" role="img" aria-label="MediNotes Architecture Diagram">
+  <defs>
+    <marker id="arr-blue"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#3d7eff"/></marker>
+    <marker id="arr-green"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#10b981"/></marker>
+    <marker id="arr-teal"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#2dd4bf"/></marker>
+    <marker id="arr-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#a78bfa"/></marker>
+    <marker id="arr-amber"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#f59e0b"/></marker>
+    <marker id="arr-gray"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#6b7280"/></marker>
+  </defs>
+
+  <!-- ═══ LEGEND BAR ═══ -->
+  <rect x="18" y="14" width="1238" height="26" rx="5" fill="rgba(13,30,56,0.88)" stroke="rgba(149,175,219,0.15)" stroke-width="1"/>
+  <line x1="30"  y1="27" x2="54"  y2="27" stroke="#10b981" stroke-width="1.8" marker-end="url(#arr-green)"/>
+  <text x="60"  y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Pipeline orchestration</text>
+  <line x1="210" y1="27" x2="234" y2="27" stroke="#3d7eff" stroke-width="1.8" marker-end="url(#arr-blue)"/>
+  <text x="240" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">REST · SSE request</text>
+  <line x1="390" y1="27" x2="414" y2="27" stroke="#2dd4bf" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#arr-teal)"/>
+  <text x="420" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">SSE stream · events</text>
+  <line x1="570" y1="27" x2="594" y2="27" stroke="#3d7eff" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#arr-blue)"/>
+  <text x="600" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Job state · Redis</text>
+  <line x1="720" y1="27" x2="744" y2="27" stroke="#a78bfa" stroke-width="1.8" marker-end="url(#arr-purple)"/>
+  <text x="750" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Storage · RAG</text>
+  <line x1="860" y1="27" x2="884" y2="27" stroke="#6b7280" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#arr-gray)"/>
+  <text x="890" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">External · conditional</text>
+  <text x="1250" y="31" text-anchor="end" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Hover nodes to highlight paths</text>
+
+  <!-- ═══ ZONE BACKGROUNDS ═══ -->
+  <rect x="18"  y="46" width="182" height="578" rx="4" fill="rgba(13,40,90,0.14)"/>
+  <rect x="230" y="46" width="252" height="578" rx="4" fill="rgba(60,20,100,0.10)"/>
+  <rect x="512" y="46" width="432" height="578" rx="4" fill="rgba(5,25,15,0.10)"/>
+  <rect x="974" y="46" width="282" height="578" rx="4" fill="rgba(5,20,40,0.08)"/>
+
+  <!-- ═══ CONNECTIONS ═══ -->
+
+  <!-- c-req: Next.js → FastAPI -->
+  <path id="c-req"   class="conn" d="M 190,108 L 230,108" stroke="#3d7eff" stroke-width="1.8" fill="none" marker-end="url(#arr-blue)"/>
+  <!-- c-sse: FastAPI → Next.js (SSE events) -->
+  <path id="c-sse"   class="conn" d="M 230,128 L 190,128" stroke="#2dd4bf" stroke-width="1.4" stroke-dasharray="5 3" fill="none" marker-end="url(#arr-teal)"/>
+  <!-- c-run: FastAPI → Extraction Agent -->
+  <path id="c-run"   class="conn" d="M 472,122 L 512,122" stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#arr-green)"/>
+  <!-- c-redis: FastAPI → Upstash Redis (over-top y=48) -->
+  <path id="c-redis" class="conn" d="M 356,76 L 356,48 L 959,48 L 959,239 L 984,239" stroke="#3d7eff" stroke-width="1.4" stroke-dasharray="5 3" fill="none" marker-end="url(#arr-blue)"/>
+  <!-- c-brave: Research Agent → Brave Search (zone gap x=959) -->
+  <path id="c-brave" class="conn" d="M 924,328 L 959,328 L 959,418 L 984,418" stroke="#6b7280" stroke-width="1.4" stroke-dasharray="4 3" fill="none" marker-end="url(#arr-gray)"/>
+  <!-- c-mem: Memory Agent → Vector Store (bottom routing y=618) -->
+  <path id="c-mem"   class="conn" d="M 724,496 L 724,618 L 959,618 L 959,131 L 984,131" stroke="#a78bfa" stroke-width="1.8" fill="none" marker-end="url(#arr-purple)"/>
+  <!-- c-email: Email Agent → Resend -->
+  <path id="c-email" class="conn" d="M 924,577 L 959,577 L 959,325 L 984,325" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#arr-teal)"/>
+  <!-- c-sres: Summary → Research (internal conditional) -->
+  <path id="c-sres"  class="conn" d="M 858,266 L 858,284" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 2" fill="none" marker-end="url(#arr-amber)"/>
+  <!-- c-extract: Extraction Agent → Summary Agent (core pipeline handoff) -->
+  <path id="c-extract" class="conn" d="M 728,156 L 728,174" stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#arr-green)"/>
+  <!-- c-crit: Summary Agent → Critic Agent (QA gate) -->
+  <path id="c-crit" class="conn" d="M 657,266 L 657,284" stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#arr-green)"/>
+  <!-- c-regen: Critic → Summary regen feedback (conditional loop up left side) -->
+  <path id="c-regen" class="conn" d="M 532,328 L 515,328 L 515,220 L 532,220" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="4 3" fill="none" marker-end="url(#arr-amber)"/>
+  <!-- c-evid-flow: post-Critic → Evidence Agent (parallel fanout) -->
+  <path id="c-evid-flow" class="conn" d="M 592,410 L 592,428" stroke="#10b981" stroke-width="1.4" fill="none" marker-end="url(#arr-green)"/>
+  <!-- c-mem-flow: post-Critic → Memory Agent (parallel fanout) -->
+  <path id="c-mem-flow" class="conn" d="M 724,410 L 724,428" stroke="#10b981" stroke-width="1.4" fill="none" marker-end="url(#arr-green)"/>
+  <!-- c-coord-flow: post-Critic → Coordinator (parallel fanout) -->
+  <path id="c-coord-flow" class="conn" d="M 860,410 L 860,428" stroke="#10b981" stroke-width="1.4" fill="none" marker-end="url(#arr-green)"/>
+  <!-- c-rag-ret: Vector Store → Summary Agent (RAG retrieval, longitudinal memory) -->
+  <path id="c-rag-ret" class="conn" d="M 984,76 L 984,44 L 728,44 L 728,174" stroke="#a78bfa" stroke-width="1.4" stroke-dasharray="5 3" fill="none" marker-end="url(#arr-purple)"/>
+  <!-- c-clerk: Clerk → FastAPI (JWT auth verification) -->
+  <path id="c-clerk" class="conn" d="M 190,248 L 210,248 L 210,192 L 240,192" stroke="#a78bfa" stroke-width="1.4" stroke-dasharray="4 3" fill="none" marker-end="url(#arr-purple)"/>
+
+  <!-- ═══ FLOW ANIMATION DOTS ═══ -->
+  <!-- Dots travel along each path to visualise data flow direction -->
+  <circle class="conn-dot" data-conn="c-req" r="3" fill="#3d7eff">
+    <animateMotion dur="1.8s" repeatCount="indefinite" begin="0s"><mpath href="#c-req"/></animateMotion>
+  </circle>
+  <circle class="conn-dot" data-conn="c-sse" r="3" fill="#2dd4bf">
+    <animateMotion dur="1.8s" repeatCount="indefinite" begin="0.5s"><mpath href="#c-sse"/></animateMotion>
+  </circle>
+  <circle class="conn-dot" data-conn="c-run" r="3" fill="#10b981">
+    <animateMotion dur="1.8s" repeatCount="indefinite" begin="0.9s"><mpath href="#c-run"/></animateMotion>
+  </circle>
+  <circle class="conn-dot" data-conn="c-clerk" r="2.5" fill="#a78bfa">
+    <animateMotion dur="2.0s" repeatCount="indefinite" begin="0.3s"><mpath href="#c-clerk"/></animateMotion>
+  </circle>
+  <circle class="conn-dot" data-conn="c-redis" r="2.5" fill="#3d7eff">
+    <animateMotion dur="3.6s" repeatCount="indefinite" begin="0s"><mpath href="#c-redis"/></animateMotion>
+  </circle>
+  <circle class="conn-dot" data-conn="c-extract" r="2.5" fill="#10b981">
+    <animateMotion dur="1.4s" repeatCount="indefinite" begin="0s"><mpath href="#c-extract"/></animateMotion>
+  </circle>
+  <circle class="conn-dot" data-conn="c-crit" r="2.5" fill="#10b981">
+    <animateMotion dur="1.4s" repeatCount="indefinite" begin="0.5s"><mpath href="#c-crit"/></animateMotion>
+  </circle>
+  <circle class="conn-dot" data-conn="c-sres" r="2.5" fill="#f59e0b">
+    <animateMotion dur="1.4s" repeatCount="indefinite" begin="0.2s"><mpath href="#c-sres"/></animateMotion>
+  </circle>
+  <circle class="conn-dot" data-conn="c-regen" r="2.5" fill="#f59e0b">
+    <animateMotion dur="2.0s" repeatCount="indefinite" begin="0s"><mpath href="#c-regen"/></animateMotion>
+  </circle>
+  <circle class="conn-dot" data-conn="c-evid-flow" r="2.5" fill="#10b981">
+    <animateMotion dur="1.4s" repeatCount="indefinite" begin="0s"><mpath href="#c-evid-flow"/></animateMotion>
+  </circle>
+  <circle class="conn-dot" data-conn="c-mem-flow" r="2.5" fill="#10b981">
+    <animateMotion dur="1.4s" repeatCount="indefinite" begin="0.4s"><mpath href="#c-mem-flow"/></animateMotion>
+  </circle>
+  <circle class="conn-dot" data-conn="c-coord-flow" r="2.5" fill="#10b981">
+    <animateMotion dur="1.4s" repeatCount="indefinite" begin="0.8s"><mpath href="#c-coord-flow"/></animateMotion>
+  </circle>
+  <circle class="conn-dot" data-conn="c-brave" r="2.5" fill="#6b7280">
+    <animateMotion dur="2.2s" repeatCount="indefinite" begin="0s"><mpath href="#c-brave"/></animateMotion>
+  </circle>
+  <circle class="conn-dot" data-conn="c-mem" r="2.5" fill="#a78bfa">
+    <animateMotion dur="3.6s" repeatCount="indefinite" begin="0.8s"><mpath href="#c-mem"/></animateMotion>
+  </circle>
+  <circle class="conn-dot" data-conn="c-email" r="2.5" fill="#2dd4bf">
+    <animateMotion dur="2.6s" repeatCount="indefinite" begin="0.4s"><mpath href="#c-email"/></animateMotion>
+  </circle>
+  <circle class="conn-dot" data-conn="c-rag-ret" r="2.5" fill="#a78bfa">
+    <animateMotion dur="3.0s" repeatCount="indefinite" begin="1.2s"><mpath href="#c-rag-ret"/></animateMotion>
+  </circle>
+
+  <!-- ═══ NODES ═══ -->
+
+  <!-- ── CLIENT ZONE ── -->
+  <!-- 5 nodes, total h=466, 4 gaps of 18px, y=76→614 -->
+
+  <!-- Next.js (y=76, h=114) -->
+  <g id="node-client" class="node" style="cursor:pointer">
+    <rect x="28" y="76" width="162" height="114" rx="8" fill="#0a1929" stroke="rgba(61,126,255,0.52)" stroke-width="1.8"/>
+    <text x="109" y="96"  text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="13">Next.js</text>
+    <text x="109" y="111" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="9">SSE · evidence panel</text>
+    <text x="109" y="124" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">patient history · chat</text>
+    <text x="109" y="137" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">incremental stage render</text>
+    <text x="109" y="150" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">reconnect via job_id</text>
+    <text x="109" y="163" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">no re-execution on rejoin</text>
+    <text x="109" y="176" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">evidence claim inspector</text>
+  </g>
+
+  <!-- Clerk (y=208, h=80, gap=18) -->
+  <g id="node-clerk" class="node" style="cursor:pointer">
+    <rect x="28" y="208" width="162" height="80" rx="7" fill="#1a0a2e" stroke="rgba(167,139,250,0.44)" stroke-width="1.8"/>
+    <text x="109" y="226" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11.5">Clerk</text>
+    <text x="109" y="240" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">auth · org scoping</text>
+    <text x="109" y="253" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">JWT issued to client</text>
+    <text x="109" y="266" text-anchor="middle" fill="#7e5cc4" font-family="'IBM Plex Mono',monospace" font-size="8">JWTs verified per request</text>
+    <text x="109" y="279" text-anchor="middle" fill="#7e5cc4" font-family="'IBM Plex Mono',monospace" font-size="8">data scoped to user ID</text>
+  </g>
+
+  <!-- SSE Stage Events (y=306, h=96, gap=18) -->
+  <g id="node-sseevents" class="node" style="cursor:pointer">
+    <rect x="28" y="306" width="162" height="96" rx="7" fill="#071e1a" stroke="rgba(45,212,191,0.32)" stroke-width="1.6"/>
+    <text x="109" y="324" text-anchor="middle" fill="#2dd4bf" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">SSE Stage Events</text>
+    <text x="109" y="338" text-anchor="middle" fill="#4fb5a8" font-family="'IBM Plex Mono',monospace" font-size="9">extraction_complete</text>
+    <text x="109" y="351" text-anchor="middle" fill="#4fb5a8" font-family="'IBM Plex Mono',monospace" font-size="9">summary_draft_ready</text>
+    <text x="109" y="364" text-anchor="middle" fill="#4fb5a8" font-family="'IBM Plex Mono',monospace" font-size="9">critic_pass_complete</text>
+    <text x="109" y="377" text-anchor="middle" fill="#4fb5a8" font-family="'IBM Plex Mono',monospace" font-size="9">evidence_linked</text>
+    <text x="109" y="390" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">memory_indexed · error</text>
+  </g>
+
+  <!-- Consultation History (y=420, h=96, gap=18) -->
+  <g id="node-history" class="node" style="cursor:pointer">
+    <rect x="28" y="420" width="162" height="96" rx="7" fill="#0a1929" stroke="rgba(61,126,255,0.38)" stroke-width="1.6"/>
+    <text x="109" y="438" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11">Consultation History</text>
+    <text x="109" y="452" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">paginated past visits</text>
+    <text x="109" y="465" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">filter: patient · date</text>
+    <text x="109" y="478" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">PDF export per visit</text>
+    <text x="109" y="491" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">draft → finalized</text>
+    <text x="109" y="504" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">GET /api/consultations</text>
+  </g>
+
+  <!-- Consultation Form (y=534, h=80, gap=18) → bottom=614 -->
+  <g id="node-inputpanel" class="node" style="cursor:pointer">
+    <rect x="28" y="534" width="162" height="80" rx="7" fill="#0a1929" stroke="rgba(61,126,255,0.28)" stroke-width="1.4"/>
+    <text x="109" y="551" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11">Consultation Form</text>
+    <text x="109" y="565" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">PDF · audio · image · text</text>
+    <text x="109" y="578" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">language: source → target</text>
+    <text x="109" y="591" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">submit → /api/consultation</text>
+    <text x="109" y="604" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">Whisper preview on upload</text>
+  </g>
+
+  <!-- ── FASTAPI ZONE (x=230–482, nodes x=240 w=232 center=356) ── -->
+  <!-- 5 nodes, total h=428, 4 gaps of 27px, y=76→612 -->
+
+  <!-- FastAPI (y=76, h=124) -->
+  <g id="node-fastapi" class="node" style="cursor:pointer">
+    <rect x="240" y="76" width="232" height="124" rx="8" fill="#160a3e" stroke="rgba(139,92,246,0.56)" stroke-width="1.8"/>
+    <text x="356" y="96"  text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="13">FastAPI</text>
+    <text x="356" y="111" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">AWS App Runner · single container</text>
+    <text x="356" y="123" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">SSE streaming · pipeline host</text>
+    <text x="356" y="135" text-anchor="middle" fill="#7e5cc4" font-family="'IBM Plex Mono',monospace" font-size="8">Clerk JWT verified per request</text>
+    <text x="356" y="148" text-anchor="middle" fill="#7e5cc4" font-family="'IBM Plex Mono',monospace" font-size="8">orchestrates pipeline as resumable SSE job</text>
+    <text x="356" y="161" text-anchor="middle" fill="#6b4db0" font-family="'IBM Plex Mono',monospace" font-size="8">POST /api/consultation (SSE)</text>
+    <text x="356" y="174" text-anchor="middle" fill="#6b4db0" font-family="'IBM Plex Mono',monospace" font-size="8">POST /api/chat · /api/send-email</text>
+  </g>
+
+  <!-- Resumable SSE Jobs (y=227, h=56, gap=27) -->
+  <g id="node-ssejobs" class="node" style="cursor:pointer">
+    <rect x="240" y="227" width="232" height="56" rx="6" fill="#071e1a" stroke="rgba(45,212,191,0.36)" stroke-width="1.6"/>
+    <text x="356" y="244" text-anchor="middle" fill="#2dd4bf" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">Resumable SSE Jobs</text>
+    <text x="356" y="258" text-anchor="middle" fill="#4fb5a8" font-family="'IBM Plex Mono',monospace" font-size="8.5">Upstash-backed · job_id · reconnect</text>
+    <text x="356" y="271" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">exact-stage resumption · no replay</text>
+  </g>
+
+  <!-- Persistent Format Guardrails (y=310, h=56, gap=27) -->
+  <g id="node-guardrails" class="node" style="cursor:pointer">
+    <rect x="240" y="310" width="232" height="56" rx="6" fill="#1a100a" stroke="rgba(245,158,11,0.32)" stroke-width="1.6"/>
+    <text x="356" y="327" text-anchor="middle" fill="#f59e0b" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">Persistent Format Guardrails</text>
+    <text x="356" y="341" text-anchor="middle" fill="#c47830" font-family="'IBM Plex Mono',monospace" font-size="8.5">critic failures → future prompts</text>
+    <text x="356" y="354" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">per-doctor-profile scoped</text>
+  </g>
+
+  <!-- Model Routing + Fallback (y=393, h=92, gap=27) -->
+  <g id="node-routing" class="node" style="cursor:pointer">
+    <rect x="240" y="393" width="232" height="92" rx="6" fill="#0d1020" stroke="rgba(61,126,255,0.28)" stroke-width="1.6"/>
+    <text x="356" y="411" text-anchor="middle" fill="#3d7eff" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">Model Routing + Fallback</text>
+    <text x="356" y="425" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">Summary: deepseek-chat</text>
+    <text x="356" y="438" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">Critic: gemini-2.5-flash</text>
+    <text x="356" y="451" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">Chat: gemini-2.5-flash</text>
+    <text x="356" y="464" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">global fb: gpt-4o-mini</text>
+    <text x="356" y="477" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">whisper-1 · gpt-4o-mini vision</text>
+  </g>
+
+  <!-- History + Export API (y=512, h=100, gap=27) → bottom=612 -->
+  <g id="node-histapi" class="node" style="cursor:pointer">
+    <rect x="240" y="512" width="232" height="100" rx="6" fill="#0f0d1a" stroke="rgba(167,139,250,0.24)" stroke-width="1.4"/>
+    <text x="356" y="530" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">History + Export API</text>
+    <text x="356" y="544" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">GET /api/consultations</text>
+    <text x="356" y="557" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">GET /api/consultation/{id}</text>
+    <text x="356" y="570" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">POST /api/export-pdf</text>
+    <text x="356" y="583" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">WeasyPrint HTML → PDF</text>
+    <text x="356" y="596" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">S3 presigned download URL</text>
+  </g>
+
+  <!-- ── AGENT PIPELINE ZONE (x=512–944, container x=522 w=412) ── -->
+  <!-- Container h=554, internal 7 sections, 6 gaps of 18px, y=88→604 -->
+
+  <g id="node-pipeline" class="node" style="cursor:pointer">
+    <rect x="522" y="60" width="412" height="554" rx="10" fill="#0d1529" stroke="rgba(16,185,129,0.28)" stroke-width="1.8"/>
+    <text x="728" y="78" text-anchor="middle" fill="#10b981" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10">AGENT PIPELINE · Hub-and-Spoke</text>
+
+    <!-- Extraction Agent (y=88, h=68) -->
+    <g id="node-extraction" class="node" style="cursor:pointer">
+      <rect x="532" y="88" width="392" height="68" rx="7" fill="#061a12" stroke="rgba(16,185,129,0.22)" stroke-width="1.2"/>
+      <text x="728" y="107" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11.5">Extraction Agent</text>
+      <text x="728" y="121" text-anchor="middle" fill="#4fb58a" font-family="'IBM Plex Mono',monospace" font-size="8.5">PDF · DOCX · TXT · Whisper audio · vision OCR</text>
+      <text x="728" y="133" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">normalizes all inputs to unified text before summarization</text>
+      <text x="728" y="145" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">gpt-4o-mini vision · whisper-1 audio · text extraction</text>
+    </g>
+
+    <!-- Summary Agent (y=174, h=92, gap=18) -->
+    <g id="node-summary" class="node" style="cursor:pointer">
+      <rect x="532" y="174" width="392" height="92" rx="7" fill="#051e10" stroke="rgba(16,185,129,0.36)" stroke-width="1.8"/>
+      <text x="728" y="194" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11.5">Summary Agent — Orchestration Hub</text>
+      <text x="728" y="208" text-anchor="middle" fill="#4fb58a" font-family="'IBM Plex Mono',monospace" font-size="8.5">DeepSeek · strict 3-section HTML output</text>
+      <text x="728" y="220" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">deterministic handoffs to all specialist agents</text>
+      <text x="728" y="232" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">Extraction → Research → Critic → Evidence → Memory</text>
+      <text x="728" y="244" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">deepseek-chat · model fallback chain</text>
+      <text x="728" y="256" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">tool calls: check_drug_interactions · search_medical_guidelines</text>
+    </g>
+
+    <!-- Critic Agent (y=284, x=532, w=250, h=88, gap=18) -->
+    <g id="node-critic" class="node" style="cursor:pointer">
+      <rect x="532" y="284" width="250" height="88" rx="7" fill="#1a0805" stroke="rgba(249,115,22,0.36)" stroke-width="1.4"/>
+      <text x="657" y="303" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11">Critic Agent · QA Gate</text>
+      <text x="657" y="317" text-anchor="middle" fill="#c47830" font-family="'IBM Plex Mono',monospace" font-size="8.5">4 checks: factual · omission</text>
+      <text x="657" y="329" text-anchor="middle" fill="#c47830" font-family="'IBM Plex Mono',monospace" font-size="8.5">hallucination · structural</text>
+      <text x="657" y="341" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">gemini-2.5-flash · up to 3 regen</text>
+      <text x="657" y="353" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">issues promoted to guardrails</text>
+      <text x="657" y="365" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">score / issues / missing / hallucinations</text>
+    </g>
+
+    <!-- Research Agent (y=284, x=792, w=132, h=88) -->
+    <g id="node-research" class="node" style="cursor:pointer">
+      <rect x="792" y="284" width="132" height="88" rx="7" fill="#0a1010" stroke="rgba(107,114,128,0.44)" stroke-width="1.4"/>
+      <text x="858" y="303" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11">Research Agent</text>
+      <text x="858" y="317" text-anchor="middle" fill="#9ba3ae" font-family="'IBM Plex Mono',monospace" font-size="8.5">MCP Brave Search</text>
+      <text x="858" y="329" text-anchor="middle" fill="#9ba3ae" font-family="'IBM Plex Mono',monospace" font-size="8.5">conditional trigger</text>
+      <text x="858" y="341" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">MCPServerStdio</text>
+      <text x="858" y="353" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">drug / guideline</text>
+      <text x="858" y="365" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">heuristic gating</text>
+    </g>
+
+    <!-- Regen bar (y=390, h=20, gap=18) -->
+    <rect x="532" y="390" width="392" height="20" rx="4" fill="rgba(8,14,32,0.92)" stroke="rgba(249,115,22,0.24)" stroke-width="1"/>
+    <text x="728" y="404" text-anchor="middle" fill="#f59e0b" font-family="'IBM Plex Mono',monospace" font-size="8">critic fail → tournament regen N=3 · select best candidate · issue → guardrail</text>
+
+    <!-- Evidence Agent (y=428, x=532, w=120, h=68, gap=18) -->
+    <g id="node-evidence" class="node" style="cursor:pointer">
+      <rect x="532" y="428" width="120" height="68" rx="6" fill="#061a12" stroke="rgba(16,185,129,0.20)" stroke-width="1"/>
+      <text x="592" y="446" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">Evidence Agent</text>
+      <text x="592" y="460" text-anchor="middle" fill="#4fb58a" font-family="'IBM Plex Mono',monospace" font-size="8.5">claim → source</text>
+      <text x="592" y="472" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">unsupported → gap</text>
+      <text x="592" y="484" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">140ch snippet cap</text>
+    </g>
+
+    <!-- Memory Agent (y=428, x=664, w=120, h=68) -->
+    <g id="node-memory" class="node" style="cursor:pointer">
+      <rect x="664" y="428" width="120" height="68" rx="6" fill="#061a12" stroke="rgba(167,139,250,0.28)" stroke-width="1"/>
+      <text x="724" y="446" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">Memory Agent</text>
+      <text x="724" y="460" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">RAG store + recall</text>
+      <text x="724" y="472" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">patient-keyed vector</text>
+      <text x="724" y="484" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">visit_summary · notes</text>
+    </g>
+
+    <!-- Coordinator (y=428, x=796, w=128, h=68) -->
+    <g id="node-coordinator" class="node" style="cursor:pointer">
+      <rect x="796" y="428" width="128" height="68" rx="6" fill="#061a12" stroke="rgba(16,185,129,0.20)" stroke-width="1"/>
+      <text x="860" y="446" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">Coordinator</text>
+      <text x="860" y="460" text-anchor="middle" fill="#4fb58a" font-family="'IBM Plex Mono',monospace" font-size="8.5">next-step actions</text>
+      <text x="860" y="472" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">emitted as SSE event</text>
+      <text x="860" y="484" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">referrals · follow-ups</text>
+    </g>
+
+    <!-- Zero Hallucination bar (y=514, h=18, gap=18) -->
+    <rect x="532" y="514" width="392" height="18" rx="4" fill="rgba(8,14,32,0.92)" stroke="rgba(16,185,129,0.18)" stroke-width="1"/>
+    <text x="728" y="527" text-anchor="middle" fill="#10b981" font-family="'IBM Plex Mono',monospace" font-size="8">Critic · Evidence · Guardrails = zero hallucination contract</text>
+
+    <!-- Chat Agent (y=550, x=532, w=196, h=54, gap=18) → bottom=604 -->
+    <g id="node-chat" class="node" style="cursor:pointer">
+      <rect x="532" y="550" width="196" height="54" rx="6" fill="#071e1a" stroke="rgba(45,212,191,0.32)" stroke-width="1.2"/>
+      <text x="630" y="567" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11">Chat Agent</text>
+      <text x="630" y="581" text-anchor="middle" fill="#4fb5a8" font-family="'IBM Plex Mono',monospace" font-size="8.5">Gemini · patient-scoped Q&amp;A</text>
+      <text x="630" y="593" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">RAG recall from Vector Store</text>
+    </g>
+
+    <!-- Email Agent (y=550, x=740, w=184, h=54) → bottom=604 -->
+    <g id="node-emailagent" class="node" style="cursor:pointer">
+      <rect x="740" y="550" width="184" height="54" rx="6" fill="#071510" stroke="rgba(16,185,129,0.32)" stroke-width="1.2"/>
+      <text x="832" y="567" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11">Email Agent</text>
+      <text x="832" y="581" text-anchor="middle" fill="#4fb58a" font-family="'IBM Plex Mono',monospace" font-size="8.5">translate · send via Resend</text>
+      <text x="832" y="593" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">verified delivery receipt</text>
+    </g>
+  </g>
+
+  <!-- ── STORAGE · EXTERNAL ZONE (x=974–1440, nodes x=984 w=226 center=1097) ── -->
+  <!-- 6 nodes, total h=464, 5 gaps of 15px, y=76→615 -->
+
+  <!-- Vector Store (RAG) (y=76, h=110) -->
+  <g id="node-vecstore" class="node" style="cursor:pointer">
+    <rect x="984" y="76" width="226" height="110" rx="8" fill="#1a0d05" stroke="rgba(167,139,250,0.52)" stroke-width="1.8"/>
+    <text x="1097" y="96"  text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">Vector Store (RAG)</text>
+    <text x="1097" y="112" text-anchor="middle" fill="#c47830" font-family="'IBM Plex Mono',monospace" font-size="9">text-embedding-3-small</text>
+    <text x="1097" y="125" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">patient-keyed similarity search</text>
+    <text x="1097" y="138" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">visit_summary · notes · evidence</text>
+    <text x="1097" y="151" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">dedup: patient+date+encounter_id</text>
+    <text x="1097" y="163" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">soft delete · overwrite semantics</text>
+    <text x="1097" y="175" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">cross-patient retrieval blocked at query</text>
+  </g>
+
+  <!-- Upstash Redis (y=201, h=76, gap=15) -->
+  <g id="node-redis" class="node" style="cursor:pointer">
+    <rect x="984" y="201" width="226" height="76" rx="8" fill="#071e1a" stroke="rgba(45,212,191,0.48)" stroke-width="1.8"/>
+    <text x="1097" y="221" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">Upstash Redis</text>
+    <text x="1097" y="236" text-anchor="middle" fill="#4fb5a8" font-family="'IBM Plex Mono',monospace" font-size="9">resumable SSE job state</text>
+    <text x="1097" y="249" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">per-stage completion flags</text>
+    <text x="1097" y="262" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">HTTP · App Runner compatible</text>
+  </g>
+
+  <!-- Resend (y=292, h=66, gap=15) -->
+  <g id="node-resend" class="node" style="cursor:pointer">
+    <rect x="984" y="292" width="226" height="66" rx="7" fill="#0a1520" stroke="rgba(61,126,255,0.38)" stroke-width="1.6"/>
+    <text x="1097" y="313" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">Resend</text>
+    <text x="1097" y="328" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">email delivery · verified-send</text>
+    <text x="1097" y="341" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">send receipt before state update</text>
+    <text x="1097" y="352" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">failed sends surface as errors</text>
+  </g>
+
+  <!-- Brave Search MCP (y=373, h=90, gap=15) -->
+  <g id="node-brave" class="node" style="cursor:pointer">
+    <rect x="984" y="373" width="226" height="90" rx="7" fill="#0a1010" stroke="rgba(107,114,128,0.44)" stroke-width="1.6"/>
+    <text x="1097" y="393" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">Brave Search MCP</text>
+    <text x="1097" y="409" text-anchor="middle" fill="#9ba3ae" font-family="'IBM Plex Mono',monospace" font-size="8.5">drug interactions · guidelines</text>
+    <text x="1097" y="422" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">stdio · Research Agent only</text>
+    <text x="1097" y="435" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">conditionally triggered</text>
+    <text x="1097" y="447" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">heuristic: meds/conditions in notes</text>
+  </g>
+
+  <!-- Infra badge (y=478, h=56, gap=15) -->
+  <rect x="984" y="478" width="226" height="56" rx="6" fill="rgba(13,30,56,0.85)" stroke="rgba(149,175,219,0.15)" stroke-width="1"/>
+  <text x="1097" y="498" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">Docker · AWS ECR · App Runner</text>
+  <text x="1097" y="511" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">Route 53 · auto HTTPS · scaling</text>
+  <text x="1097" y="524" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">ECR image pull on deploy</text>
+
+  <!-- PostgreSQL · S3 (y=549, h=66, gap=15) → bottom=615 -->
+  <g id="node-postgres" class="node" style="cursor:pointer">
+    <rect x="984" y="549" width="226" height="66" rx="7" fill="#0d0a1a" stroke="rgba(167,139,250,0.36)" stroke-width="1.6"/>
+    <text x="1097" y="569" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">PostgreSQL · S3</text>
+    <text x="1097" y="584" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">consultation records · files</text>
+    <text x="1097" y="597" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">AWS RDS · async SQLAlchemy</text>
+    <text x="1097" y="609" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">Alembic · S3 presigned URLs</text>
+  </g>
+
+  <!-- ═══ ZONE LABELS ═══ -->
+  <text x="109"  y="638" text-anchor="middle" fill="rgba(149,175,219,0.32)" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="2">CLIENT</text>
+  <text x="356"  y="638" text-anchor="middle" fill="rgba(149,175,219,0.32)" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="2">FASTAPI · APP RUNNER</text>
+  <text x="728"  y="638" text-anchor="middle" fill="rgba(149,175,219,0.32)" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="2">AGENT PIPELINE</text>
+  <text x="1115" y="638" text-anchor="middle" fill="rgba(149,175,219,0.32)" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="2">STORAGE · EXTERNAL</text>
+
+</svg>
+</div>
+
+<div id="tooltip"></div>
+
+<script>
+const tooltips = {
+  'node-client':      { title: 'Next.js Client', body: 'Consumes incremental SSE events from the pipeline. Evidence panel lets clinicians expand any claim to see the exact source excerpt. Reconnects via job_id after any disconnect — no re-execution, picks up from last completed stage.' },
+  'node-clerk':       { title: 'Clerk Authentication', body: 'Issues JWTs to the client. FastAPI verifies the JWT on every API request via JWKS. All patient data queries scoped to the verified user ID — cross-patient access is architecturally impossible at the query layer.' },
+  'node-sseevents':   { title: 'SSE Stage Events', body: 'Each pipeline stage emits an SSE event on completion: extraction_complete, summary_draft_ready, critic_pass_complete, evidence_linked, memory_indexed. Critic failure emits critic_regenerating so the client knows why the pipeline is taking longer.' },
+  'node-fastapi':     { title: 'FastAPI · AWS App Runner', body: 'Single-container deployment (Next.js static export + FastAPI). Orchestrates the full pipeline as a resumable SSE job. Verifies Clerk JWTs per request. App Runner handles auto HTTPS, health checks, and request-based scaling.' },
+  'node-ssejobs':     { title: 'Resumable SSE Jobs', body: 'Job state persisted in Upstash Redis keyed by job_id with per-stage completion flags. Client reconnects with the job_id and resumes from the exact last completed stage — not from the beginning. No re-execution cost.' },
+  'node-guardrails':  { title: 'Persistent Format Guardrails', body: 'Critic issues are counted per doctor profile. When a violation pattern reaches the repeat threshold, an LLM rewrites it as a neutral format rule (max 8 guardrails). Future generation prompts inject these as negative constraints — output quality improves without manual prompt tuning.' },
+  'node-routing':     { title: 'Model Routing + Fallback', body: 'Summary Agent uses deepseek-chat via DeepSeek API when configured; falls back to gpt-4o-mini. Critic uses gemini-2.5-flash (gemini-2.5-flash-lite fallback). Chat uses same Gemini chain. Extraction uses gpt-4o-mini for vision OCR, whisper-1 for audio.' },
+  'node-pipeline':    { title: 'Agent Pipeline · Hub-and-Spoke', body: 'Summary Agent orchestrates all specialist agents with deterministic handoffs — not open-ended loops. Each agent has a single bounded responsibility. A Critic failure triggers targeted regeneration, not a full pipeline restart.' },
+  'node-extraction':  { title: 'Extraction Agent', body: 'Multimodal input normalization. PDF/DOCX/TXT/MD to text, audio via Whisper (whisper-1), prescription images via vision model OCR and English translation. All inputs normalized to uniform text context before any summarization occurs.' },
+  'node-summary':     { title: 'Summary Agent — Orchestration Hub', body: 'Builds unified visit context from all extracted inputs and research evidence. Generates strict 3-section HTML: chief complaint, clinical findings, treatment plan. Conditionally enables tool calls when medication/condition heuristics fire. Coordinates all downstream handoffs.' },
+  'node-critic':      { title: 'Critic Agent · QA Gate · Gemini', body: 'Evaluates every summary before delivery: factual contradictions, clinical omissions, hallucinated specifics, structural violations. Fail → tournament regeneration (N=3 parallel candidates, each re-reviewed, best selected). Issues recorded as guardrails. Returns JSON: score, issues, missing, hallucinations.' },
+  'node-research':    { title: 'Research Agent · Conditional', body: 'Only triggered when medication/condition heuristics detect signals needing external verification. Queries Brave Search via MCPServerStdio. Results injected as clearly marked referenced evidence into Summary Agent — not as direct clinical claims.' },
+  'node-evidence':    { title: 'Evidence Agent · Source Mapping', body: 'Maps every summary statement to its specific source chunk. Clinician can expand any claim to see the exact input excerpt. Unsupported statements flagged as evidence gaps. Snippets capped at 140 chars. Evidence map persisted and emitted as SSE event.' },
+  'node-memory':      { title: 'Memory Agent · RAG', body: 'After each visit, the finalized summary is embedded and stored in the Vector Store keyed by patient ID. On subsequent visits, semantically similar prior summaries are retrieved and injected as longitudinal background context. Dedup by patient+date+encounter_id.' },
+  'node-coordinator': { title: 'Coordinator Agent', body: 'Extracts next-step actions from the finalized summary: follow-ups, referrals, medication changes, pending tests. Emitted as the actions SSE event. Runs in parallel with Evidence and Memory agents after Critic approval.' },
+  'node-chat':        { title: 'Chat Agent · Gemini', body: 'Patient-scoped clinical Q&A. Grounded only in current patient\'s summaries and consultation context via Vector Store RAG recall. Cannot speculate beyond documented evidence. App guide injected for product support questions. Streams Markdown.' },
+  'node-emailagent':  { title: 'Email Agent', body: 'Triggered by clinician to dispatch patient summaries. Optionally translates to patient\'s language before sending. Sends via Resend with verified-send pattern: delivery receipt confirmed before recording delivery_success. Failed sends surface as delivery errors.' },
+  'node-vecstore':    { title: 'Vector Store (RAG) · Longitudinal Memory', body: 'Patient-keyed embeddings via text-embedding-3-small. Stores visit_summary, visit_notes, visit_evidence per encounter. Dedup by (patient, date, type, template_id, encounter_id). Cross-patient retrieval blocked at the query layer — not just by policy.' },
+  'node-redis':       { title: 'Upstash Redis · Job State', body: 'Resumable SSE job state. Each job stored as a Redis hash with per-stage completion flags. HTTP-based access — no persistent TCP connections, compatible with App Runner. Optional — falls back to in-memory jobs if not configured.' },
+  'node-resend':      { title: 'Resend · Email Delivery', body: 'Email dispatch for summaries and patient reports. Verified-send: server confirms delivery receipt from Resend API before recording delivery_success in job state. Failed sends surface as state errors — not silent failures.' },
+  'node-brave':       { title: 'Brave Search MCP · stdio', body: 'External clinical lookup via MCPServerStdio from OpenAI Agents SDK. Triggered by medication/condition heuristics in the Summary Agent. Provides drug interaction data and clinical guidelines. Research Agent owns the MCP boundary — Summary Agent never calls external tools directly.' },
+  'node-history':     { title: 'Consultation History', body: 'Browse and manage past consultations. Paginated list scoped to the authenticated clinician. Filter by patient name, date range, or lifecycle status (draft / finalized). PDF export per consultation via WeasyPrint. Finalized consultations are immutable; drafts can be amended before finalization.' },
+  'node-inputpanel':  { title: 'Consultation Form', body: 'Multi-input assembly before submission. Accepts PDF documents, audio recordings (Whisper transcription preview on upload), prescription images (vision OCR), and freeform text notes. Target language for patient email translation selected here. Submits as POST /api/consultation, which opens an SSE stream keyed by job_id.' },
+  'node-histapi':     { title: 'History + Export API', body: 'REST endpoints for consultation management and PDF export. GET /api/consultations returns paginated list scoped to the verified JWT user. GET /api/consultation/{id} returns full artifact with evidence map. POST /api/export-pdf generates a WeasyPrint PDF from the stored HTML artifact and returns an S3 presigned download URL. All endpoints JWT-gated.' },
+  'node-postgres':    { title: 'PostgreSQL · S3', body: 'Persistent store for all consultation records and uploaded files. PostgreSQL (AWS RDS) stores structured consultation data — summaries, critic scores, evidence maps, lifecycle state. S3 stores audio recordings, uploaded PDFs, images, and generated export PDFs referenced by key in the PostgreSQL record. Alembic schema migrations applied on container startup. Async SQLAlchemy engine for non-blocking I/O.' },
+};
+
+const connMap = {
+  'node-client':      ['c-req','c-sse'],
+  'node-clerk':       ['c-req','c-clerk'],
+  'node-sseevents':   ['c-sse'],
+  'node-fastapi':     ['c-req','c-sse','c-run','c-redis','c-clerk'],
+  'node-ssejobs':     ['c-redis','c-sse'],
+  'node-guardrails':  [],
+  'node-routing':     [],
+  'node-pipeline':    ['c-run','c-mem','c-brave','c-email'],
+  'node-extraction':  ['c-run','c-extract'],
+  'node-summary':     ['c-mem','c-sres','c-extract','c-crit','c-regen','c-rag-ret'],
+  'node-critic':      ['c-crit','c-regen','c-evid-flow','c-mem-flow','c-coord-flow'],
+  'node-research':    ['c-brave','c-sres'],
+  'node-evidence':    ['c-evid-flow'],
+  'node-memory':      ['c-mem','c-mem-flow'],
+  'node-coordinator': ['c-coord-flow'],
+  'node-chat':        [],
+  'node-emailagent':  ['c-email'],
+  'node-vecstore':    ['c-mem','c-rag-ret'],
+  'node-redis':       ['c-redis'],
+  'node-resend':      ['c-email'],
+  'node-brave':       ['c-brave'],
+  'node-history':     ['c-req'],
+  'node-inputpanel':  ['c-req'],
+  'node-histapi':     [],
+  'node-postgres':    [],
+};
+
+const allNodes = Object.keys(connMap);
+const allConns = ['c-req','c-sse','c-run','c-redis','c-brave','c-mem','c-email','c-sres','c-extract','c-crit','c-regen','c-evid-flow','c-mem-flow','c-coord-flow','c-rag-ret','c-clerk'];
+const tip = document.getElementById('tooltip');
+
+function fadeAll() {
+  allNodes.forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('faded'); });
+  allConns.forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('faded'); });
+  document.querySelectorAll('.conn-dot').forEach(d => d.classList.add('faded'));
+}
+function clearAll() {
+  allNodes.forEach(id => { const el = document.getElementById(id); if (el) { el.classList.remove('faded'); el.classList.remove('highlighted'); } });
+  allConns.forEach(id => { const el = document.getElementById(id); if (el) { el.classList.remove('faded'); el.classList.remove('highlighted'); } });
+  document.querySelectorAll('.conn-dot').forEach(d => { d.classList.remove('faded'); d.classList.remove('highlighted'); });
+}
+
+allNodes.forEach(nodeId => {
+  const el = document.getElementById(nodeId);
+  if (!el) return;
+  el.addEventListener('mouseenter', (e) => {
+    fadeAll();
+    el.classList.remove('faded');
+    el.classList.add('highlighted');
+    (connMap[nodeId] || []).forEach(cid => {
+      const cel = document.getElementById(cid);
+      if (cel) { cel.classList.remove('faded'); cel.classList.add('highlighted'); }
+      document.querySelectorAll(`.conn-dot[data-conn="${cid}"]`).forEach(d => {
+        d.classList.remove('faded'); d.classList.add('highlighted');
+      });
+      Object.keys(connMap).forEach(nid => {
+        if (nid !== nodeId && connMap[nid].some(c => connMap[nodeId].includes(c))) {
+          const nel = document.getElementById(nid);
+          if (nel) nel.classList.remove('faded');
+        }
+      });
+    });
+    const t = tooltips[nodeId];
+    if (t) {
+      tip.innerHTML = `<b>${t.title}</b>${t.body}`;
+      tip.classList.add('vis');
+    }
+  });
+  el.addEventListener('mousemove', (e) => {
+    tip.style.left = (e.clientX + 14) + 'px';
+    tip.style.top  = (e.clientY - 10) + 'px';
+  });
+  el.addEventListener('mouseleave', () => {
+    clearAll();
+    tip.classList.remove('vis');
+  });
+});
+</script>
+</body>
+</html>

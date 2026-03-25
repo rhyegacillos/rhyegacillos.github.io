@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Autonomous Agentic Trader Architecture</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: #050d1c; overflow: hidden; }
+    .wrap { display: flex; flex-direction: column; height: 100%; }
+    svg { width: 100%; flex: 1; min-height: 0; }
+    .node, .conn { transition: opacity 0.18s; }
+    .node > rect { transition: fill 0.18s, stroke 0.18s; }
+    .faded { opacity: 0.12 !important; }
+    .highlighted > rect:first-child { fill: #162b52 !important; stroke-opacity: 1 !important; stroke-width: 2.4px !important; }
+    .conn-dot { pointer-events: none; transition: opacity 0.18s; }
+    .conn-dot.faded { opacity: 0.12 !important; }
+    #tooltip {
+      position: absolute;
+      background: rgba(5,13,28,0.96);
+      border: 1px solid rgba(149,175,219,0.28);
+      border-radius: 7px;
+      padding: 9px 13px;
+      color: #e2eaf8;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px;
+      line-height: 1.55;
+      max-width: 260px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 10;
+    }
+    #tooltip.vis { opacity: 1; }
+    #tooltip b { color: #3d7eff; display: block; margin-bottom: 3px; font-size: 12.5px; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+<!--
+  viewBox 1400×680
+  Zones (x):  CLIENT 18–180 | FASTAPI·EC2 184–452 | AGENT RUNTIME 456–808 | PIPELINE·STORAGE 812–1382
+  All text widths measured at IBM Plex Mono ~4.8px/ch (sz8), ~5.4px/ch (sz9), ~5.7px/ch (sz9.5), ~6.0px/ch (sz10)
+-->
+<svg viewBox="0 0 1400 680" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Autonomous Agentic Trader Architecture Diagram">
+  <defs>
+    <marker id="arr-blue"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#3d7eff"/></marker>
+    <marker id="arr-green"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#10b981"/></marker>
+    <marker id="arr-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#a78bfa"/></marker>
+    <marker id="arr-teal"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#2dd4bf"/></marker>
+    <marker id="arr-amber"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#f59e0b"/></marker>
+  </defs>
+
+  <!-- ═══ LEGEND BAR ═══ -->
+  <rect x="18" y="14" width="1364" height="26" rx="5" fill="rgba(13,30,56,0.88)" stroke="rgba(149,175,219,0.15)" stroke-width="1"/>
+  <line x1="30"  y1="27" x2="54"  y2="27" stroke="#3d7eff" stroke-width="1.8" marker-end="url(#arr-blue)"/>
+  <text x="60"  y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">REST request</text>
+  <line x1="162" y1="27" x2="186" y2="27" stroke="#3d7eff" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#arr-blue)"/>
+  <text x="192" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">REST response</text>
+  <line x1="314" y1="27" x2="338" y2="27" stroke="#2dd4bf" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#arr-teal)"/>
+  <text x="344" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">SSE · live events</text>
+  <line x1="462" y1="27" x2="486" y2="27" stroke="#10b981" stroke-width="1.8" marker-end="url(#arr-green)"/>
+  <text x="492" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Agent orchestration</text>
+  <line x1="622" y1="27" x2="646" y2="27" stroke="#f59e0b" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#arr-amber)"/>
+  <text x="652" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Proposal pipeline</text>
+  <line x1="772" y1="27" x2="796" y2="27" stroke="#a78bfa" stroke-width="1.8" marker-end="url(#arr-purple)"/>
+  <text x="802" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Storage</text>
+  <text x="1080" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Hover nodes to highlight paths</text>
+
+  <!-- ═══ ZONE BACKGROUNDS ═══ -->
+  <!-- CLIENT: 18–180 -->
+  <rect x="18"  y="46" width="162" height="578" rx="4" fill="rgba(13,40,90,0.14)"/>
+  <!-- FASTAPI·EC2: 184–452 -->
+  <rect x="184" y="46" width="268" height="578" rx="4" fill="rgba(60,20,100,0.10)"/>
+  <!-- AGENT RUNTIME: 456–808 -->
+  <rect x="456" y="46" width="352" height="578" rx="4" fill="rgba(5,25,15,0.10)"/>
+  <!-- PIPELINE·STORAGE: 812–1382 -->
+  <rect x="812" y="46" width="570" height="578" rx="4" fill="rgba(5,20,40,0.08)"/>
+
+  <!-- ═══ CONNECTIONS ═══ -->
+
+  <!-- c-req: Next.js → FastAPI -->
+  <path id="c-req"    class="conn" d="M 170,102 L 184,102"                                   stroke="#3d7eff" stroke-width="1.8" fill="none" marker-end="url(#arr-blue)"/>
+  <!-- c-resp: FastAPI → Next.js -->
+  <path id="c-resp"   class="conn" d="M 184,116 L 170,116"                                   stroke="#3d7eff" stroke-width="1.4" stroke-dasharray="5 3" fill="none" marker-end="url(#arr-blue)"/>
+  <!-- c-sse: SSE Broker → Next.js -->
+  <path id="c-sse"    class="conn" d="M 184,254 L 99,254 L 99,128"                           stroke="#2dd4bf" stroke-width="1.6" stroke-dasharray="5 3" fill="none" marker-end="url(#arr-teal)"/>
+  <!-- c-spawn: FastAPI → Engine -->
+  <path id="c-spawn"  class="conn" d="M 318,128 L 318,380"                                   stroke="#10b981" stroke-width="1.6" fill="none" marker-end="url(#arr-green)"/>
+  <!-- c-run: Engine → Traders -->
+  <path id="c-run"    class="conn" d="M 446,406 L 454,406 L 454,159 L 466,159"              stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#arr-green)"/>
+  <!-- c-mcp: Traders → MCP servers -->
+  <path id="c-mcp"    class="conn" d="M 632,252 L 632,383"                                   stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#arr-green)"/>
+  <!-- c-prop: MCP Accounts → Pipeline G1 — G1 center y=128 -->
+  <path id="c-prop"   class="conn" d="M 524,461 L 524,500 L 810,500 L 810,128 L 822,128"   stroke="#f59e0b" stroke-width="1.6" stroke-dasharray="4 3" fill="none" marker-end="url(#arr-amber)"/>
+  <!-- c-market: MCP Market → Polygon+Brave — Polygon now y=448, center y=471 -->
+  <path id="c-market" class="conn" d="M 678,436 L 810,436 L 810,551 L 1120,551"             stroke="#3d7eff" stroke-width="1.4" stroke-dasharray="4 3" fill="none" marker-end="url(#arr-blue)"/>
+  <!-- c-exec: G3 Exec Gateway → Alpaca — exits G3 bottom, routes below container -->
+  <path id="c-exec"   class="conn" d="M 963,260 L 963,392 L 1228,392 L 1228,472"           stroke="#f59e0b" stroke-width="1.8" fill="none" marker-end="url(#arr-amber)"/>
+  <!-- c-store: Pipeline → PostgreSQL — x=922 still within PostgreSQL (872–1092) -->
+  <path id="c-store"  class="conn" d="M 922,308 L 922,472"                                   stroke="#a78bfa" stroke-width="1.8" fill="none" marker-end="url(#arr-purple)"/>
+  <!-- c-mem: MCP Memory → PostgreSQL left edge x=872 -->
+  <path id="c-mem"    class="conn" d="M 736,461 L 872,461 L 872,472"                        stroke="#a78bfa" stroke-width="1.6" fill="none" marker-end="url(#arr-purple)"/>
+  <!-- c-event: PostgreSQL left edge x=872 → SSE Broker -->
+  <path id="c-event"  class="conn" d="M 872,517 L 90,517 L 90,254 L 184,254"                stroke="#2dd4bf" stroke-width="1.4" stroke-dasharray="5 3" fill="none" marker-end="url(#arr-teal)"/>
+
+  <!-- ═══ ANIMATED FLOW DOTS ═══ -->
+  <!-- c-req: Next.js → FastAPI (operator REST request) -->
+  <circle class="conn-dot" data-conn="c-req" r="2.5" fill="#3d7eff">
+    <animateMotion dur="0.6s" repeatCount="indefinite" rotate="auto" path="M 170,102 L 184,102"/>
+  </circle>
+  <!-- c-resp: FastAPI → Next.js (REST response) -->
+  <circle class="conn-dot" data-conn="c-resp" r="2.5" fill="#3d7eff">
+    <animateMotion dur="0.6s" repeatCount="indefinite" rotate="auto" path="M 184,116 L 170,116"/>
+  </circle>
+  <!-- c-sse: SSE Broker → Next.js (live event stream back to dashboard) -->
+  <circle class="conn-dot" data-conn="c-sse" r="2.5" fill="#2dd4bf">
+    <animateMotion dur="1.8s" repeatCount="indefinite" rotate="auto" path="M 184,254 L 99,254 L 99,128"/>
+  </circle>
+  <!-- c-spawn: FastAPI → Trading Engine (operator starts scheduler) -->
+  <circle class="conn-dot" data-conn="c-spawn" r="2.5" fill="#10b981">
+    <animateMotion dur="2s" repeatCount="indefinite" rotate="auto" path="M 318,128 L 318,380"/>
+  </circle>
+  <!-- c-run: Engine → Traders (spawn concurrent trader agents) -->
+  <circle class="conn-dot" data-conn="c-run" r="2.5" fill="#10b981">
+    <animateMotion dur="1.8s" repeatCount="indefinite" rotate="auto" path="M 446,406 L 454,406 L 454,159 L 466,159"/>
+  </circle>
+  <!-- c-mcp: Traders → MCP Tool Servers (tool calls per agent turn) -->
+  <circle class="conn-dot" data-conn="c-mcp" r="2.5" fill="#10b981">
+    <animateMotion dur="1.4s" repeatCount="indefinite" rotate="auto" path="M 632,252 L 632,383"/>
+  </circle>
+  <!-- c-prop: MCP Accounts buy/sell → Pipeline G1 intake (not directly to Alpaca) -->
+  <circle class="conn-dot" data-conn="c-prop" r="2.5" fill="#f59e0b">
+    <animateMotion dur="3s" repeatCount="indefinite" rotate="auto" path="M 524,461 L 524,500 L 810,500 L 810,128 L 822,128"/>
+  </circle>
+  <!-- c-market: MCP Market → Polygon·Brave (price lookup + news) -->
+  <circle class="conn-dot" data-conn="c-market" r="2" fill="#3d7eff">
+    <animateMotion dur="2.5s" repeatCount="indefinite" rotate="auto" path="M 678,436 L 810,436 L 810,551 L 1120,551"/>
+  </circle>
+  <!-- c-exec: G3 Exec Gate → Alpaca (trade execution after 4-gate approval) -->
+  <circle class="conn-dot" data-conn="c-exec" r="2.5" fill="#f59e0b">
+    <animateMotion dur="2s" repeatCount="indefinite" rotate="auto" path="M 963,260 L 963,392 L 1228,392 L 1228,472"/>
+  </circle>
+  <!-- c-store: Pipeline → PostgreSQL (proposals, decisions, audit trail) -->
+  <circle class="conn-dot" data-conn="c-store" r="2.5" fill="#a78bfa">
+    <animateMotion dur="1.5s" repeatCount="indefinite" rotate="auto" path="M 922,308 L 922,472"/>
+  </circle>
+  <!-- c-mem: Memory MCP → PostgreSQL (per-trader knowledge graph) -->
+  <circle class="conn-dot" data-conn="c-mem" r="2" fill="#a78bfa">
+    <animateMotion dur="0.8s" repeatCount="indefinite" rotate="auto" path="M 736,461 L 872,461 L 872,472"/>
+  </circle>
+  <!-- c-event: PostgreSQL → SSE Broker (DB events drive live dashboard updates) -->
+  <circle class="conn-dot" data-conn="c-event" r="2" fill="#2dd4bf">
+    <animateMotion dur="4s" repeatCount="indefinite" rotate="auto" path="M 872,517 L 90,517 L 90,254 L 184,254"/>
+  </circle>
+
+  <!-- ═══ NODES ═══ -->
+
+  <!-- Next.js — w=142: "Operator Dashboard" 17ch×5.7+24=121 ✓ -->
+  <g id="node-client" class="node" style="cursor:pointer">
+    <rect x="28" y="76" width="142" height="52" rx="8" fill="#0a1929" stroke="rgba(61,126,255,0.52)" stroke-width="1.8"/>
+    <text x="99" y="98"  text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="13">Next.js</text>
+    <text x="99" y="115" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="9.5">Operator Dashboard</text>
+  </g>
+
+  <!-- FastAPI — w=252: "AWS EC2 · control plane · static host" 38ch×5.7+24=241 ✓ -->
+  <g id="node-fastapi" class="node" style="cursor:pointer">
+    <rect x="194" y="76" width="252" height="52" rx="8" fill="#160a3e" stroke="rgba(139,92,246,0.56)" stroke-width="1.8"/>
+    <text x="320" y="98"  text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="13">FastAPI</text>
+    <text x="320" y="115" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="9.5">AWS EC2 · control plane · static host</text>
+  </g>
+
+  <!-- SSE Broker — w=252: "ring buffer · 300 events · replay" 34ch×5.4+24=208 ✓ -->
+  <g id="node-sse" class="node" style="cursor:pointer">
+    <rect x="194" y="231" width="252" height="46" rx="7" fill="#071e1a" stroke="rgba(45,212,191,0.48)" stroke-width="1.8"/>
+    <text x="320" y="251" text-anchor="middle" fill="#2dd4bf" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11.5">SSE Broker</text>
+    <text x="320" y="267" text-anchor="middle" fill="#4fb5a8" font-family="'IBM Plex Mono',monospace" font-size="9">ring buffer · 300 events · replay</text>
+  </g>
+
+  <!-- Trading Engine — w=252: "subprocess · operator-controlled lifecycle" 42ch×5.4+24=251 ✓ -->
+  <g id="node-engine" class="node" style="cursor:pointer">
+    <rect x="194" y="380" width="252" height="52" rx="7" fill="#0a2010" stroke="rgba(16,185,129,0.44)" stroke-width="1.8"/>
+    <text x="320" y="402" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11.5">Trading Engine</text>
+    <text x="320" y="419" text-anchor="middle" fill="#4fb58a" font-family="'IBM Plex Mono',monospace" font-size="9">subprocess · operator-controlled lifecycle</text>
+  </g>
+
+  <!-- Trader Personas CONTAINER — w=332
+       annotation "concurrent asyncio · MAX_TURNS=30 · per-trader model routing" 60ch×4.8+24=312 ✓ -->
+  <g id="node-traders" class="node" style="cursor:pointer">
+    <rect x="466" y="60" width="332" height="192" rx="10" fill="#0d1529" stroke="rgba(61,126,255,0.30)" stroke-width="1.8"/>
+    <text x="632" y="82" text-anchor="middle" fill="#3d7eff" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">TRADER PERSONAS</text>
+    <!-- Warren -->
+    <g><rect x="476" y="90" width="148" height="46" rx="6" fill="#091420" stroke="rgba(61,126,255,0.24)" stroke-width="1.2"/>
+    <text x="550" y="109" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11">Warren</text>
+    <text x="550" y="125" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">Conservative · 0.70×</text></g>
+    <!-- George -->
+    <g><rect x="634" y="90" width="148" height="46" rx="6" fill="#091420" stroke="rgba(61,126,255,0.24)" stroke-width="1.2"/>
+    <text x="708" y="109" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11">George</text>
+    <text x="708" y="125" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">Aggressive · 1.30×</text></g>
+    <!-- Ray -->
+    <g><rect x="476" y="146" width="148" height="46" rx="6" fill="#091420" stroke="rgba(61,126,255,0.24)" stroke-width="1.2"/>
+    <text x="550" y="165" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11">Ray</text>
+    <text x="550" y="181" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">Balanced · 1.00×</text></g>
+    <!-- Cathie -->
+    <g><rect x="634" y="146" width="148" height="46" rx="6" fill="#091420" stroke="rgba(61,126,255,0.24)" stroke-width="1.2"/>
+    <text x="708" y="165" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11">Cathie</text>
+    <text x="708" y="181" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">Growth · 1.30×</text></g>
+    <!-- concurrent annotation -->
+    <rect x="476" y="200" width="314" height="20" rx="4" fill="rgba(8,14,32,0.90)" stroke="rgba(245,158,11,0.28)" stroke-width="1"/>
+    <text x="633" y="214" text-anchor="middle" fill="#f59e0b" font-family="'IBM Plex Mono',monospace" font-size="8.5">concurrent asyncio · MAX_TURNS=30 · per-trader model routing</text>
+  </g>
+
+  <!-- MCP Servers CONTAINER — w=332
+       label "MCP TOOL SERVERS · stdio · isolated per-trader" 47ch×6.0+24=306 ✓ -->
+  <g id="node-mcp" class="node" style="cursor:pointer">
+    <rect x="466" y="383" width="332" height="110" rx="10" fill="#051912" stroke="rgba(16,185,129,0.32)" stroke-width="1.8"/>
+    <text x="632" y="403" text-anchor="middle" fill="#10b981" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10">MCP TOOL SERVERS · stdio · isolated per-trader</text>
+    <!-- Accounts — w=96: "buy · sell · balance" 20ch×4.5+24=114 → use font-size 8 -->
+    <g id="node-accounts" class="node" style="cursor:pointer">
+      <rect x="476" y="411" width="96" height="50" rx="6" fill="#061a12" stroke="rgba(16,185,129,0.22)" stroke-width="1"/>
+      <text x="524" y="432" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">Accounts</text>
+      <text x="524" y="448" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">buy · sell · balance</text>
+    </g>
+    <!-- Market -->
+    <g id="node-market" class="node" style="cursor:pointer">
+      <rect x="582" y="411" width="96" height="50" rx="6" fill="#061a12" stroke="rgba(16,185,129,0.22)" stroke-width="1"/>
+      <text x="630" y="432" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">Market</text>
+      <text x="630" y="448" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">price · news · events</text>
+    </g>
+    <!-- Memory -->
+    <g id="node-memory" class="node" style="cursor:pointer">
+      <rect x="688" y="411" width="96" height="50" rx="6" fill="#061a12" stroke="rgba(16,185,129,0.22)" stroke-width="1"/>
+      <text x="736" y="432" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">Memory</text>
+      <text x="736" y="448" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">knowledge graph</text>
+    </g>
+  </g>
+
+  <!-- Portfolio-Control Pipeline CONTAINER — 2×2 grid: G1+G2 top row, G3+G4 bottom row, each gate w=262 -->
+  <g id="node-pipeline" class="node" style="cursor:pointer">
+    <rect x="822" y="60" width="558" height="248" rx="10" fill="#0d1520" stroke="rgba(61,126,255,0.28)" stroke-width="1.8"/>
+    <text x="1101" y="80" text-anchor="middle" fill="#3d7eff" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">PORTFOLIO-CONTROL PIPELINE</text>
+    <!-- G1: Proposal Intake — row 1 left, w=262 -->
+    <g><rect x="832" y="88" width="262" height="80" rx="6" fill="#0a1020" stroke="rgba(61,126,255,0.20)" stroke-width="1"/>
+    <text x="963" y="106" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">G1 · Intake</text>
+    <text x="963" y="120" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">dedupe · hash</text>
+    <text x="963" y="132" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">TTL · 5-min bucket</text>
+    <text x="963" y="144" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">created → validated</text></g>
+    <!-- G1→G2 arrow (row 1) -->
+    <text x="1100" y="132" text-anchor="middle" fill="#3d7eff" font-family="'Space Grotesk',sans-serif" font-size="16">›</text>
+    <!-- G2: Risk Policy — row 1 right, w=262 -->
+    <g><rect x="1106" y="88" width="262" height="80" rx="6" fill="#0a1020" stroke="rgba(61,126,255,0.20)" stroke-width="1"/>
+    <text x="1237" y="106" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">G2 · Risk Policy</text>
+    <text x="1237" y="120" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">14+ rules · drawdown</text>
+    <text x="1237" y="132" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">exposure · cooldown</text>
+    <text x="1237" y="144" text-anchor="middle" fill="#f59e0b" font-family="'IBM Plex Mono',monospace" font-size="8">approve · reduce · reject</text></g>
+    <!-- G2→G3 connector: top-right → bottom-left (pipeline continues) -->
+    <path d="M 1237,168 L 1237,174 L 963,174 L 963,180" stroke="#3d7eff" stroke-width="1" stroke-dasharray="4 3" fill="none" marker-end="url(#arr-blue)"/>
+    <!-- G3: Execution Gateway — row 2 left, w=262 -->
+    <g><rect x="832" y="180" width="262" height="80" rx="6" fill="#0a1020" stroke="rgba(61,126,255,0.20)" stroke-width="1"/>
+    <text x="963" y="198" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">G3 · Exec Gate</text>
+    <text x="963" y="212" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">proposal_only</text>
+    <text x="963" y="224" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">approval_required</text>
+    <text x="963" y="236" text-anchor="middle" fill="#10b981" font-family="'IBM Plex Mono',monospace" font-size="8">auto_execute</text></g>
+    <!-- G3→G4 arrow (row 2) -->
+    <text x="1100" y="223" text-anchor="middle" fill="#3d7eff" font-family="'Space Grotesk',sans-serif" font-size="16">›</text>
+    <!-- G4: Adjudication — row 2 right, w=262 (was 110 — now fits all text) -->
+    <g><rect x="1106" y="180" width="262" height="80" rx="6" fill="#0a1020" stroke="rgba(245,158,11,0.20)" stroke-width="1"/>
+    <text x="1237" y="198" text-anchor="middle" fill="#f59e0b" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">G4 · Adjudication</text>
+    <text x="1237" y="212" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">optional</text>
+    <text x="1237" y="224" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">conflict resolution</text>
+    <text x="1237" y="236" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">LLM advisory</text></g>
+    <!-- G4 annotation bar — w=536 -->
+    <rect x="832" y="270" width="536" height="20" rx="4" fill="rgba(8,14,32,0.92)" stroke="rgba(245,158,11,0.22)" stroke-width="1"/>
+    <text x="1100" y="284" text-anchor="middle" fill="#f59e0b" font-family="'IBM Plex Mono',monospace" font-size="8.5">G4 optional · conflict detection · LLM advisory · deterministic policy has final authority</text>
+  </g>
+
+  <!-- PostgreSQL RDS — w=220, x shifted +60 from 812→872 -->
+  <g id="node-postgres" class="node" style="cursor:pointer">
+    <rect x="872" y="472" width="220" height="90" rx="8" fill="#1a0d05" stroke="rgba(249,115,22,0.52)" stroke-width="1.8"/>
+    <text x="982" y="496" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="13">PostgreSQL</text>
+    <text x="982" y="513" text-anchor="middle" fill="#c47830" font-family="'IBM Plex Mono',monospace" font-size="9.5">AWS RDS · 30+ tables</text>
+    <text x="982" y="529" text-anchor="middle" fill="#f59e0b" font-family="'IBM Plex Mono',monospace" font-size="8.5">proposals · decisions · executions</text>
+    <text x="982" y="543" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">positions · performance · memory graph</text>
+  </g>
+
+  <!-- Alpaca — w=216, x shifted +60 from 1060→1120 -->
+  <g id="node-alpaca" class="node" style="cursor:pointer">
+    <rect x="1120" y="472" width="216" height="46" rx="7" fill="#0a2010" stroke="rgba(16,185,129,0.44)" stroke-width="1.8"/>
+    <text x="1228" y="492" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">Alpaca</text>
+    <text x="1228" y="508" text-anchor="middle" fill="#4fb58a" font-family="'IBM Plex Mono',monospace" font-size="9">broker · execution · price primary</text>
+  </g>
+
+  <!-- Polygon + Brave Search — w=224, x shifted +60 from 1060→1120 -->
+  <g id="node-polygon" class="node" style="cursor:pointer">
+    <rect x="1120" y="528" width="224" height="58" rx="7" fill="#091420" stroke="rgba(61,126,255,0.30)" stroke-width="1.8"/>
+    <text x="1232" y="546" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">Polygon · Brave</text>
+    <text x="1232" y="560" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">Brave: news · market data</text>
+    <text x="1232" y="574" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">Polygon: price fallback</text>
+  </g>
+
+  <!-- ═══ ANNOTATION OVERLAYS ═══ -->
+
+  <!-- Read-model note — w=252: "persisted shell · live reads · no stale state" 44ch×4.8+24=235 ✓ -->
+  <rect x="194" y="535" width="252" height="32" rx="6" fill="rgba(13,18,46,0.90)" stroke="rgba(45,212,191,0.20)" stroke-width="1"/>
+  <text x="320" y="550" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">Read-Model Layer</text>
+  <text x="320" y="562" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">persisted shell · live reads · no stale state</text>
+
+  <!-- Price resolution note — moved to y=318 (below new container bottom y=308) -->
+  <rect x="872" y="398" width="248" height="28" rx="4" fill="rgba(10,20,14,0.88)" stroke="rgba(61,126,255,0.18)" stroke-width="1"/>
+  <text x="996" y="411" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">price resolution chain</text>
+  <text x="996" y="422" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">Alpaca → Polygon → cache</text>
+
+  <!-- Operator approval note -->
+  <rect x="872" y="432" width="252" height="28" rx="4" fill="rgba(10,18,8,0.88)" stroke="rgba(245,158,11,0.22)" stroke-width="1"/>
+  <text x="998" y="445" text-anchor="middle" fill="#f59e0b" font-family="'IBM Plex Mono',monospace" font-size="8.5">approval_required mode</text>
+  <text x="998" y="456" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">operator approves → revalidates before submit</text>
+
+  <!-- SSE fallback note — w=142: "fallback: /versions · 20s" 25ch×4.5+24=136 ✓ -->
+  <rect x="28" y="234" width="142" height="28" rx="5" fill="rgba(10,16,36,0.92)" stroke="rgba(45,212,191,0.20)" stroke-width="1"/>
+  <text x="99" y="246" text-anchor="middle" fill="#4fb5a8" font-family="'IBM Plex Mono',monospace" font-size="8.5">SSE primary</text>
+  <text x="99" y="257" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">fallback: polling every 20s</text>
+
+  <!-- Infra badge — w=318: "EC2 · ECR · RDS · Route 53 · Terraform · GitHub Actions" 56ch×5.1+24=310 ✓ -->
+  <rect x="28" y="572" width="318" height="18" rx="4" fill="rgba(13,30,56,0.85)" stroke="rgba(149,175,219,0.15)" stroke-width="1"/>
+  <text x="187" y="585" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">EC2 · ECR · RDS · Route 53 · Terraform · GitHub Actions</text>
+
+  <!-- ═══ ZONE LABELS ═══ -->
+  <text x="99"  y="638" text-anchor="middle" fill="rgba(149,175,219,0.32)" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="2">CLIENT</text>
+  <text x="318" y="638" text-anchor="middle" fill="rgba(149,175,219,0.32)" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="2">FASTAPI · EC2</text>
+  <text x="632" y="638" text-anchor="middle" fill="rgba(149,175,219,0.32)" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="2">AGENT RUNTIME</text>
+  <text x="1097" y="638" text-anchor="middle" fill="rgba(149,175,219,0.32)" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="2">PIPELINE · STORAGE · EXTERNAL</text>
+
+</svg>
+</div>
+
+<div id="tooltip"></div>
+
+<script>
+const tooltips = {
+  'node-client':   { title: 'Next.js Operator Dashboard', body: 'Static export served by FastAPI on port 8000. SSE-driven live updates with 300-event replay on reconnect. Fallback polling every 20s when stream is unavailable. 5 tabs: Manager, per-Trader views, portfolio chart, scorecards.' },
+  'node-fastapi':  { title: 'FastAPI · AWS EC2', body: 'Control plane: 40+ REST endpoints covering scheduler lifecycle, proposal management, execution approval/rejection, read-model queries, and audit log access. Also serves static frontend and manages SSE broker.' },
+  'node-sse':      { title: 'SSE Broker · Ring Buffer', body: '300-event ring buffer keyed by sequence ID. On reconnect, client sends Last-Event-ID and broker replays missed events. If Last-Event-ID is outside buffer coverage, client triggers full REST resync before resuming stream.' },
+  'node-engine':   { title: 'Trading Engine Subprocess', body: 'Long-lived process spawned/stopped by operator command. Manages the scheduler cycle loop, spawns concurrent trader agents, triggers portfolio-control pipeline, and refreshes read models. Must be long-lived — Lambda would break MCP sessions and SSE broker state.' },
+  'node-traders':  { title: 'Trader Personas · Concurrent', body: 'Warren (Conservative 0.70×), George (Aggressive 1.30×), Ray (Balanced 1.00×), Cathie (Growth 1.30×). Each runs bounded multi-turn agent loop (MAX_TURNS=30) via OpenAI Agents SDK. Per-trader model routing: Gemini, OpenAI, DeepSeek, or Grok.' },
+  'node-mcp':      { title: 'MCP Tool Servers · stdio', body: 'Three servers: Accounts, Market, Memory. Failed MCP session for one trader is isolated and retried independently — does not collapse other traders. All tool calls logged at the MCP boundary for full auditability.' },
+  'node-accounts': { title: 'Accounts MCP Server', body: 'Tools: get_balance, get_holdings, buy_shares, sell_shares, change_strategy. buy_shares/sell_shares are named to match trader intent — but the implementation routes to the proposal pipeline, not directly to Alpaca.' },
+  'node-market':   { title: 'Market MCP Server', body: 'Tools: lookup_share_price, get_quote_freshness, get_symbol_news_summary, get_symbol_event_risk. Price resolution: Alpaca → Polygon → cache (Alpaca is primary SIP feed). News and market data via Brave Search. Stale/low-trust quotes trigger quote_low_trust path in Gate 2.' },
+  'node-memory':   { title: 'Memory MCP Server · Knowledge Graph', body: 'Tools: create_entities, create_relations, search_nodes, read_graph. Per-trader PostgreSQL knowledge graph — companies analyzed, sector dynamics, prior trade outcomes. Memory is scoped per trader: Warren\'s graph does not contaminate Cathie\'s.' },
+  'node-pipeline': { title: 'Portfolio-Control Pipeline · 4 Gates', body: 'No trader agent executes trades directly. Every buy_shares/sell_shares call routes to Gate 1 (proposal intake), not the Alpaca execution API. Travels through 4 deterministic gates before anything touches a real brokerage position.' },
+  'node-postgres': { title: 'PostgreSQL · AWS RDS · 30+ Tables', body: 'Source of truth for all runtime state. Proposals, decisions, executions, audit events, position lots, closed trades, performance snapshots, memory graphs, read models, adjudication records. Alembic migrations applied automatically at container startup.' },
+  'node-alpaca':   { title: 'Alpaca · Broker', body: 'Trade execution and account state — accessed only through the Accounts MCP server after full four-gate pipeline approval. Also serves as the primary price source in the quote resolution chain (Alpaca → Polygon → cache).' },
+  'node-polygon':  { title: 'Polygon · Brave Search', body: 'Two distinct roles: Brave Search provides news summaries (get_symbol_news_summary) and event risk data (get_symbol_event_risk) — not price resolution. Polygon is the secondary price source in the resolution chain (Alpaca → Polygon → cache), used when Alpaca data is unavailable or stale.' },
+};
+
+const connMap = {
+  'node-client':   ['c-req','c-resp','c-sse'],
+  'node-fastapi':  ['c-req','c-resp','c-spawn'],
+  'node-sse':      ['c-sse','c-event'],
+  'node-engine':   ['c-spawn','c-run'],
+  'node-traders':  ['c-run','c-mcp'],
+  'node-mcp':      ['c-mcp','c-prop','c-market','c-mem'],
+  'node-accounts': ['c-prop'],
+  'node-market':   ['c-market'],
+  'node-memory':   ['c-mem'],
+  'node-pipeline': ['c-prop','c-store','c-exec'],
+  'node-postgres': ['c-store','c-mem','c-event'],
+  'node-alpaca':   ['c-exec','c-market'],
+  'node-polygon':  ['c-market'],
+};
+
+const allNodes = Object.keys(connMap);
+const allConns = ['c-req','c-resp','c-sse','c-spawn','c-run','c-mcp','c-prop','c-market','c-exec','c-store','c-mem','c-event'];
+const tip = document.getElementById('tooltip');
+
+function fadeAll() {
+  allNodes.forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('faded'); });
+  allConns.forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('faded'); });
+  document.querySelectorAll('.conn-dot').forEach(d => d.classList.add('faded'));
+}
+function clearAll() {
+  allNodes.forEach(id => { const el = document.getElementById(id); if (el) { el.classList.remove('faded'); el.classList.remove('highlighted'); } });
+  allConns.forEach(id => { const el = document.getElementById(id); if (el) { el.classList.remove('faded'); el.classList.remove('highlighted'); } });
+  document.querySelectorAll('.conn-dot').forEach(d => d.classList.remove('faded'));
+}
+
+allNodes.forEach(nodeId => {
+  const el = document.getElementById(nodeId);
+  if (!el) return;
+  el.addEventListener('mouseenter', (e) => {
+    fadeAll();
+    el.classList.remove('faded');
+    el.classList.add('highlighted');
+    (connMap[nodeId] || []).forEach(cid => {
+      const cel = document.getElementById(cid);
+      if (cel) { cel.classList.remove('faded'); cel.classList.add('highlighted'); }
+      document.querySelectorAll(`.conn-dot[data-conn="${cid}"]`).forEach(d => d.classList.remove('faded'));
+      Object.keys(connMap).forEach(nid => {
+        if (nid !== nodeId && connMap[nid].some(c => connMap[nodeId].includes(c))) {
+          const nel = document.getElementById(nid);
+          if (nel) nel.classList.remove('faded');
+        }
+      });
+    });
+    const t = tooltips[nodeId];
+    if (t) {
+      tip.innerHTML = `<b>${t.title}</b>${t.body}`;
+      tip.classList.add('vis');
+    }
+  });
+  el.addEventListener('mousemove', (e) => {
+    tip.style.left = (e.clientX + 14) + 'px';
+    tip.style.top  = (e.clientY - 10) + 'px';
+  });
+  el.addEventListener('mouseleave', () => {
+    clearAll();
+    tip.classList.remove('vis');
+  });
+});
+</script>
+</body>
+</html>

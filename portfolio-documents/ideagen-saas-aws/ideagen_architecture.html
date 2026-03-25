@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IdeaGen Architecture</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: #050d1c; overflow: hidden; }
+    .wrap { display: flex; flex-direction: column; height: 100%; }
+    svg { width: 100%; flex: 1; min-height: 0; }
+    .node, .conn { transition: opacity 0.18s; }
+    .node > rect { transition: fill 0.18s, stroke 0.18s; }
+    .faded { opacity: 0.12 !important; }
+    .highlighted > rect:first-child { fill: #162b52 !important; stroke-opacity: 1 !important; stroke-width: 2.4px !important; }
+    .conn-dot { pointer-events: none; transition: opacity 0.18s; }
+    .conn-dot.faded { opacity: 0.12 !important; }
+    #tooltip {
+      position: absolute;
+      background: rgba(5,13,28,0.96);
+      border: 1px solid rgba(149,175,219,0.28);
+      border-radius: 7px;
+      padding: 9px 13px;
+      color: #e2eaf8;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px;
+      line-height: 1.55;
+      max-width: 250px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 10;
+    }
+    #tooltip.vis { opacity: 1; }
+    #tooltip b { color: #3d7eff; display: block; margin-bottom: 3px; font-size: 12.5px; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+<svg viewBox="0 0 1140 660" preserveAspectRatio="xMidYMid meet" role="img" aria-label="IdeaGen Architecture Diagram">
+  <defs>
+    <marker id="arr-blue"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#3d7eff"/></marker>
+    <marker id="arr-green"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#10b981"/></marker>
+    <marker id="arr-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#a78bfa"/></marker>
+    <marker id="arr-teal"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#2dd4bf"/></marker>
+  </defs>
+
+  <!-- ═══ LEGEND BAR ═══ -->
+  <rect x="18" y="14" width="1104" height="26" rx="5" fill="rgba(13,30,56,0.88)" stroke="rgba(149,175,219,0.15)" stroke-width="1"/>
+  <line x1="30"  y1="27" x2="54"  y2="27" stroke="#3d7eff" stroke-width="1.8" marker-end="url(#arr-blue)"/>
+  <text x="60"  y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Request · parallel</text>
+  <line x1="168" y1="27" x2="192" y2="27" stroke="#3d7eff" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#arr-blue)"/>
+  <text x="198" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Response / return</text>
+  <line x1="320" y1="27" x2="344" y2="27" stroke="#2dd4bf" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#arr-teal)"/>
+  <text x="350" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">JWT auth</text>
+  <line x1="422" y1="27" x2="446" y2="27" stroke="#10b981" stroke-width="1.8" marker-end="url(#arr-green)"/>
+  <text x="452" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Pipeline flow</text>
+  <line x1="534" y1="27" x2="558" y2="27" stroke="#a78bfa" stroke-width="1.8" marker-end="url(#arr-purple)"/>
+  <text x="564" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Artifact storage</text>
+  <text x="872" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Hover nodes to highlight paths</text>
+
+  <!-- ═══ ZONE BACKGROUNDS ═══ -->
+  <rect x="18"  y="46" width="200" height="578" rx="4" fill="rgba(13,40,90,0.14)"/>
+  <rect x="222" y="46" width="222" height="578" rx="4" fill="rgba(60,20,100,0.10)"/>
+  <rect x="448" y="46" width="676" height="578" rx="4" fill="rgba(5,25,15,0.07)"/>
+
+  <!-- ═══ CONNECTIONS ═══ -->
+
+  <!-- c-req: Next.js → FastAPI -->
+  <path id="c-req"    class="conn" d="M 190,95 L 232,95"                                 stroke="#3d7eff" stroke-width="1.8" fill="none" marker-end="url(#arr-blue)"/>
+  <!-- c-resp: FastAPI → Next.js -->
+  <path id="c-resp"   class="conn" d="M 232,109 L 190,109"                               stroke="#3d7eff" stroke-width="1.4" stroke-dasharray="5 3" fill="none" marker-end="url(#arr-blue)"/>
+  <!-- c-auth: Clerk → FastAPI -->
+  <path id="c-auth"   class="conn" d="M 190,201 L 305,201 L 305,128"                    stroke="#2dd4bf" stroke-width="1.6" stroke-dasharray="5 3" fill="none" marker-end="url(#arr-teal)"/>
+  <!-- c-config: Run Config → FastAPI (routes through gap between zones) -->
+  <path id="c-config" class="conn" d="M 190,277 L 218,277 L 218,102 L 232,102"          stroke="#3d7eff" stroke-width="1.5" stroke-dasharray="4 3" fill="none" marker-end="url(#arr-blue)"/>
+  <!-- c-route: FastAPI → LLM Router -->
+  <path id="c-route"  class="conn" d="M 407,95 L 452,95"                                 stroke="#3d7eff" stroke-width="1.8" fill="none" marker-end="url(#arr-blue)"/>
+  <!-- c-result: LLM Router → FastAPI -->
+  <path id="c-result" class="conn" d="M 452,109 L 407,109"                               stroke="#3d7eff" stroke-width="1.4" stroke-dasharray="5 3" fill="none" marker-end="url(#arr-blue)"/>
+  <!-- c-pipe: FastAPI → Pipeline -->
+  <path id="c-pipe"   class="conn" d="M 332,128 L 332,378"                               stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#arr-green)"/>
+  <!-- c-store: Pipeline → PostgreSQL -->
+  <path id="c-store"  class="conn" d="M 784,423 L 800,423"                               stroke="#a78bfa" stroke-width="1.8" fill="none" marker-end="url(#arr-purple)"/>
+  <!-- c-pdf: PostgreSQL → WeasyPrint -->
+  <path id="c-pdf"    class="conn" d="M 955,403 C 963,403 963,379 970,379"               stroke="#a78bfa" stroke-width="1.6" fill="none" marker-end="url(#arr-purple)"/>
+  <!-- c-email: WeasyPrint → Resend -->
+  <path id="c-email"  class="conn" d="M 1035,402 L 1035,430"                             stroke="#a78bfa" stroke-width="1.6" fill="none" marker-end="url(#arr-purple)"/>
+  <!-- c-return: PostgreSQL → Next.js -->
+  <path id="c-return" class="conn" d="M 877,468 L 877,560 L 109,560 L 109,128"          stroke="#3d7eff" stroke-width="1.4" stroke-dasharray="5 3" fill="none" marker-end="url(#arr-blue)"/>
+
+  <!-- ═══ ANIMATED FLOW DOTS ═══ -->
+  <circle class="conn-dot" data-conn="c-req" r="2.5" fill="#3d7eff">
+    <animateMotion dur="0.8s" repeatCount="indefinite" rotate="auto" path="M 190,95 L 232,95"/>
+  </circle>
+  <circle class="conn-dot" data-conn="c-resp" r="2.5" fill="#3d7eff">
+    <animateMotion dur="0.8s" repeatCount="indefinite" rotate="auto" path="M 232,109 L 190,109"/>
+  </circle>
+  <circle class="conn-dot" data-conn="c-auth" r="2.5" fill="#2dd4bf">
+    <animateMotion dur="1.5s" repeatCount="indefinite" rotate="auto" path="M 190,201 L 305,201 L 305,128"/>
+  </circle>
+  <circle class="conn-dot" data-conn="c-config" r="2" fill="#3d7eff">
+    <animateMotion dur="2s" repeatCount="indefinite" rotate="auto" path="M 190,277 L 218,277 L 218,102 L 232,102"/>
+  </circle>
+  <circle class="conn-dot" data-conn="c-route" r="2.5" fill="#3d7eff">
+    <animateMotion dur="0.8s" repeatCount="indefinite" rotate="auto" path="M 407,95 L 452,95"/>
+  </circle>
+  <circle class="conn-dot" data-conn="c-result" r="2.5" fill="#3d7eff">
+    <animateMotion dur="0.8s" repeatCount="indefinite" rotate="auto" path="M 452,109 L 407,109"/>
+  </circle>
+  <circle class="conn-dot" data-conn="c-pipe" r="2.5" fill="#10b981">
+    <animateMotion dur="2.5s" repeatCount="indefinite" rotate="auto" path="M 332,128 L 332,378"/>
+  </circle>
+  <circle class="conn-dot" data-conn="c-store" r="2.5" fill="#a78bfa">
+    <animateMotion dur="0.8s" repeatCount="indefinite" rotate="auto" path="M 784,423 L 800,423"/>
+  </circle>
+  <circle class="conn-dot" data-conn="c-pdf" r="2.5" fill="#a78bfa">
+    <animateMotion dur="1s" repeatCount="indefinite" rotate="auto" path="M 955,403 C 963,403 963,379 970,379"/>
+  </circle>
+  <circle class="conn-dot" data-conn="c-email" r="2.5" fill="#a78bfa">
+    <animateMotion dur="0.8s" repeatCount="indefinite" rotate="auto" path="M 1035,402 L 1035,430"/>
+  </circle>
+  <circle class="conn-dot" data-conn="c-return" r="2" fill="#3d7eff">
+    <animateMotion dur="3.5s" repeatCount="indefinite" rotate="auto" path="M 877,468 L 877,560 L 109,560 L 109,128"/>
+  </circle>
+
+  <!-- ═══ NODES ═══ -->
+
+  <!-- Next.js -->
+  <g id="node-client" class="node" style="cursor:pointer">
+    <rect x="28" y="76" width="162" height="52" rx="8" fill="#0a1929" stroke="rgba(61,126,255,0.52)" stroke-width="1.8"/>
+    <text x="109" y="98"  text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="13">Next.js</text>
+    <text x="109" y="115" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="9.5">S3 · CloudFront</text>
+  </g>
+
+  <!-- Clerk Auth -->
+  <g id="node-clerk" class="node" style="cursor:pointer">
+    <rect x="28" y="180" width="162" height="42" rx="7" fill="#071e1a" stroke="rgba(45,212,191,0.48)" stroke-width="1.8"/>
+    <text x="109" y="197" text-anchor="middle" fill="#2dd4bf" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11.5">Clerk Auth</text>
+    <text x="109" y="213" text-anchor="middle" fill="#4fb5a8" font-family="'IBM Plex Mono',monospace" font-size="9.5">JWT · org scoping</text>
+  </g>
+
+  <!-- Run Config -->
+  <g id="node-config" class="node" style="cursor:pointer">
+    <rect x="28" y="248" width="162" height="58" rx="7" fill="#0d1a2e" stroke="rgba(61,126,255,0.36)" stroke-width="1.8"/>
+    <text x="109" y="267" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11.5">Run Config</text>
+    <text x="109" y="282" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">persona · industry</text>
+    <text x="109" y="295" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">constraints · models</text>
+  </g>
+
+  <!-- Recommend (premium) annotation -->
+  <rect x="28" y="314" width="162" height="28" rx="5" fill="rgba(10,16,36,0.92)" stroke="rgba(245,158,11,0.30)" stroke-width="1"/>
+  <text x="109" y="326" text-anchor="middle" fill="#f59e0b" font-family="'IBM Plex Mono',monospace" font-size="8">recommend_combination</text>
+  <text x="109" y="337" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="7.5">premium · ↺ ×3 · exact-match</text>
+
+  <!-- FastAPI App Runner -->
+  <g id="node-fastapi" class="node" style="cursor:pointer">
+    <rect x="232" y="76" width="175" height="52" rx="8" fill="#160a3e" stroke="rgba(139,92,246,0.56)" stroke-width="1.8"/>
+    <text x="319" y="98"  text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="13">FastAPI</text>
+    <text x="319" y="115" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="9.5">AWS App Runner</text>
+  </g>
+
+  <!-- LLM Router CONTAINER -->
+  <g id="node-llmrouter" class="node" style="cursor:pointer">
+    <rect x="452" y="60" width="368" height="218" rx="10" fill="#0d1529" stroke="rgba(61,126,255,0.30)" stroke-width="1.8"/>
+    <text x="636" y="82"  text-anchor="middle" fill="#3d7eff" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11">LLM ROUTER</text>
+    <text x="636" y="96"  text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">asyncio.gather · parallel fan-out · up to 5 configs</text>
+  </g>
+
+  <!-- OpenAI -->
+  <g id="node-openai" class="node" style="cursor:pointer">
+    <rect x="464" y="104" width="158" height="52" rx="7" fill="#091420" stroke="rgba(61,126,255,0.28)" stroke-width="1.5"/>
+    <text x="543" y="126" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">OpenAI</text>
+    <text x="543" y="143" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">primary → fallback</text>
+  </g>
+
+  <!-- Gemini -->
+  <g id="node-gemini" class="node" style="cursor:pointer">
+    <rect x="646" y="104" width="158" height="52" rx="7" fill="#091420" stroke="rgba(61,126,255,0.28)" stroke-width="1.5"/>
+    <text x="725" y="126" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">Gemini</text>
+    <text x="725" y="143" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">primary → fallback</text>
+  </g>
+
+  <!-- DeepSeek -->
+  <g id="node-deepseek" class="node" style="cursor:pointer">
+    <rect x="464" y="170" width="158" height="52" rx="7" fill="#091420" stroke="rgba(61,126,255,0.28)" stroke-width="1.5"/>
+    <text x="543" y="192" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">DeepSeek</text>
+    <text x="543" y="209" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">primary → fallback</text>
+  </g>
+
+  <!-- Grok -->
+  <g id="node-grok" class="node" style="cursor:pointer">
+    <rect x="646" y="170" width="158" height="52" rx="7" fill="#091420" stroke="rgba(61,126,255,0.28)" stroke-width="1.5"/>
+    <text x="725" y="192" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">Grok</text>
+    <text x="725" y="209" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">primary → fallback</text>
+  </g>
+
+  <!-- LLM Router retry annotation (inside container bounds x:452–820, y:60–278) -->
+  <rect x="464" y="232" width="354" height="22" rx="4" fill="rgba(8,14,32,0.92)" stroke="rgba(245,158,11,0.28)" stroke-width="1"/>
+  <text x="641" y="247" text-anchor="middle" fill="#f59e0b" font-family="'IBM Plex Mono',monospace" font-size="8.5">↺ ×3 · validate output → correction prompt → retry → safe fallback</text>
+
+  <!-- Agent Pipeline CONTAINER (stages nested as <g> so highlighted > rect targets only container bg) -->
+  <g id="node-pipeline" class="node" style="cursor:pointer">
+    <rect x="28" y="378" width="756" height="90" rx="10" fill="#051912" stroke="rgba(16,185,129,0.32)" stroke-width="1.8"/>
+    <text x="406" y="396" text-anchor="middle" fill="#10b981" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10">AGENT PIPELINE · schema-validated at each stage</text>
+    <!-- Stage 1: Idea Gen -->
+    <g><rect x="38"  y="404" width="132" height="48" rx="6" fill="#061a12" stroke="rgba(16,185,129,0.2)" stroke-width="1"/>
+    <text x="104" y="424" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11.5">Idea Gen</text>
+    <text x="104" y="440" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">generation <tspan fill="#f59e0b">↺ ×3</tspan></text></g>
+    <text x="183" y="433" text-anchor="middle" fill="#3d7eff" font-family="'Space Grotesk',sans-serif" font-size="15">›</text>
+    <!-- Stage 2: Rank -->
+    <g><rect x="195" y="404" width="120" height="48" rx="6" fill="#061a12" stroke="rgba(16,185,129,0.2)" stroke-width="1"/>
+    <text x="255" y="424" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11.5">Rank</text>
+    <text x="255" y="440" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">score <tspan fill="#f59e0b">↺ ×2</tspan></text></g>
+    <text x="327" y="433" text-anchor="middle" fill="#3d7eff" font-family="'Space Grotesk',sans-serif" font-size="15">›</text>
+    <!-- Stage 3: Compare -->
+    <g><rect x="339" y="404" width="120" height="48" rx="6" fill="#061a12" stroke="rgba(16,185,129,0.2)" stroke-width="1"/>
+    <text x="399" y="424" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11.5">Compare</text>
+    <text x="399" y="440" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">compare <tspan fill="#f59e0b">↺ ×2</tspan></text></g>
+    <text x="471" y="433" text-anchor="middle" fill="#3d7eff" font-family="'Space Grotesk',sans-serif" font-size="15">›</text>
+    <!-- Stage 4: Decision -->
+    <g><rect x="483" y="404" width="130" height="48" rx="6" fill="#061a12" stroke="rgba(16,185,129,0.2)" stroke-width="1"/>
+    <text x="548" y="424" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11.5">Decision</text>
+    <text x="548" y="440" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">report <tspan fill="#f59e0b">↺ ×2</tspan></text></g>
+    <text x="625" y="433" text-anchor="middle" fill="#3d7eff" font-family="'Space Grotesk',sans-serif" font-size="15">›</text>
+    <!-- Stage 5: Exec Plan -->
+    <g><rect x="637" y="404" width="132" height="48" rx="6" fill="#061a12" stroke="rgba(16,185,129,0.2)" stroke-width="1"/>
+    <text x="703" y="424" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11.5">Exec Plan</text>
+    <text x="703" y="440" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">plan <tspan fill="#f59e0b">↺ ×3</tspan></text></g>
+  </g>
+
+  <!-- PostgreSQL RDS -->
+  <g id="node-postgres" class="node" style="cursor:pointer">
+    <rect x="800" y="378" width="155" height="90" rx="8" fill="#1a0d05" stroke="rgba(249,115,22,0.52)" stroke-width="1.8"/>
+    <text x="877" y="402" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="13">PostgreSQL</text>
+    <text x="877" y="419" text-anchor="middle" fill="#c47830" font-family="'IBM Plex Mono',monospace" font-size="9.5">AWS RDS</text>
+    <text x="877" y="435" text-anchor="middle" fill="#f59e0b" font-family="'IBM Plex Mono',monospace" font-size="8.5">artifact lifecycle</text>
+    <text x="877" y="449" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="7.5">draft → finalized → archived</text>
+  </g>
+
+  <!-- WeasyPrint -->
+  <g id="node-weasyprint" class="node" style="cursor:pointer">
+    <rect x="970" y="356" width="130" height="46" rx="7" fill="#160a3e" stroke="rgba(139,92,246,0.46)" stroke-width="1.8"/>
+    <text x="1035" y="376" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">WeasyPrint</text>
+    <text x="1035" y="393" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="9">PDF export</text>
+  </g>
+
+  <!-- Resend -->
+  <g id="node-resend" class="node" style="cursor:pointer">
+    <rect x="970" y="430" width="130" height="46" rx="7" fill="#160a3e" stroke="rgba(139,92,246,0.46)" stroke-width="1.8"/>
+    <text x="1035" y="450" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">Resend</text>
+    <text x="1035" y="467" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="9">email delivery</text>
+  </g>
+
+  <!-- ═══ ANNOTATION OVERLAYS ═══ -->
+
+  <!-- Contract-First overlay (below FastAPI, like Truth-Gated in DA) -->
+  <rect x="232" y="146" width="175" height="44" rx="6" fill="rgba(13,18,46,0.90)" stroke="rgba(61,126,255,0.22)" stroke-width="1"/>
+  <text x="319" y="162" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">Contract-First</text>
+  <text x="319" y="175" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">Pydantic · retry loop · safe fallback</text>
+  <text x="319" y="186" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">cache-before-infer</text>
+
+  <!-- Provider fallback note (below LLM Router container) -->
+  <rect x="452" y="283" width="250" height="14" rx="4" fill="rgba(10,20,14,0.88)" stroke="rgba(61,126,255,0.18)" stroke-width="1"/>
+  <text x="577" y="294" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">per-provider model chain · same-provider fallback only</text>
+
+  <!-- Go/Conditional/No-Go gate annotation -->
+  <rect x="625" y="476" width="175" height="28" rx="5" fill="rgba(13,18,8,0.92)" stroke="rgba(245,158,11,0.32)" stroke-width="1"/>
+  <text x="712" y="488" text-anchor="middle" fill="#f59e0b" font-family="'IBM Plex Mono',monospace" font-size="8.5">Go / Conditional / No-Go</text>
+  <text x="712" y="499" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="7.5">deterministic gate · IRR · break-even</text>
+
+  <!-- Artifact return label -->
+  <rect x="250" y="548" width="145" height="16" rx="4" fill="rgba(13,30,56,0.90)" stroke="rgba(61,126,255,0.18)" stroke-width="1"/>
+  <text x="323" y="560" text-anchor="middle" fill="#3d7eff" font-family="'IBM Plex Mono',monospace" font-size="8.5">artifact data to client</text>
+
+  <!-- Infra footer badge -->
+  <rect x="28" y="572" width="210" height="18" rx="4" fill="rgba(13,30,56,0.85)" stroke="rgba(149,175,219,0.15)" stroke-width="1"/>
+  <text x="133" y="585" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">Route 53 · ECR · App Runner · RDS</text>
+
+  <!-- ═══ ZONE LABELS ═══ -->
+  <text x="118" y="638" text-anchor="middle" fill="rgba(149,175,219,0.32)" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="2">CLIENT</text>
+  <text x="333" y="638" text-anchor="middle" fill="rgba(149,175,219,0.32)" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="2">APP RUNNER</text>
+  <text x="784" y="638" text-anchor="middle" fill="rgba(149,175,219,0.32)" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="2">MULTI-MODEL · PIPELINE · STORAGE</text>
+
+</svg>
+</div>
+
+<div id="tooltip"></div>
+
+<script>
+const tooltips = {
+  'node-client':    { title: 'Next.js Frontend',    body: 'Static export on S3 served via CloudFront. Adaptive UI: guided flow mode (step-by-step) and status flow mode (real-time progress). localStorage recovery on reload.' },
+  'node-clerk':     { title: 'Clerk Auth',           body: 'JWT verified on every API request. All artifact queries scoped to the verified user ID — no cross-user visibility. Organization-level artifact isolation.' },
+  'node-config':    { title: 'Run Config',           body: 'User-defined generation inputs: persona (shapes system prompt), industry, and constraints (shapes user prompt). Also selects which LLM providers to run. Premium: recommend_combination_agent (↺ ×3) recommends a persona + constraint pair from allowed lists using exact-string selection semantics.' },
+  'node-fastapi':   { title: 'FastAPI · App Runner', body: 'Orchestration layer: builds prompts from persona + industry + constraints, resolves model labels to provider chains, multi-model fan-out, Pydantic validation, deterministic financial computation, PDF generation, email delivery.' },
+  'node-llmrouter': { title: 'LLM Router',           body: 'User selects which providers to run. All selected models are called in parallel via asyncio.gather (up to 5). Each slot has its own per-provider model chain — if the primary model of that provider fails, it falls back to a lesser model from the same provider.' },
+  'node-openai':    { title: 'OpenAI',               body: 'Called in parallel with other selected providers. Has its own internal fallback: primary OpenAI model → lesser OpenAI model on failure. Same Pydantic contract enforced on output.' },
+  'node-gemini':    { title: 'Gemini',               body: 'Called in parallel. Internal fallback within Gemini: on 429 or resource exhaustion, falls back to a lesser Gemini model. Same Pydantic contract enforced.' },
+  'node-deepseek':  { title: 'DeepSeek',             body: 'Called in parallel. Internal model fallback chain within DeepSeek only. Same Pydantic contract enforced. Provider identity recorded in artifact metadata.' },
+  'node-grok':      { title: 'Grok',                 body: 'Called in parallel. Internal model fallback chain within Grok only. Same Pydantic contract enforced. If all retries exhausted, a deterministic safe payload is returned.' },
+  'node-pipeline':  { title: 'Agent Pipeline',       body: 'Five sequential stages: Idea Gen → Rank → Compare → Decision → Exec Plan. Schema-validated at each stage. Execution Plan computes financials deterministically — LLM contributes narrative framing only, never numbers. Go / Conditional / No-Go gate is a computed threshold check, not a prompt suggestion.' },
+  'node-postgres':  { title: 'PostgreSQL RDS',       body: 'All artifacts persisted: runs, comparisons, decision summaries, execution plans. Lifecycle: draft → finalized → archived. Full provenance chain back to ideation inputs — every projection re-derivable from stored formula inputs. Alembic migrations on startup.' },
+  'node-weasyprint':{ title: 'WeasyPrint PDF',       body: 'Server-side HTML→PDF rendering. Structured templates from verified artifact data — consistent formatting independent of LLM output variance.' },
+  'node-resend':    { title: 'Resend Email',         body: 'Verified-send pattern: server confirms receipt before recording delivery success in artifact lifecycle state. Failed sends surface as artifact errors, not silently dropped.' },
+};
+
+const connMap = {
+  'node-client':    ['c-req','c-resp','c-return'],
+  'node-clerk':     ['c-auth'],
+  'node-config':    ['c-config'],
+  'node-fastapi':   ['c-req','c-resp','c-auth','c-config','c-route','c-result','c-pipe'],
+  'node-llmrouter': ['c-route','c-result'],
+  'node-openai':    ['c-route','c-result'],
+  'node-gemini':    ['c-route','c-result'],
+  'node-deepseek':  ['c-route','c-result'],
+  'node-grok':      ['c-route','c-result'],
+  'node-pipeline':  ['c-pipe','c-store'],
+  'node-postgres':  ['c-store','c-pdf','c-return'],
+  'node-weasyprint':['c-pdf','c-email'],
+  'node-resend':    ['c-email'],
+};
+
+const allNodes = Object.keys(connMap);
+const allConns = ['c-req','c-resp','c-auth','c-config','c-route','c-result','c-pipe','c-store','c-pdf','c-email','c-return'];
+const tip = document.getElementById('tooltip');
+
+function showTip(e, id) {
+  const d = tooltips[id]; if (!d) return;
+  tip.innerHTML = `<b>${d.title}</b>${d.body}`;
+  tip.classList.add('vis'); moveTip(e);
+}
+function moveTip(e) {
+  const x = e.clientX + 14, y = e.clientY - 10;
+  tip.style.left = Math.min(x, window.innerWidth  - tip.offsetWidth  - 10) + 'px';
+  tip.style.top  = Math.max(0, Math.min(y, window.innerHeight - tip.offsetHeight - 10)) + 'px';
+}
+function hideTip() { tip.classList.remove('vis'); }
+
+function hl(nodeId) {
+  const active = new Set(connMap[nodeId] || []);
+  allNodes.forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    if (id === nodeId) { el.classList.add('highlighted'); el.classList.remove('faded'); }
+    else {
+      const linked = (connMap[id] || []).some(c => active.has(c));
+      el.classList.toggle('faded', !linked);
+      if (linked) el.classList.remove('highlighted');
+    }
+  });
+  allConns.forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    const faded = !active.has(id);
+    el.classList.toggle('faded', faded);
+    document.querySelectorAll(`.conn-dot[data-conn="${id}"]`).forEach(d => d.classList.toggle('faded', faded));
+  });
+}
+
+function reset() {
+  [...allNodes, ...allConns].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('faded','highlighted');
+  });
+  document.querySelectorAll('.conn-dot').forEach(d => d.classList.remove('faded'));
+  hideTip();
+}
+
+allNodes.forEach(id => {
+  const el = document.getElementById(id); if (!el) return;
+  el.addEventListener('mouseenter', e => { hl(id); showTip(e, id); });
+  el.addEventListener('mousemove', moveTip);
+  el.addEventListener('mouseleave', reset);
+});
+</script>
+</body>
+</html>

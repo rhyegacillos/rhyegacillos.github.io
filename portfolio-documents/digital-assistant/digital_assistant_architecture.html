@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Assistant — Architecture Diagram</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: #080e1a;
+      min-height: 100vh;
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      color: #e2e8f0;
+    }
+    html, body { height: 100%; overflow: hidden; }
+    .wrap { display: flex; flex-direction: column; height: 100%; padding: 12px 16px; }
+    .legend {
+      display: flex; gap: 18px; flex-wrap: wrap; flex-shrink: 0;
+      margin-bottom: 10px; padding: 8px 14px;
+      background: #0f172a; border: 1px solid #1e293b;
+      border-radius: 8px;
+    }
+    .legend-item { display: flex; align-items: center; gap: 7px; font-size: 11px; color: #94a3b8; }
+    svg { display: block; width: 100%; flex: 1; min-height: 0; }
+    .node { cursor: pointer; }
+    .node .box { transition: filter 0.15s; }
+    .node:hover .box { filter: brightness(1.4); }
+    .node.dimmed { opacity: 0.15; }
+    .conn { transition: opacity 0.15s; }
+    .conn.dimmed { opacity: 0.05; }
+    .conn.lit path { stroke-width: 2.5 !important; }
+    @keyframes dash { to { stroke-dashoffset: -20; } }
+    .anim { animation: dash 1.4s linear infinite; }
+    .conn-dot { pointer-events: none; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="legend">
+    <div class="legend-item">
+      <svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#34d399" stroke-width="2"/></svg>
+      Sync · low-risk
+    </div>
+    <div class="legend-item">
+      <svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#fbbf24" stroke-width="2"/></svg>
+      Async · high-risk
+    </div>
+    <div class="legend-item">
+      <svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="5 3"/></svg>
+      Return / poll
+    </div>
+    <div class="legend-item">
+      <svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#475569" stroke-width="1.5"/></svg>
+      Data flow
+    </div>
+    <div class="legend-item" style="color:#475569; font-size:10px;">Hover nodes to highlight paths</div>
+  </div>
+
+  <svg id="arch" viewBox="0 0 1140 660" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <marker id="a-gray"   markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#475569"/></marker>
+      <marker id="a-green"  markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#34d399"/></marker>
+      <marker id="a-amber"  markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#fbbf24"/></marker>
+      <marker id="a-blue"   markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#60a5fa"/></marker>
+      <marker id="a-teal"   markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#2dd4bf"/></marker>
+      <marker id="a-orange" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#fb923c"/></marker>
+    </defs>
+
+    <!-- ── ZONE BACKGROUNDS ── -->
+    <rect x="8"   y="8" width="188" height="644" rx="10" fill="#0b1423" stroke="#1e3a5f" stroke-width="1"/>
+    <text x="102" y="645" text-anchor="middle" font-size="10" fill="#1e3a5f" letter-spacing="2">CLIENT</text>
+
+    <rect x="203" y="8" width="430" height="644" rx="10" fill="#0d1117" stroke="#1c2433" stroke-width="1"/>
+    <text x="418" y="645" text-anchor="middle" font-size="10" fill="#1c2433" letter-spacing="2">AWS SERVERLESS</text>
+
+    <rect x="640" y="8"  width="230" height="200" rx="10" fill="#130d1f" stroke="#3b0764" stroke-width="1"/>
+    <text x="755" y="200" text-anchor="middle" font-size="9" fill="#3b0764" letter-spacing="1">LLM</text>
+
+    <rect x="640" y="215" width="492" height="437" rx="10" fill="#071210" stroke="#134e4a" stroke-width="1"/>
+    <text x="886" y="645" text-anchor="middle" font-size="10" fill="#134e4a" letter-spacing="2">QUEUE · TOOLS · STORAGE</text>
+
+    <!-- ── CONNECTIONS ── -->
+
+    <!-- 1. Client → API GW -->
+    <g class="conn" id="c1">
+      <path d="M 196,112 L 215,112" stroke="#475569" stroke-width="1.5" fill="none" marker-end="url(#a-gray)"/>
+      <text x="205" y="106" text-anchor="middle" font-size="8" fill="#334155">POST /chat</text>
+      <circle class="conn-dot" r="2.5" fill="#475569">
+        <animateMotion dur="0.8s" repeatCount="indefinite" rotate="auto" path="M 196,112 L 215,112"/>
+      </circle>
+    </g>
+
+    <!-- 2. API GW → API Lambda -->
+    <g class="conn" id="c2">
+      <path d="M 388,112 L 418,112" stroke="#475569" stroke-width="1.5" fill="none" marker-end="url(#a-gray)"/>
+      <circle class="conn-dot" r="2.5" fill="#475569">
+        <animateMotion dur="0.8s" repeatCount="indefinite" rotate="auto" path="M 388,112 L 418,112"/>
+      </circle>
+    </g>
+
+    <!-- 3. API Lambda → LLM (sync, curves up-right) -->
+    <g class="conn" id="c-sync">
+      <path d="M 595,96 C 618,96 625,88 640,88" stroke="#34d399" stroke-width="1.5" fill="none" marker-end="url(#a-green)"/>
+      <text x="617" y="83" text-anchor="middle" font-size="9" fill="#34d399">sync</text>
+      <circle class="conn-dot" r="2.5" fill="#34d399">
+        <animateMotion dur="1s" repeatCount="indefinite" rotate="auto" path="M 595,96 C 618,96 625,88 640,88"/>
+      </circle>
+    </g>
+
+    <!-- 4. API Lambda → Redis (async, curves down-right) -->
+    <g class="conn" id="c-async">
+      <path d="M 595,130 C 620,130 628,248 640,248" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#a-amber)"/>
+      <text x="632" y="205" text-anchor="middle" font-size="9" fill="#fbbf24">enqueue</text>
+      <circle class="conn-dot" r="2.5" fill="#fbbf24">
+        <animateMotion dur="1.8s" repeatCount="indefinite" rotate="auto" path="M 595,130 C 620,130 628,248 640,248"/>
+      </circle>
+    </g>
+
+    <!-- 5. job_id return to client (dashed blue) -->
+    <g class="conn" id="c-jobid">
+      <path class="anim" d="M 418,140 C 355,168 265,160 196,140" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="6 4" fill="none" marker-end="url(#a-blue)"/>
+      <text x="310" y="172" text-anchor="middle" font-size="9" fill="#60a5fa">job_id (202)</text>
+      <circle class="conn-dot" r="2.5" fill="#60a5fa">
+        <animateMotion dur="2s" repeatCount="indefinite" rotate="auto" path="M 418,140 C 355,168 265,160 196,140"/>
+      </circle>
+    </g>
+
+    <!-- 6. Client polls status (dashed blue, smaller) -->
+    <g class="conn" id="c-poll">
+      <path class="anim" d="M 102,158 C 102,196 210,208 215,198" stroke="#60a5fa" stroke-width="1" stroke-dasharray="4 4" fill="none" marker-end="url(#a-blue)" opacity="0.65"/>
+      <text x="112" y="212" font-size="8" fill="#3b82f6">GET /jobs/{id}</text>
+      <circle class="conn-dot" r="2" fill="#60a5fa">
+        <animateMotion dur="1.5s" repeatCount="indefinite" rotate="auto" path="M 102,158 C 102,196 210,208 215,198"/>
+      </circle>
+    </g>
+
+    <!-- 7. Redis → Worker -->
+    <g class="conn" id="c-rw">
+      <path d="M 755,295 L 755,335" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#a-amber)"/>
+      <text x="770" y="318" font-size="9" fill="#a16207">dequeue</text>
+      <circle class="conn-dot" r="2.5" fill="#fbbf24">
+        <animateMotion dur="0.9s" repeatCount="indefinite" rotate="auto" path="M 755,295 L 755,335"/>
+      </circle>
+    </g>
+
+    <!-- 8. Worker → Redis (status update, short left curve) -->
+    <g class="conn" id="c-status">
+      <path class="anim" d="M 700,345 C 672,325 672,300 700,290" stroke="#fbbf24" stroke-width="1" stroke-dasharray="4 3" fill="none" marker-end="url(#a-amber)" opacity="0.7"/>
+      <text x="658" y="318" text-anchor="middle" font-size="8" fill="#a16207">status</text>
+      <circle class="conn-dot" r="2" fill="#fbbf24">
+        <animateMotion dur="1.2s" repeatCount="indefinite" rotate="auto" path="M 700,345 C 672,325 672,300 700,290"/>
+      </circle>
+    </g>
+
+    <!-- 9. Worker → MCP -->
+    <g class="conn" id="c-wm">
+      <path d="M 755,393 L 755,452" stroke="#2dd4bf" stroke-width="1.5" fill="none" marker-end="url(#a-teal)"/>
+      <circle class="conn-dot" r="2.5" fill="#2dd4bf">
+        <animateMotion dur="1s" repeatCount="indefinite" rotate="auto" path="M 755,393 L 755,452"/>
+      </circle>
+    </g>
+
+    <!-- 10. MCP → S3 -->
+    <g class="conn" id="c-ms">
+      <path d="M 755,530 L 755,562" stroke="#fb923c" stroke-width="1.5" fill="none" marker-end="url(#a-orange)"/>
+      <text x="770" y="549" font-size="9" fill="#9a3412">artifacts</text>
+      <circle class="conn-dot" r="2.5" fill="#fb923c">
+        <animateMotion dur="0.8s" repeatCount="indefinite" rotate="auto" path="M 755,530 L 755,562"/>
+      </circle>
+    </g>
+
+    <!-- 11. S3 history load back to Lambda (subtle dashed) -->
+    <g class="conn" id="c-s3l">
+      <path class="anim" d="M 640,580 C 580,580 510,540 508,148" stroke="#334155" stroke-width="1" stroke-dasharray="3 5" fill="none" marker-end="url(#a-gray)" opacity="0.45"/>
+      <text x="556" y="576" text-anchor="middle" font-size="8" fill="#334155">history load</text>
+      <circle class="conn-dot" r="2" fill="#475569">
+        <animateMotion dur="3s" repeatCount="indefinite" rotate="auto" path="M 640,580 C 580,580 510,540 508,148"/>
+      </circle>
+    </g>
+
+    <!-- OTel trace line -->
+    <line x1="418" y1="228" x2="640" y2="228" stroke="#1e293b" stroke-width="1" stroke-dasharray="3 3"/>
+
+    <!-- ── NODES ── -->
+
+    <!-- Next.js -->
+    <g class="node" id="node-client" data-tip="Next.js static export · S3 + CloudFront CDN · Calls POST /chat · Polls GET /jobs/{id} for async results · Resyncs on reconnect without re-running LLM chain · user_id from localStorage sync code">
+      <rect class="box" x="15" y="78" width="178" height="68" rx="8" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="104" y="101" text-anchor="middle" font-size="13" font-weight="700" fill="#93c5fd">Next.js</text>
+      <text x="104" y="117" text-anchor="middle" font-size="10" fill="#4b7cbf">S3 + CloudFront</text>
+      <text x="104" y="131" text-anchor="middle" font-size="9" fill="#1e3a5f">static export · CDN</text>
+    </g>
+
+    <!-- API Gateway -->
+    <g class="node" id="node-apigw" data-tip="API Gateway REST · 29s hard timeout — the infrastructure constraint that forced the entire async architecture · Routes: /chat /jobs /memory /uploads /downloads · All traffic enters here">
+      <rect class="box" x="215" y="78" width="173" height="68" rx="8" fill="#431407" stroke="#f97316" stroke-width="1.5"/>
+      <text x="301" y="101" text-anchor="middle" font-size="13" font-weight="700" fill="#fed7aa">API Gateway</text>
+      <text x="301" y="117" text-anchor="middle" font-size="10" fill="#9a3412">REST</text>
+      <text x="301" y="131" text-anchor="middle" font-size="9" fill="#7c2d12">⚠ 29s hard timeout</text>
+    </g>
+
+    <!-- API Lambda -->
+    <g class="node" id="node-apilambda" data-tip="API Lambda · FastAPI + Mangum · Classifies risk: low-risk → prose-only sync path · high-risk → async tool path via Redis · Enqueues job and returns job_id immediately (202) · Truth-gated rendering: IntentEnvelope → server executes → TruthContext → Canonical Response">
+      <rect class="box" x="418" y="78" width="177" height="68" rx="8" fill="#2e1065" stroke="#a855f7" stroke-width="1.5"/>
+      <text x="506" y="99" text-anchor="middle" font-size="13" font-weight="700" fill="#c4b5fd">API Lambda</text>
+      <text x="506" y="115" text-anchor="middle" font-size="10" fill="#7c3aed">FastAPI orchestrator</text>
+      <text x="506" y="129" text-anchor="middle" font-size="9" fill="#5b21b6">risk routing · truth gate</text>
+      <text x="506" y="141" text-anchor="middle" font-size="8" fill="#4c1d95">ECR container image</text>
+    </g>
+
+    <!-- LLM -->
+    <g class="node" id="node-llm" data-tip="LLM Router · Primary: AWS Bedrock · Fallback: Grok (xAI) via OpenAI-compatible client · Validator pass: if approved memory exists, checks response compliance before returning — one retry with fix instructions if non-compliant">
+      <rect class="box" x="648" y="18" width="210" height="170" rx="8" fill="#3b0764" stroke="#d946ef" stroke-width="1.5"/>
+      <text x="753" y="44" text-anchor="middle" font-size="13" font-weight="700" fill="#f0abfc">LLM Router</text>
+      <rect x="662" y="53"  width="182" height="46" rx="5" fill="#4a044e" stroke="#a21caf" stroke-width="1"/>
+      <text x="753" y="72"  text-anchor="middle" font-size="11" font-weight="600" fill="#e879f9">AWS Bedrock</text>
+      <text x="753" y="88"  text-anchor="middle" font-size="9"  fill="#86198f">primary provider</text>
+      <rect x="662" y="107" width="182" height="46" rx="5" fill="#4a044e" stroke="#a21caf" stroke-width="1"/>
+      <text x="753" y="126" text-anchor="middle" font-size="11" font-weight="600" fill="#e879f9">Grok (xAI)</text>
+      <text x="753" y="142" text-anchor="middle" font-size="9"  fill="#86198f">fallback provider</text>
+      <text x="753" y="163" text-anchor="middle" font-size="8"  fill="#581c87">validator: memory compliance check</text>
+    </g>
+
+    <!-- Upstash Redis -->
+    <g class="node" id="node-redis" data-tip="Upstash Redis · Async job queue: enqueue on POST /chat · dequeue by Worker Lambda · CAS quota governance: tokens / PDF exports / email sends · Compare-And-Swap prevents double-spend across concurrent Lambda invocations · HTTP-based, zero infra overhead">
+      <rect class="box" x="648" y="222" width="210" height="68" rx="8" fill="#042f2e" stroke="#2dd4bf" stroke-width="1.5"/>
+      <text x="753" y="245" text-anchor="middle" font-size="13" font-weight="700" fill="#5eead4">Upstash Redis</text>
+      <text x="753" y="261" text-anchor="middle" font-size="10" fill="#0f766e">Async Job Queue</text>
+      <text x="753" y="276" text-anchor="middle" font-size="9"  fill="#0d9488">CAS Quota · tokens · pdf · email</text>
+      <text x="753" y="284" text-anchor="middle" font-size="8"  fill="#134e4a">HTTP · serverless-compatible</text>
+    </g>
+
+    <!-- Worker Lambda -->
+    <g class="node" id="node-worker" data-tip="Worker Lambda · FastAPI + Mangum · Dequeues jobs from Redis · Runs full MCP tool chain · Lives outside API Gateway timeout domain — can run as long as needed · Persists artifacts to S3 · Updates job status in Redis · Traces linked to API Lambda via OTel context propagation">
+      <rect class="box" x="648" y="335" width="210" height="58" rx="8" fill="#2e1065" stroke="#a855f7" stroke-width="1.5"/>
+      <text x="753" y="357" text-anchor="middle" font-size="13" font-weight="700" fill="#c4b5fd">Worker Lambda</text>
+      <text x="753" y="373" text-anchor="middle" font-size="10" fill="#7c3aed">FastAPI · MCP executor</text>
+      <text x="753" y="385" text-anchor="middle" font-size="8"  fill="#4c1d95">ECR container image</text>
+    </g>
+
+    <!-- MCP Tool Servers (wide bar) -->
+    <g class="node" id="node-mcp" data-tip="MCP Tool Servers (stdio processes) · Each tool is an isolated process boundary · Independently testable and swappable without modifying the agent loop · Tool results flow through TruthContext before reaching the canonical response renderer">
+      <rect class="box" x="450" y="452" width="670" height="78" rx="8" fill="#052e16" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="785" y="472" text-anchor="middle" font-size="11" font-weight="700" fill="#86efac">MCP Tool Servers (stdio)</text>
+      <line x1="582" y1="456" x2="582" y2="526" stroke="#166534" stroke-width="0.8"/>
+      <line x1="714" y1="456" x2="714" y2="526" stroke="#166534" stroke-width="0.8"/>
+      <line x1="848" y1="456" x2="848" y2="526" stroke="#166534" stroke-width="0.8"/>
+      <line x1="982" y1="456" x2="982" y2="526" stroke="#166534" stroke-width="0.8"/>
+      <text x="516" y="492" text-anchor="middle" font-size="10" fill="#4ade80">Brave Search</text>
+      <text x="516" y="506" text-anchor="middle" font-size="9"  fill="#166534">web research</text>
+      <text x="648" y="492" text-anchor="middle" font-size="10" fill="#4ade80">WeasyPrint</text>
+      <text x="648" y="506" text-anchor="middle" font-size="9"  fill="#166534">PDF generation</text>
+      <text x="781" y="492" text-anchor="middle" font-size="10" fill="#4ade80">Resend</text>
+      <text x="781" y="506" text-anchor="middle" font-size="9"  fill="#166534">email delivery</text>
+      <text x="915" y="492" text-anchor="middle" font-size="10" fill="#4ade80">File Reader</text>
+      <text x="915" y="506" text-anchor="middle" font-size="9"  fill="#166534">upload ingestion</text>
+      <text x="1056" y="492" text-anchor="middle" font-size="10" fill="#4ade80">Memory MCP</text>
+      <text x="1056" y="506" text-anchor="middle" font-size="9"  fill="#166534">candidate extract</text>
+    </g>
+
+    <!-- S3 -->
+    <g class="node" id="node-s3" data-tip="S3 · Memory Bucket: conversation history (last 5 sessions, last 50 messages) + approved memory + pending candidates · Artifacts Bucket: generated PDFs + uploaded files · Durable, cheap — no database needed for conversation persistence">
+      <rect class="box" x="648" y="562" width="210" height="62" rx="8" fill="#431407" stroke="#fb923c" stroke-width="1.5"/>
+      <text x="753" y="585" text-anchor="middle" font-size="13" font-weight="700" fill="#fed7aa">S3</text>
+      <text x="753" y="601" text-anchor="middle" font-size="10" fill="#9a3412">Artifacts · Memory · History</text>
+      <text x="753" y="615" text-anchor="middle" font-size="9"  fill="#7c2d12">5 sessions · 50 msg context window</text>
+    </g>
+
+    <!-- ── ANNOTATIONS ── -->
+
+    <!-- Risk Router label -->
+    <rect x="418" y="168" width="177" height="54" rx="5" fill="#1e1b4b" stroke="#312e81" stroke-width="1"/>
+    <text x="506" y="182" text-anchor="middle" font-size="9" fill="#818cf8">Risk Router</text>
+    <text x="506" y="197" text-anchor="middle" font-size="9" fill="#4338ca">low-risk → sync</text>
+    <text x="506" y="210" text-anchor="middle" font-size="9" fill="#4338ca">high-risk → async</text>
+
+    <!-- Truth Gate annotation -->
+    <rect x="215" y="165" width="195" height="54" rx="6" fill="#1c1917" stroke="#57534e" stroke-width="1"/>
+    <text x="312" y="183" text-anchor="middle" font-size="10" font-weight="600" fill="#a8a29e">Truth-Gated Rendering</text>
+    <text x="312" y="197" text-anchor="middle" font-size="9" fill="#78716c">IntentEnvelope → TruthContext</text>
+    <text x="312" y="210" text-anchor="middle" font-size="9" fill="#57534e">→ Canonical Response</text>
+
+    <!-- OTel badge -->
+    <rect x="215" y="228" width="418" height="26" rx="5" fill="#0f172a" stroke="#1e293b" stroke-width="1" stroke-dasharray="4 3"/>
+    <text x="424" y="246" text-anchor="middle" font-size="10" fill="#475569">⬡ OpenTelemetry → Sentry · trace spans API Lambda + Worker Lambda</text>
+
+    <!-- Memory tab note -->
+    <rect x="15" y="270" width="178" height="52" rx="6" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+    <text x="104" y="289" text-anchor="middle" font-size="9" fill="#475569">Memory Tab</text>
+    <text x="104" y="303" text-anchor="middle" font-size="9" fill="#334155">User approves / rejects</text>
+    <text x="104" y="315" text-anchor="middle" font-size="9" fill="#1e293b">memory candidates</text>
+
+    <!-- IaC badge -->
+    <rect x="215" y="418" width="225" height="26" rx="5" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+    <text x="327" y="436" text-anchor="middle" font-size="10" fill="#334155">Terraform IaC · GitHub Actions (OIDC)</text>
+
+    <!-- ── TOOLTIP ── -->
+    <foreignObject id="tip" x="0" y="0" width="270" height="130" style="display:none;pointer-events:none;">
+      <div xmlns="http://www.w3.org/1999/xhtml"
+           style="background:#0f172a;border:1px solid #334155;border-radius:8px;
+                  padding:10px 12px;font-family:'IBM Plex Mono',monospace;font-size:11px;
+                  color:#cbd5e1;line-height:1.55;box-shadow:0 4px 20px rgba(0,0,0,.7);">
+        <span id="tip-text"></span>
+      </div>
+    </foreignObject>
+  </svg>
+</div>
+
+<script>
+  const svg   = document.getElementById('arch');
+  const tip   = document.getElementById('tip');
+  const tipTx = document.getElementById('tip-text');
+
+  const map = {
+    'node-client':    ['c1','c-jobid','c-poll'],
+    'node-apigw':     ['c1','c2','c-jobid','c-poll'],
+    'node-apilambda': ['c2','c-sync','c-async','c-jobid','c-s3l'],
+    'node-llm':       ['c-sync'],
+    'node-redis':     ['c-async','c-rw','c-status'],
+    'node-worker':    ['c-rw','c-wm','c-status'],
+    'node-mcp':       ['c-wm','c-ms'],
+    'node-s3':        ['c-ms','c-s3l'],
+  };
+
+  const nodes = document.querySelectorAll('.node');
+  const conns = document.querySelectorAll('.conn');
+
+  nodes.forEach(n => {
+    n.addEventListener('mouseenter', () => {
+      const active = map[n.id] || [];
+      nodes.forEach(x => { if (x !== n) x.classList.add('dimmed'); });
+      conns.forEach(c => { c.classList.add('dimmed'); c.classList.remove('lit'); });
+      active.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.classList.remove('dimmed'); el.classList.add('lit'); }
+      });
+      const tx = n.getAttribute('data-tip');
+      if (tx) {
+        const br = n.getBoundingClientRect();
+        const sr = svg.getBoundingClientRect();
+        const sx = Math.min((br.left - sr.left) / sr.width  * 1140, 860);
+        const sy = Math.min((br.top  - sr.top)  / sr.height * 660 + 75, 520);
+        tip.setAttribute('x', sx);
+        tip.setAttribute('y', sy);
+        tip.style.display = 'block';
+        tipTx.textContent = tx;
+      }
+    });
+    n.addEventListener('mouseleave', () => {
+      nodes.forEach(x => x.classList.remove('dimmed'));
+      conns.forEach(c => { c.classList.remove('dimmed'); c.classList.remove('lit'); });
+      tip.style.display = 'none';
+    });
+  });
+</script>
+</body>
+</html>
