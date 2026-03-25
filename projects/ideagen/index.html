@@ -56,6 +56,21 @@
         </div>
       </section>
 
+      <!-- ARCHITECTURE DIAGRAM -->
+      <section class="cs-section reveal">
+        <div class="cs-chapter-header">
+          <span class="cs-chapter-num">&mdash;</span>
+          <h2>Architecture Diagram</h2>
+        </div>
+        <div class="cs-diagram-frame">
+          <iframe
+            src="../../portfolio-documents/ideagen-saas-aws/ideagen_architecture.html"
+            title="IdeaGen Architecture Diagram"
+            loading="lazy"
+          ></iframe>
+        </div>
+      </section>
+
       <!-- CHAPTER I -->
       <section class="cs-section reveal">
         <div class="cs-chapter-header">
@@ -92,16 +107,16 @@
       <section class="cs-section reveal">
         <div class="cs-chapter-header">
           <span class="cs-chapter-num">II</span>
-          <h2>The Architecture: Multi-Model Orchestration &amp; Ordered Fallback</h2>
+          <h2>The Architecture: Parallel Multi-Model Orchestration</h2>
         </div>
         <div class="cs-story">
           <p>
             The generation layer is designed around three interlocking properties: every output has
-            a guaranteed structure, every provider failure is automatically recovered, and multiple
-            models can evaluate the same prompt simultaneously so their outputs can be ranked
-            head-to-head. These three properties are not independent — the schema enforcement is
-            what makes parallel scoring possible, and the fallback chain is what makes the schema
-            enforcement reliable under real-world provider availability.
+            a guaranteed structure, every provider failure is automatically recovered within its own
+            slot, and multiple models generate against the same prompt simultaneously so their outputs
+            can be ranked head-to-head. These three properties are not independent — the schema
+            enforcement is what makes parallel scoring possible, and the per-provider model chain
+            is what keeps each parallel slot reliable under real-world provider availability.
           </p>
         </div>
 
@@ -121,14 +136,14 @@
         </div>
 
         <div class="cs-decision">
-          <h3>Ordered Fallback Routing</h3>
+          <h3>Per-Provider Model Fallback</h3>
           <p>
-            Generation requests follow an ordered provider chain:
-            <strong>OpenAI &rarr; Gemini &rarr; DeepSeek &rarr; Grok</strong>. If a provider is
-            unavailable, rate-limited, or returns a non-recoverable error, the next provider in
-            the chain is attempted with the same request. This provides resilience without manual
-            operator intervention and without surfacing provider failures to the user. The provider
-            that ultimately fulfilled the request is recorded in the artifact metadata for
+            Each provider slot has its own internal model chain — if the primary model of that
+            provider encounters a transient failure or rate limit, the system falls back to a
+            <strong>lesser model from the same provider</strong>, not a different one. OpenAI falls
+            back within OpenAI; Gemini falls back within Gemini. This means each parallel generation
+            task is independently resilient without cross-provider routing. The provider and model
+            that ultimately fulfilled each slot are recorded in the artifact metadata for
             auditability — operators can see which model produced which output.
           </p>
         </div>
@@ -268,18 +283,6 @@
             never served after a source artifact is updated.
           </p>
         </div>
-      </section>
-
-      <!-- ARCHITECTURE DIAGRAM -->
-      <section class="cs-section reveal">
-        <div class="cs-chapter-header">
-          <span class="cs-chapter-num">&mdash;</span>
-          <h2>Architecture Diagram</h2>
-        </div>
-        <div class="cs-arch-img-wrap">
-          <img src="../../images/ideagen/ideagen.png" alt="Architecture diagram for the IdeaGen platform" />
-        </div>
-        <p class="cs-arch-caption">Scroll horizontally on small screens</p>
       </section>
 
       <!-- CHAPTER V -->

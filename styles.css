@@ -654,10 +654,14 @@ ul.hero-copy li {
   line-height: 1.65;
 }
 
-/* Architecture diagram frame */
+/* Architecture diagram frame — wider than content columns but not full viewport */
 .cs-diagram-frame {
   overflow-x: auto;
-  width: 100%;
+  width: 1160px;
+  max-width: 100vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
   border-radius: 12px;
   border: 1px solid rgba(149, 175, 219, 0.22);
   background: #050d1c;
@@ -665,8 +669,8 @@ ul.hero-copy li {
 }
 
 .cs-diagram-frame iframe {
-  width: 2400px;
-  height: 970px;
+  width: 100%;
+  height: 680px;
   border: none;
   display: block;
 }
@@ -975,8 +979,7 @@ ul {
   }
 
   .cs-diagram-frame iframe {
-    width: 1800px;
-    height: 820px;
+    height: 680px;
   }
 
   .cs-stack-grid {
@@ -1131,8 +1134,7 @@ ul {
   }
 
   .cs-diagram-frame iframe {
-    width: 1400px;
-    height: 700px;
+    height: 680px;
   }
 
   .cs-arch-img-wrap img {
