@@ -670,7 +670,7 @@ ul.hero-copy li {
 
 .cs-diagram-frame iframe {
   width: 100%;
-  height: 680px;
+  height: 610px;
   border: none;
   display: block;
 }
@@ -979,7 +979,7 @@ ul {
   }
 
   .cs-diagram-frame iframe {
-    height: 680px;
+    height: 610px;
   }
 
   .cs-stack-grid {
@@ -1134,7 +1134,7 @@ ul {
   }
 
   .cs-diagram-frame iframe {
-    height: 680px;
+    height: 610px;
   }
 
   .cs-arch-img-wrap img {
