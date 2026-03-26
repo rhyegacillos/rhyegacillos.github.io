@@ -206,13 +206,19 @@
           </p>
           <ul>
             <li>Portfolio state freshness check (reject if snapshot is stale beyond threshold)</li>
-            <li>Preflight receipt validation and sell position validation (must hold shares to sell)</li>
+            <li>Preflight receipt validation (reject without valid preflight receipt)</li>
+            <li>Sell position validation (must hold shares to sell; oversized sells are rejected or reduced)</li>
             <li>Drawdown entry block (block new entries if portfolio is down more than 10%)</li>
             <li>Drawdown exposure reduction (reduce existing exposure if drawdown deepens)</li>
             <li>Position exposure limits (maximum 10% per symbol of total portfolio value)</li>
-            <li>Deployed capital limits, confidence threshold, averaging-down block</li>
-            <li>Re-entry cooldown, minimum actionable size ($250–$400), intraday frequency and volume caps</li>
-            <li>Price source adequacy check and offsetting signal detection (blocks a buy when an open sell exists for the same symbol)</li>
+            <li>Deployed capital limits (cap total deployed portfolio exposure)</li>
+            <li>Confidence threshold (reject low-confidence proposals)</li>
+            <li>Averaging-down block (prevent adding to a losing position)</li>
+            <li>Re-entry cooldown (enforce a waiting period after a recent exit)</li>
+            <li>Minimum actionable size ($250–$400 notional minimum)</li>
+            <li>Intraday limits (frequency and daily volume caps)</li>
+            <li>Price source adequacy check (reject on unreliable or low-trust pricing)</li>
+            <li>Offsetting signal detection (blocks a buy when an open sell exists for the same symbol)</li>
           </ul>
           <p>
             Each rule produces a typed reason code. Outcomes: <code>approved</code>,
@@ -240,17 +246,17 @@
         </div>
 
         <div class="cs-decision">
-          <h3>Gate 4 — Hybrid Adjudication (Optional)</h3>
+          <h3>Gate 4 — Supporting Review / Extra Review (Optional)</h3>
           <p>
             Triggered when 2 or more proposals conflict on the same symbol: a
             <strong>same_symbol_opposite_side</strong> conflict (one trader buying while another
             is selling), a <strong>same_symbol_same_side_competing</strong> conflict (multiple
             traders competing for the same entry), or a same-sector competing allocation conflict.
-            Routes to an advisory LLM for conflict resolution analysis that considers each trader's
-            persona parameters and current portfolio context. <strong>Deterministic policy always
-            has final authority</strong> — the LLM advisory output is a recommendation, not a
-            decision. Shadow mode is available for running adjudication analysis in parallel without
-            blocking the primary pipeline path.
+            Routes to an advisory LLM for supporting review or extra review analysis that considers
+            each trader's persona parameters and current portfolio context. <strong>Deterministic
+            policy always has final authority</strong> — the LLM output is a recommendation, not a
+            decision. A shadow-style supporting review path is available for running the analysis
+            in parallel without blocking the primary pipeline path.
           </p>
         </div>
       </section>
@@ -287,7 +293,7 @@
           <h3>Market Server</h3>
           <p>
             Tools: <code>lookup_share_price</code> (multi-source resolution chain:
-            <strong>Brave &rarr; Polygon &rarr; Alpaca &rarr; cache</strong>),
+            <strong>Alpaca &rarr; Polygon &rarr; cache</strong>),
             <code>get_quote_freshness</code>, <code>get_symbol_news_summary</code>,
             <code>get_symbol_event_risk</code>. Price source quality is tracked across the
             resolution chain — stale or low-trust quotes trigger the
@@ -384,7 +390,7 @@
           </div>
           <div class="cs-stack-item">
             <h4>PostgreSQL 16 + SQLAlchemy 2.x + Alembic</h4>
-            <p>Source of truth. 30+ tables covering proposals, decisions, executions, audit events, position lots, closed trades, performance snapshots, memory graphs, read models, and adjudication records. Alembic migrations applied automatically at container startup.</p>
+            <p>Source of truth. 30+ tables covering proposals, decisions, executions, audit events, position lots, closed trades, performance snapshots, memory graphs, read models, and supporting-review/adjudication records. Alembic migrations applied automatically at container startup.</p>
           </div>
           <div class="cs-stack-item">
             <h4>OpenAI Agents SDK</h4>
@@ -396,7 +402,7 @@
           </div>
           <div class="cs-stack-item">
             <h4>Alpaca + Polygon + Brave Search</h4>
-            <p>Alpaca for trade execution and account state — accessed only through the Accounts MCP server after full four-gate approval. Polygon and Brave provide structured market data in the multi-source quote resolution chain.</p>
+            <p>Alpaca for trade execution and account state — accessed only through the Accounts MCP server after full four-gate approval. Alpaca and Polygon handle market price resolution, while Brave Search is used for research, news summaries, and event-risk context.</p>
           </div>
           <div class="cs-stack-item">
             <h4>Docker + AWS EC2/ECR</h4>

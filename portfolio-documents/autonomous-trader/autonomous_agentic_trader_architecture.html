@@ -264,15 +264,15 @@
     <text x="963" y="236" text-anchor="middle" fill="#10b981" font-family="'IBM Plex Mono',monospace" font-size="8">auto_execute</text></g>
     <!-- G3→G4 arrow (row 2) -->
     <text x="1100" y="223" text-anchor="middle" fill="#3d7eff" font-family="'Space Grotesk',sans-serif" font-size="16">›</text>
-    <!-- G4: Adjudication — row 2 right, w=262 (was 110 — now fits all text) -->
+    <!-- G4: Supporting Review / Extra Review — row 2 right, w=262 -->
     <g><rect x="1106" y="180" width="262" height="80" rx="6" fill="#0a1020" stroke="rgba(245,158,11,0.20)" stroke-width="1"/>
-    <text x="1237" y="198" text-anchor="middle" fill="#f59e0b" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">G4 · Adjudication</text>
-    <text x="1237" y="212" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">optional</text>
+    <text x="1237" y="198" text-anchor="middle" fill="#f59e0b" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">G4 · Supporting Review</text>
+    <text x="1237" y="212" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">extra review · optional</text>
     <text x="1237" y="224" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">conflict resolution</text>
     <text x="1237" y="236" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">LLM advisory</text></g>
     <!-- G4 annotation bar — w=536 -->
     <rect x="832" y="270" width="536" height="20" rx="4" fill="rgba(8,14,32,0.92)" stroke="rgba(245,158,11,0.22)" stroke-width="1"/>
-    <text x="1100" y="284" text-anchor="middle" fill="#f59e0b" font-family="'IBM Plex Mono',monospace" font-size="8.5">G4 optional · conflict detection · LLM advisory · deterministic policy has final authority</text>
+    <text x="1100" y="284" text-anchor="middle" fill="#f59e0b" font-family="'IBM Plex Mono',monospace" font-size="8.5">G4 optional · supporting review / extra review · deterministic policy has final authority</text>
   </g>
 
   <!-- PostgreSQL RDS — w=220, x shifted +60 from 812→872 -->
@@ -295,7 +295,7 @@
   <g id="node-polygon" class="node" style="cursor:pointer">
     <rect x="1120" y="528" width="224" height="58" rx="7" fill="#091420" stroke="rgba(61,126,255,0.30)" stroke-width="1.8"/>
     <text x="1232" y="546" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">Polygon · Brave</text>
-    <text x="1232" y="560" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">Brave: news · market data</text>
+    <text x="1232" y="560" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">Brave: research · event risk</text>
     <text x="1232" y="574" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">Polygon: price fallback</text>
   </g>
 
@@ -345,10 +345,10 @@ const tooltips = {
   'node-traders':  { title: 'Trader Personas · Concurrent', body: 'Warren (Conservative 0.70×), George (Aggressive 1.30×), Ray (Balanced 1.00×), Cathie (Growth 1.30×). Each runs bounded multi-turn agent loop (MAX_TURNS=30) via OpenAI Agents SDK. Per-trader model routing: Gemini, OpenAI, DeepSeek, or Grok.' },
   'node-mcp':      { title: 'MCP Tool Servers · stdio', body: 'Three servers: Accounts, Market, Memory. Failed MCP session for one trader is isolated and retried independently — does not collapse other traders. All tool calls logged at the MCP boundary for full auditability.' },
   'node-accounts': { title: 'Accounts MCP Server', body: 'Tools: get_balance, get_holdings, buy_shares, sell_shares, change_strategy. buy_shares/sell_shares are named to match trader intent — but the implementation routes to the proposal pipeline, not directly to Alpaca.' },
-  'node-market':   { title: 'Market MCP Server', body: 'Tools: lookup_share_price, get_quote_freshness, get_symbol_news_summary, get_symbol_event_risk. Price resolution: Alpaca → Polygon → cache (Alpaca is primary SIP feed). News and market data via Brave Search. Stale/low-trust quotes trigger quote_low_trust path in Gate 2.' },
+  'node-market':   { title: 'Market MCP Server', body: 'Tools: lookup_share_price, get_quote_freshness, get_symbol_news_summary, get_symbol_event_risk. Price resolution: Alpaca → Polygon → cache (Alpaca is primary SIP feed). Brave Search is used for research, news summaries, and event-risk context. Stale/low-trust quotes trigger quote_low_trust path in Gate 2.' },
   'node-memory':   { title: 'Memory MCP Server · Knowledge Graph', body: 'Tools: create_entities, create_relations, search_nodes, read_graph. Per-trader PostgreSQL knowledge graph — companies analyzed, sector dynamics, prior trade outcomes. Memory is scoped per trader: Warren\'s graph does not contaminate Cathie\'s.' },
-  'node-pipeline': { title: 'Portfolio-Control Pipeline · 4 Gates', body: 'No trader agent executes trades directly. Every buy_shares/sell_shares call routes to Gate 1 (proposal intake), not the Alpaca execution API. Travels through 4 deterministic gates before anything touches a real brokerage position.' },
-  'node-postgres': { title: 'PostgreSQL · AWS RDS · 30+ Tables', body: 'Source of truth for all runtime state. Proposals, decisions, executions, audit events, position lots, closed trades, performance snapshots, memory graphs, read models, adjudication records. Alembic migrations applied automatically at container startup.' },
+  'node-pipeline': { title: 'Portfolio-Control Pipeline · 4 Gates', body: 'No trader agent executes trades directly. Every buy_shares/sell_shares call routes to Gate 1 (proposal intake), not the Alpaca execution API. The flow passes through deterministic intake, risk policy, execution control, and an optional supporting review / extra review gate before anything touches a real brokerage position.' },
+  'node-postgres': { title: 'PostgreSQL · AWS RDS · 30+ Tables', body: 'Source of truth for all runtime state. Proposals, decisions, executions, audit events, position lots, closed trades, performance snapshots, memory graphs, read models, and supporting-review/adjudication records. Alembic migrations applied automatically at container startup.' },
   'node-alpaca':   { title: 'Alpaca · Broker', body: 'Trade execution and account state — accessed only through the Accounts MCP server after full four-gate pipeline approval. Also serves as the primary price source in the quote resolution chain (Alpaca → Polygon → cache).' },
   'node-polygon':  { title: 'Polygon · Brave Search', body: 'Two distinct roles: Brave Search provides news summaries (get_symbol_news_summary) and event risk data (get_symbol_event_risk) — not price resolution. Polygon is the secondary price source in the resolution chain (Alpaca → Polygon → cache), used when Alpaca data is unavailable or stale.' },
 };
