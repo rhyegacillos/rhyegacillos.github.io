@@ -1,2 +1,11 @@
 portfolio-documents/
 
+# Local editor state
+.claude/
+
+# Local tooling and generated assets
+gifs/
+make_gifs.js
+node_modules/
+package.json
+package-lock.json
