@@ -93,11 +93,11 @@
             </div>
             <h3 class="project-entry-title">Digital Assistant</h3>
             <div class="project-entry-desc">
-              <div class="project-goal" style="margin-bottom: 10px;"><b>Goal:</b> Build a production-grade serverless assistant that can execute high-risk workflows without timing out or making unverifiable action claims.</div>
-              <div class="project-how"><b>How:</b> Uses an async API + worker Lambda architecture to route tool-heavy jobs off the synchronous path, then applies a contract-first truth gate so PDF, email, and research responses are rendered only from verified tool results. MCP boundaries and server-side quota enforcement keep execution safe and cost-bounded.</div>
+              <div class="project-goal" style="margin-bottom: 10px;"><b>Goal:</b> Create an autonomous serverless agent to execute multi-step workflows like document processing and email orchestration.</div>
+              <div class="project-how"><b>How:</b> Built on AWS Lambda using MCP tool-server boundaries to isolate search, PDF, and email capabilities from core reasoning. Employs OpenTelemetry for observability and a persistent memory layer for context retention.</div>
             </div>
             <div class="project-entry-tech">
-              <span>FastAPI</span><span>AWS Lambda</span><span>AWS CloudFront</span><span>AWS Bedrock</span><span>MCP</span><span>Upstash Redis</span><span>Terraform</span><span>GitHub CI/CD</span>
+              <span>FastAPI</span><span>AWS Lambda</span><span>OpenAI Agents SDK</span><span>MCP</span><span>Terraform</span>
             </div>
             <div class="project-entry-footer">
               <a class="project-live-link" href="https://digital-assistant.agentairg.site/" target="_blank" rel="noopener noreferrer">
@@ -115,11 +115,11 @@
             </div>
             <h3 class="project-entry-title">IdeaGen</h3>
             <div class="project-entry-desc">
-              <div class="project-goal" style="margin-bottom: 10px;"><b>Goal:</b> Build a multi-model decision platform that turns business ideas into investment-readiness assessments and decision-ready artifacts.</div>
-              <div class="project-how"><b>How:</b> Uses contract-first validation across OpenAI, Gemini, DeepSeek, and Grok so outputs stay comparable across providers, then combines deterministic financial modeling with persistent artifact snapshots to keep decisions auditable, reproducible, and reusable. Deployed on AWS App Runner with cached analysis flows to reduce repeat inference cost.</div>
+              <div class="project-goal" style="margin-bottom: 10px;"><b>Goal:</b> Automated decision engine for investment-readiness assessments using multi-model comparison.</div>
+              <div class="project-how"><b>How:</b> Implements adaptive routing across OpenAI, Gemini, and DeepSeek with contract-first validation to ensure schema accuracy. Deployed on AWS App Runner with cache-before-infer logic and snapshot durability.</div>
             </div>
             <div class="project-entry-tech">
-              <span>FastAPI</span><span>Next.js</span><span>PostgreSQL</span><span>AWS RDS</span><span>Multi-Provider LLMs</span><span>AWS App Runner</span><span>Terraform</span><span>GitHub CI/CD</span>
+              <span>FastAPI</span><span>Next.js</span><span>Multi-Provider LLM</span><span>PostgreSQL</span><span>AWS</span>
             </div>
             <div class="project-entry-footer">
               <a class="project-live-link" href="https://ideagen.agentairg.site/" target="_blank" rel="noopener noreferrer">
@@ -137,11 +137,11 @@
             </div>
             <h3 class="project-entry-title">Autonomous Agentic Trader</h3>
             <div class="project-entry-desc">
-              <div class="project-goal" style="margin-bottom: 10px;"><b>Goal:</b> Build high-integrity trading infrastructure where LLM-generated trade ideas are governed by deterministic portfolio controls before any execution can happen.</div>
-              <div class="project-how"><b>How:</b> Runs four trader personas through MCP tool boundaries, routing every buy or sell request into a four-gate portfolio-control pipeline with deterministic risk checks, approval controls, and optional conflict adjudication. The operator dashboard uses SSE replay, resync, and fallback polling so live state stays consistent across reconnects and engine restarts.</div>
+              <div class="project-goal" style="margin-bottom: 10px;"><b>Goal:</b> High-integrity trading infrastructure using deterministic risk guardrails to govern LLM-driven trade proposals.</div>
+              <div class="project-how"><b>How:</b> Orchestrates a four-gate portfolio-control pipeline enforcing deterministic risk rules. The real-time dashboard uses an SSE-first architecture with a recent update memory to handle client reconnections and state resyncing.</div>
             </div>
             <div class="project-entry-tech">
-              <span>FastAPI</span><span>Next.js</span><span>PostgreSQL</span><span>AWS RDS</span><span>MCP</span><span>Alpaca</span><span>AWS EC2</span><span>Terraform</span><span>GitHub CI/CD</span>
+              <span>FastAPI</span><span>Next.js</span><span>OpenAI Agents SDK</span><span>MCP</span><span>Alpaca</span><span>PostgreSQL</span><span>AWS EC2</span>
             </div>
             <div class="project-entry-footer">
               <a class="project-live-link" href="https://manager-trader.agentairg.site/" target="_blank" rel="noopener noreferrer">
@@ -159,11 +159,11 @@
             </div>
             <h3 class="project-entry-title">MediNotes</h3>
             <div class="project-entry-desc">
-              <div class="project-goal" style="margin-bottom: 10px;"><b>Goal:</b> Build a clinical documentation platform that turns multimodal patient intake into evidence-linked summaries and patient-scoped consultation support.</div>
-              <div class="project-how"><b>How:</b> Uses a hub-and-spoke agent architecture where extraction, research, summary generation, critic QA, and evidence mapping are handled as separate stages. The system grounds outputs in source data, runs regeneration when the critic detects issues, and keeps chat scoped to the current patient’s consultation history and records.</div>
+              <div class="project-goal" style="margin-bottom: 10px;"><b>Goal:</b> Convert multimodal medical intake into evidence-mapped clinical summaries and provide real-time consultation support.</div>
+              <div class="project-how"><b>How:</b> Deploys a hub-and-spoke agent architecture (RAG + MCP) with a critic-derived QA loop. It grounds summaries in raw patient data using scoped context windows and includes a clinical chat assistant strictly bounded to the consultation context to prevent hallucinations.</div>
             </div>
             <div class="project-entry-tech">
-              <span>FastAPI</span><span>Next.js</span><span>OpenAI Agents SDK</span><span>RAG</span><span>MCP</span><span>Upstash Redis</span><span>Whisper</span><span>AWS App Runner</span>
+              <span>FastAPI</span><span>Next.js</span><span>OpenAI Agents SDK</span><span>RAG</span><span>MCP</span><span>AWS</span>
             </div>
             <div class="project-entry-footer">
               <a class="project-live-link" href="https://medinotes.agentairg.site/" target="_blank" rel="noopener noreferrer">

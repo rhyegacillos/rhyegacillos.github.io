@@ -86,13 +86,13 @@
   <!-- c-run: FastAPI → Extraction Agent -->
   <path id="c-run"   class="conn" d="M 472,122 L 512,122" stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#arr-green)"/>
   <!-- c-redis: FastAPI → Upstash Redis (over-top y=48) -->
-  <path id="c-redis" class="conn" d="M 356,76 L 356,48 L 959,48 L 959,239 L 984,239" stroke="#3d7eff" stroke-width="1.4" stroke-dasharray="5 3" fill="none" marker-end="url(#arr-blue)"/>
+  <path id="c-redis" class="conn" d="M 356,76 L 356,48 L 959,48 L 959,242 L 984,242" stroke="#3d7eff" stroke-width="1.4" stroke-dasharray="5 3" fill="none" marker-end="url(#arr-blue)"/>
   <!-- c-brave: Research Agent → Brave Search (zone gap x=959) -->
-  <path id="c-brave" class="conn" d="M 924,328 L 959,328 L 959,418 L 984,418" stroke="#6b7280" stroke-width="1.4" stroke-dasharray="4 3" fill="none" marker-end="url(#arr-gray)"/>
-  <!-- c-mem: Memory Agent → Vector Store (bottom routing y=618) -->
+  <path id="c-brave" class="conn" d="M 924,328 L 959,328 L 959,427 L 984,427" stroke="#6b7280" stroke-width="1.4" stroke-dasharray="4 3" fill="none" marker-end="url(#arr-gray)"/>
+  <!-- c-mem: Memory Agent → DynamoDB (bottom routing y=618) -->
   <path id="c-mem"   class="conn" d="M 724,496 L 724,618 L 959,618 L 959,131 L 984,131" stroke="#a78bfa" stroke-width="1.8" fill="none" marker-end="url(#arr-purple)"/>
   <!-- c-email: Email Agent → Resend -->
-  <path id="c-email" class="conn" d="M 924,577 L 959,577 L 959,325 L 984,325" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#arr-teal)"/>
+  <path id="c-email" class="conn" d="M 924,577 L 959,577 L 959,331 L 984,331" stroke="#2dd4bf" stroke-width="1.6" fill="none" marker-end="url(#arr-teal)"/>
   <!-- c-sres: Summary → Research (internal conditional) -->
   <path id="c-sres"  class="conn" d="M 858,266 L 858,284" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 2" fill="none" marker-end="url(#arr-amber)"/>
   <!-- c-extract: Extraction Agent → Summary Agent (core pipeline handoff) -->
@@ -107,7 +107,7 @@
   <path id="c-mem-flow" class="conn" d="M 724,410 L 724,428" stroke="#10b981" stroke-width="1.4" fill="none" marker-end="url(#arr-green)"/>
   <!-- c-coord-flow: post-Critic → Coordinator (parallel fanout) -->
   <path id="c-coord-flow" class="conn" d="M 860,410 L 860,428" stroke="#10b981" stroke-width="1.4" fill="none" marker-end="url(#arr-green)"/>
-  <!-- c-rag-ret: Vector Store → Summary Agent (RAG retrieval, longitudinal memory) -->
+  <!-- c-rag-ret: DynamoDB → Summary Agent (RAG retrieval, longitudinal memory) -->
   <path id="c-rag-ret" class="conn" d="M 984,76 L 984,44 L 728,44 L 728,174" stroke="#a78bfa" stroke-width="1.4" stroke-dasharray="5 3" fill="none" marker-end="url(#arr-purple)"/>
   <!-- c-clerk: Clerk → FastAPI (JWT auth verification) -->
   <path id="c-clerk" class="conn" d="M 190,248 L 210,248 L 210,192 L 240,192" stroke="#a78bfa" stroke-width="1.4" stroke-dasharray="4 3" fill="none" marker-end="url(#arr-purple)"/>
@@ -207,9 +207,9 @@
     <text x="109" y="438" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11">Consultation History</text>
     <text x="109" y="452" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">paginated past visits</text>
     <text x="109" y="465" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">filter: patient · date</text>
-    <text x="109" y="478" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">PDF export per visit</text>
-    <text x="109" y="491" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">draft → finalized</text>
-    <text x="109" y="504" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">GET /api/consultations</text>
+    <text x="109" y="478" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">soft delete · restore entries</text>
+    <text x="109" y="491" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">rename · manage patients</text>
+    <text x="109" y="504" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">GET /api/patients</text>
   </g>
 
   <!-- Consultation Form (y=534, h=80, gap=18) → bottom=614 -->
@@ -264,15 +264,15 @@
     <text x="356" y="477" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">whisper-1 · gpt-4o-mini vision</text>
   </g>
 
-  <!-- History + Export API (y=512, h=100, gap=27) → bottom=612 -->
+  <!-- Patient History API (y=512, h=100, gap=27) → bottom=612 -->
   <g id="node-histapi" class="node" style="cursor:pointer">
     <rect x="240" y="512" width="232" height="100" rx="6" fill="#0f0d1a" stroke="rgba(167,139,250,0.24)" stroke-width="1.4"/>
-    <text x="356" y="530" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">History + Export API</text>
-    <text x="356" y="544" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">GET /api/consultations</text>
-    <text x="356" y="557" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">GET /api/consultation/{id}</text>
-    <text x="356" y="570" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">POST /api/export-pdf</text>
-    <text x="356" y="583" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">WeasyPrint HTML → PDF</text>
-    <text x="356" y="596" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">S3 presigned download URL</text>
+    <text x="356" y="530" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">Patient History API</text>
+    <text x="356" y="544" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">GET /api/patients</text>
+    <text x="356" y="557" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">GET /api/patient-history</text>
+    <text x="356" y="570" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">POST /api/patient/rename</text>
+    <text x="356" y="583" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">POST /api/patient/delete-entry</text>
+    <text x="356" y="596" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">POST /api/patient/restore-entry</text>
   </g>
 
   <!-- ── AGENT PIPELINE ZONE (x=512–944, container x=522 w=412) ── -->
@@ -341,8 +341,8 @@
     <g id="node-memory" class="node" style="cursor:pointer">
       <rect x="664" y="428" width="120" height="68" rx="6" fill="#061a12" stroke="rgba(167,139,250,0.28)" stroke-width="1"/>
       <text x="724" y="446" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">Memory Agent</text>
-      <text x="724" y="460" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">RAG store + recall</text>
-      <text x="724" y="472" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">patient-keyed vector</text>
+      <text x="724" y="460" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">DynamoDB store + recall</text>
+      <text x="724" y="472" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">patient-keyed DynamoDB</text>
       <text x="724" y="484" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">visit_summary · notes</text>
     </g>
 
@@ -364,7 +364,7 @@
       <rect x="532" y="550" width="196" height="54" rx="6" fill="#071e1a" stroke="rgba(45,212,191,0.32)" stroke-width="1.2"/>
       <text x="630" y="567" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11">Chat Agent</text>
       <text x="630" y="581" text-anchor="middle" fill="#4fb5a8" font-family="'IBM Plex Mono',monospace" font-size="8.5">Gemini · patient-scoped Q&amp;A</text>
-      <text x="630" y="593" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">RAG recall from Vector Store</text>
+      <text x="630" y="593" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">RAG recall from DynamoDB</text>
     </g>
 
     <!-- Email Agent (y=550, x=740, w=184, h=54) → bottom=604 -->
@@ -377,62 +377,61 @@
   </g>
 
   <!-- ── STORAGE · EXTERNAL ZONE (x=974–1440, nodes x=984 w=226 center=1097) ── -->
-  <!-- 6 nodes, total h=464, 5 gaps of 15px, y=76→615 -->
+  <!-- 6 items, total h=454, 5 gaps of 18px, y=76→620 -->
 
-  <!-- Vector Store (RAG) (y=76, h=110) -->
+  <!-- DynamoDB (y=76, h=110) -->
   <g id="node-vecstore" class="node" style="cursor:pointer">
     <rect x="984" y="76" width="226" height="110" rx="8" fill="#1a0d05" stroke="rgba(167,139,250,0.52)" stroke-width="1.8"/>
-    <text x="1097" y="96"  text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">Vector Store (RAG)</text>
+    <text x="1097" y="96"  text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">DynamoDB</text>
     <text x="1097" y="112" text-anchor="middle" fill="#c47830" font-family="'IBM Plex Mono',monospace" font-size="9">text-embedding-3-small</text>
-    <text x="1097" y="125" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">patient-keyed similarity search</text>
+    <text x="1097" y="125" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">patient-keyed memory store</text>
     <text x="1097" y="138" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">visit_summary · notes · evidence</text>
     <text x="1097" y="151" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">dedup: patient+date+encounter_id</text>
-    <text x="1097" y="163" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">soft delete · overwrite semantics</text>
-    <text x="1097" y="175" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">cross-patient retrieval blocked at query</text>
+    <text x="1097" y="163" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">soft delete · restore semantics</text>
+    <text x="1097" y="175" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">cosine similarity ranking in app code</text>
   </g>
 
-  <!-- Upstash Redis (y=201, h=76, gap=15) -->
+  <!-- Upstash Redis (y=204, h=76, gap=18) -->
   <g id="node-redis" class="node" style="cursor:pointer">
-    <rect x="984" y="201" width="226" height="76" rx="8" fill="#071e1a" stroke="rgba(45,212,191,0.48)" stroke-width="1.8"/>
-    <text x="1097" y="221" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">Upstash Redis</text>
-    <text x="1097" y="236" text-anchor="middle" fill="#4fb5a8" font-family="'IBM Plex Mono',monospace" font-size="9">resumable SSE job state</text>
-    <text x="1097" y="249" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">per-stage completion flags</text>
-    <text x="1097" y="262" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">HTTP · App Runner compatible</text>
+    <rect x="984" y="204" width="226" height="76" rx="8" fill="#071e1a" stroke="rgba(45,212,191,0.48)" stroke-width="1.8"/>
+    <text x="1097" y="224" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">Upstash Redis</text>
+    <text x="1097" y="239" text-anchor="middle" fill="#4fb5a8" font-family="'IBM Plex Mono',monospace" font-size="9">resumable SSE job state</text>
+    <text x="1097" y="252" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">per-stage completion flags</text>
+    <text x="1097" y="265" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">HTTP · App Runner compatible</text>
   </g>
 
-  <!-- Resend (y=292, h=66, gap=15) -->
+  <!-- Resend (y=298, h=66, gap=18) -->
   <g id="node-resend" class="node" style="cursor:pointer">
-    <rect x="984" y="292" width="226" height="66" rx="7" fill="#0a1520" stroke="rgba(61,126,255,0.38)" stroke-width="1.6"/>
-    <text x="1097" y="313" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">Resend</text>
-    <text x="1097" y="328" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">email delivery · verified-send</text>
-    <text x="1097" y="341" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">send receipt before state update</text>
-    <text x="1097" y="352" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">failed sends surface as errors</text>
+    <rect x="984" y="298" width="226" height="66" rx="7" fill="#0a1520" stroke="rgba(61,126,255,0.38)" stroke-width="1.6"/>
+    <text x="1097" y="319" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">Resend</text>
+    <text x="1097" y="334" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">email delivery · verified-send</text>
+    <text x="1097" y="347" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">send receipt before state update</text>
+    <text x="1097" y="358" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">failed sends surface as errors</text>
   </g>
 
-  <!-- Brave Search MCP (y=373, h=90, gap=15) -->
+  <!-- Brave Search MCP (y=382, h=90, gap=18) -->
   <g id="node-brave" class="node" style="cursor:pointer">
-    <rect x="984" y="373" width="226" height="90" rx="7" fill="#0a1010" stroke="rgba(107,114,128,0.44)" stroke-width="1.6"/>
-    <text x="1097" y="393" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">Brave Search MCP</text>
-    <text x="1097" y="409" text-anchor="middle" fill="#9ba3ae" font-family="'IBM Plex Mono',monospace" font-size="8.5">drug interactions · guidelines</text>
-    <text x="1097" y="422" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">stdio · Research Agent only</text>
-    <text x="1097" y="435" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">conditionally triggered</text>
-    <text x="1097" y="447" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">heuristic: meds/conditions in notes</text>
+    <rect x="984" y="382" width="226" height="90" rx="7" fill="#0a1010" stroke="rgba(107,114,128,0.44)" stroke-width="1.6"/>
+    <text x="1097" y="402" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">Brave Search MCP</text>
+    <text x="1097" y="418" text-anchor="middle" fill="#9ba3ae" font-family="'IBM Plex Mono',monospace" font-size="8.5">drug interactions · guidelines</text>
+    <text x="1097" y="431" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">stdio · Research Agent only</text>
+    <text x="1097" y="444" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">conditionally triggered</text>
+    <text x="1097" y="456" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">heuristic: meds/conditions in notes</text>
   </g>
 
-  <!-- Infra badge (y=478, h=56, gap=15) -->
-  <rect x="984" y="478" width="226" height="56" rx="6" fill="rgba(13,30,56,0.85)" stroke="rgba(149,175,219,0.15)" stroke-width="1"/>
-  <text x="1097" y="498" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">Docker · AWS ECR · App Runner</text>
-  <text x="1097" y="511" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">Route 53 · auto HTTPS · scaling</text>
-  <text x="1097" y="524" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">ECR image pull on deploy</text>
-
-  <!-- PostgreSQL · S3 (y=549, h=66, gap=15) → bottom=615 -->
-  <g id="node-postgres" class="node" style="cursor:pointer">
-    <rect x="984" y="549" width="226" height="66" rx="7" fill="#0d0a1a" stroke="rgba(167,139,250,0.36)" stroke-width="1.6"/>
-    <text x="1097" y="569" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">PostgreSQL · S3</text>
-    <text x="1097" y="584" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">consultation records · files</text>
-    <text x="1097" y="597" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">AWS RDS · async SQLAlchemy</text>
-    <text x="1097" y="609" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">Alembic · S3 presigned URLs</text>
+  <!-- Secrets Manager (y=490, h=56, gap=18) -->
+  <g id="node-secrets" class="node" style="cursor:pointer">
+    <rect x="984" y="490" width="226" height="56" rx="7" fill="#0d0a1a" stroke="rgba(167,139,250,0.32)" stroke-width="1.6"/>
+    <text x="1097" y="510" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="12">Secrets Manager</text>
+    <text x="1097" y="524" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8.5">runtime secrets · ARN resolution</text>
+    <text x="1097" y="537" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">Terraform shells · deploy-sync values</text>
   </g>
+
+  <!-- Infra badge (y=564, h=56, gap=18) -->
+  <rect x="984" y="564" width="226" height="56" rx="6" fill="rgba(13,30,56,0.85)" stroke="rgba(149,175,219,0.15)" stroke-width="1"/>
+  <text x="1097" y="584" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">Docker · AWS ECR · App Runner</text>
+  <text x="1097" y="597" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">Route 53 · auto HTTPS · scaling</text>
+  <text x="1097" y="610" text-anchor="middle" fill="#6b7280" font-family="'IBM Plex Mono',monospace" font-size="8">ECR image pull on deploy</text>
 
   <!-- ═══ ZONE LABELS ═══ -->
   <text x="109"  y="638" text-anchor="middle" fill="rgba(149,175,219,0.32)" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="2">CLIENT</text>
@@ -460,18 +459,18 @@ const tooltips = {
   'node-critic':      { title: 'Critic Agent · QA Gate · Gemini', body: 'Evaluates every summary before delivery: factual contradictions, clinical omissions, hallucinated specifics, structural violations. Fail → tournament regeneration (N=3 parallel candidates, each re-reviewed, best selected). Issues recorded as guardrails. Returns JSON: score, issues, missing, hallucinations.' },
   'node-research':    { title: 'Research Agent · Conditional', body: 'Only triggered when medication/condition heuristics detect signals needing external verification. Queries Brave Search via MCPServerStdio. Results injected as clearly marked referenced evidence into Summary Agent — not as direct clinical claims.' },
   'node-evidence':    { title: 'Evidence Agent · Source Mapping', body: 'Maps every summary statement to its specific source chunk. Clinician can expand any claim to see the exact input excerpt. Unsupported statements flagged as evidence gaps. Snippets capped at 140 chars. Evidence map persisted and emitted as SSE event.' },
-  'node-memory':      { title: 'Memory Agent · RAG', body: 'After each visit, the finalized summary is embedded and stored in the Vector Store keyed by patient ID. On subsequent visits, semantically similar prior summaries are retrieved and injected as longitudinal background context. Dedup by patient+date+encounter_id.' },
+  'node-memory':      { title: 'Memory Agent · RAG', body: 'After each visit, the finalized summary is embedded and stored in DynamoDB keyed by patient ID. On subsequent visits, semantically similar prior summaries are retrieved via cosine similarity and injected as longitudinal background context. Dedup by patient+date+encounter_id.' },
   'node-coordinator': { title: 'Coordinator Agent', body: 'Extracts next-step actions from the finalized summary: follow-ups, referrals, medication changes, pending tests. Emitted as the actions SSE event. Runs in parallel with Evidence and Memory agents after Critic approval.' },
-  'node-chat':        { title: 'Chat Agent · Gemini', body: 'Patient-scoped clinical Q&A. Grounded only in current patient\'s summaries and consultation context via Vector Store RAG recall. Cannot speculate beyond documented evidence. App guide injected for product support questions. Streams Markdown.' },
+  'node-chat':        { title: 'Chat Agent · Gemini', body: 'Patient-scoped clinical Q&A. Grounded only in current patient\'s summaries and consultation context via DynamoDB RAG recall. Cannot speculate beyond documented evidence. App guide injected for product support questions. Streams Markdown.' },
   'node-emailagent':  { title: 'Email Agent', body: 'Triggered by clinician to dispatch patient summaries. Optionally translates to patient\'s language before sending. Sends via Resend with verified-send pattern: delivery receipt confirmed before recording delivery_success. Failed sends surface as delivery errors.' },
-  'node-vecstore':    { title: 'Vector Store (RAG) · Longitudinal Memory', body: 'Patient-keyed embeddings via text-embedding-3-small. Stores visit_summary, visit_notes, visit_evidence per encounter. Dedup by (patient, date, type, template_id, encounter_id). Cross-patient retrieval blocked at the query layer — not just by policy.' },
+  'node-vecstore':    { title: 'DynamoDB · Patient Memory Store', body: 'Durable patient-memory store with embeddings via text-embedding-3-small. Stores visit_summary, visit_notes, visit_evidence per encounter. Cosine similarity ranking in application code. Dedup by (patient, date, type, template_id, encounter_id). Cross-patient retrieval blocked at the query layer.' },
   'node-redis':       { title: 'Upstash Redis · Job State', body: 'Resumable SSE job state. Each job stored as a Redis hash with per-stage completion flags. HTTP-based access — no persistent TCP connections, compatible with App Runner. Optional — falls back to in-memory jobs if not configured.' },
   'node-resend':      { title: 'Resend · Email Delivery', body: 'Email dispatch for summaries and patient reports. Verified-send: server confirms delivery receipt from Resend API before recording delivery_success in job state. Failed sends surface as state errors — not silent failures.' },
   'node-brave':       { title: 'Brave Search MCP · stdio', body: 'External clinical lookup via MCPServerStdio from OpenAI Agents SDK. Triggered by medication/condition heuristics in the Summary Agent. Provides drug interaction data and clinical guidelines. Research Agent owns the MCP boundary — Summary Agent never calls external tools directly.' },
-  'node-history':     { title: 'Consultation History', body: 'Browse and manage past consultations. Paginated list scoped to the authenticated clinician. Filter by patient name, date range, or lifecycle status (draft / finalized). PDF export per consultation via WeasyPrint. Finalized consultations are immutable; drafts can be amended before finalization.' },
+  'node-history':     { title: 'Consultation History', body: 'Browse and manage patient visit history. Paginated list scoped to the authenticated clinician. Filter by patient name. Supports soft delete and restore of individual visit entries. Patient records can be renamed across all stored artifacts.' },
   'node-inputpanel':  { title: 'Consultation Form', body: 'Multi-input assembly before submission. Accepts PDF documents, audio recordings (Whisper transcription preview on upload), prescription images (vision OCR), and freeform text notes. Target language for patient email translation selected here. Submits as POST /api/consultation, which opens an SSE stream keyed by job_id.' },
-  'node-histapi':     { title: 'History + Export API', body: 'REST endpoints for consultation management and PDF export. GET /api/consultations returns paginated list scoped to the verified JWT user. GET /api/consultation/{id} returns full artifact with evidence map. POST /api/export-pdf generates a WeasyPrint PDF from the stored HTML artifact and returns an S3 presigned download URL. All endpoints JWT-gated.' },
-  'node-postgres':    { title: 'PostgreSQL · S3', body: 'Persistent store for all consultation records and uploaded files. PostgreSQL (AWS RDS) stores structured consultation data — summaries, critic scores, evidence maps, lifecycle state. S3 stores audio recordings, uploaded PDFs, images, and generated export PDFs referenced by key in the PostgreSQL record. Alembic schema migrations applied on container startup. Async SQLAlchemy engine for non-blocking I/O.' },
+  'node-histapi':     { title: 'Patient History API', body: 'REST endpoints for patient history management. GET /api/patients returns a paginated patient list. GET /api/patient-history retrieves visit history for one patient. POST /api/patient/rename renames all stored records. POST /api/patient/delete-entry soft-deletes a visit artifact. POST /api/patient/restore-entry restores a soft-deleted artifact. All endpoints JWT-gated.' },
+  'node-secrets':     { title: 'AWS Secrets Manager', body: 'Stores deployed runtime secrets — model API keys, Clerk keys, Resend API key, Brave API key. Terraform creates secret shells; deploy script synchronizes actual values. App Runner resolves ARNs at container startup. Keeps real secret values out of Terraform state while making the deployed service reproducible.' },
 };
 
 const connMap = {
@@ -499,7 +498,7 @@ const connMap = {
   'node-history':     ['c-req'],
   'node-inputpanel':  ['c-req'],
   'node-histapi':     [],
-  'node-postgres':    [],
+  'node-secrets':     [],
 };
 
 const allNodes = Object.keys(connMap);

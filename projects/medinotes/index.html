@@ -47,7 +47,7 @@
           <span class="cs-badge">Next.js</span>
           <span class="cs-badge">OpenAI Agents SDK</span>
           <span class="cs-badge">MCP</span>
-          <span class="cs-badge">Vector Store (RAG)</span>
+          <span class="cs-badge">DynamoDB (RAG)</span>
           <span class="cs-badge">Upstash Redis</span>
           <span class="cs-badge">AWS App Runner</span>
           <span class="cs-badge">Whisper</span>
@@ -257,16 +257,16 @@
         </div>
 
         <div class="cs-decision">
-          <h3>Vector Store for Cross-Visit Context</h3>
+          <h3>DynamoDB for Cross-Visit Context</h3>
           <p>
             After each visit, the finalized summary is embedded and stored in a
-            <strong>vector store keyed by patient ID</strong>. On subsequent visits for the same
+            <strong>DynamoDB table keyed by patient ID</strong>. On subsequent visits for the same
             patient, semantically similar context from prior summaries is retrieved via similarity
             search and injected as background context into the <em>Summary Agent</em>'s generation
             step — prior diagnoses, known allergies, current medication history, and documented
             clinical observations. Retrieval is scoped strictly to the current patient's indexed
-            summaries — cross-patient retrieval is architecturally impossible because the vector
-            store queries are keyed by patient ID at the query layer.
+            summaries — cross-patient retrieval is architecturally impossible because the DynamoDB
+            queries are keyed by patient ID at the query layer.
           </p>
         </div>
 
@@ -352,7 +352,7 @@
             <p>Audio transcription for voice-recorded consultation notes. Runs within the Extraction Agent before any summarization; output normalized to the same text format as all other inputs so the Summary Agent sees a uniform context.</p>
           </div>
           <div class="cs-stack-item">
-            <h4>Vector Store (RAG)</h4>
+            <h4>DynamoDB (RAG)</h4>
             <p>Longitudinal patient memory via embedding and similarity retrieval. Summaries indexed by patient ID. Cross-patient retrieval is architecturally prevented at the query layer — not just by policy.</p>
           </div>
           <div class="cs-stack-item">
@@ -369,7 +369,7 @@
           </div>
           <div class="cs-stack-item">
             <h4>Clerk</h4>
-            <p>Authentication and user identity. Scopes all patient data access by authenticated user. JWTs verified on every API request. Patient vector store queries and job history queries both scoped to the verified user identity before any data operation.</p>
+            <p>Authentication and user identity. Scopes all patient data access by authenticated user. JWTs verified on every API request. Patient DynamoDB queries and job history queries both scoped to the verified user identity before any data operation.</p>
           </div>
           <div class="cs-stack-item">
             <h4>Docker + AWS App Runner + ECR</h4>
