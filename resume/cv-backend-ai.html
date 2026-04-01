@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rayan Gacillos - Backend to Full-Stack AI CV</title>
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #475569;
+      --accent: #1d4ed8;
+      --line: #dbe3ef;
+      --soft: #f8fafc;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--ink);
+      background: #ffffff;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 28px 28px 36px;
+    }
+    .header {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 12px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 36px;
+      letter-spacing: -0.3px;
+      line-height: 1.15;
+    }
+    .subtitle {
+      margin-top: 4px;
+      font-size: 18px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .contact {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px 16px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .contact-location {
+      min-width: 0;
+    }
+    .section {
+      margin-top: 18px;
+    }
+    .compact-section {
+      break-inside: avoid-page;
+      page-break-inside: avoid;
+    }
+    h2 {
+      margin: 0;
+      font-size: 22px;
+      color: var(--accent);
+      letter-spacing: 0.2px;
+    }
+    .rule {
+      border: 0;
+      border-top: 1px solid var(--line);
+      margin: 6px 0 10px;
+    }
+    p {
+      margin: 0 0 8px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 2.8fr;
+      border: 1px solid var(--line);
+    }
+    .grid .k,
+    .grid .v {
+      padding: 9px 10px;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .grid .k {
+      font-weight: 700;
+      background: var(--soft);
+      border-right: 1px solid var(--line);
+    }
+    .grid .k.first,
+    .grid .v.first {
+      border-top: 0;
+    }
+    .item {
+      margin-bottom: 12px;
+    }
+    .item-title {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+    .meta {
+      margin: 2px 0 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    ul {
+      margin: 6px 0 0;
+      padding-left: 18px;
+    }
+    li {
+      margin: 0 0 5px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .project-links {
+      margin-top: 4px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .project-links span {
+      display: inline-block;
+      margin-right: 14px;
+      margin-bottom: 4px;
+    }
+    @media print {
+      @page {
+        size: A4;
+        margin: 0.45in;
+      }
+
+      .page {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .contact {
+        grid-template-columns: minmax(0, 1.28fr) minmax(0, 0.72fr);
+        gap: 4px 14px;
+        font-size: 13px;
+      }
+
+      .contact-location {
+        white-space: nowrap;
+        font-size: 12.6px;
+        letter-spacing: -0.01em;
+      }
+
+      a { text-decoration: none; color: inherit; }
+
+      h2,
+      .rule {
+        break-after: avoid-page;
+        page-break-after: avoid;
+      }
+
+      .project-links,
+      .item-title {
+        break-after: avoid-page;
+        page-break-after: avoid;
+      }
+
+      .item {
+        break-inside: avoid-page;
+        page-break-inside: avoid;
+      }
+
+      .compact-section {
+        break-inside: avoid-page;
+        page-break-inside: avoid;
+      }
+
+      p,
+      li {
+        orphans: 3;
+        widows: 3;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <h1>Rayan Gacillos</h1>
+      <div class="subtitle">Software Engineer with 7+ Years in Backend Systems, Now Building Full-Stack AI Applications</div>
+      <div class="contact">
+        <div class="contact-location">Location: Calabarzon, Philippines (Open to Remote/Hybrid)</div>
+        <div>Email: gacillos.rhye@gmail.com</div>
+        <div>LinkedIn: <a href="https://www.linkedin.com/in/rhyegacillos/" target="_blank" rel="noreferrer">linkedin.com/in/rhyegacillos</a></div>
+        <div>Portfolio: <a href="https://rhyegacillos.github.io/" target="_blank" rel="noreferrer">rhyegacillos.github.io</a></div>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Professional Profile</h2>
+      <hr class="rule" />
+      <p>
+        Software Engineer with 7+ years of experience building backend systems, REST APIs, and third-party integrations, with recent work focused on full-stack AI applications. My background in Java and Spring Boot shaped how I approach AI engineering: clear API contracts, dependable backend behavior, and systems that remain understandable after the demo stage.
+      </p>
+      <p>
+        Experienced in Java (Spring Boot), Python (FastAPI/Django), and TypeScript/React, I build end-to-end applications that combine API integration, AI workflows, validation, async job handling, safe tool orchestration, fallback routing, and observability. My integration work includes designing and consuming REST endpoints, handling authentication and bearer-token flows, validating request and response payloads, integrating external provider APIs, and supporting frontend-to-backend coordination for production workflows. I am targeting Software Engineer and Full-Stack AI roles where strong backend engineering, API integration depth, and reliable AI execution matter more than prompt-only experimentation.
+      </p>
+    </section>
+
+    <section class="section compact-section">
+      <h2>API &amp; Integration Highlights</h2>
+      <hr class="rule" />
+      <ul>
+        <li>7+ years building and integrating REST APIs for backend workflows, analytics systems, and external provider-connected applications.</li>
+        <li>Strong experience collecting marketing and analytics data from third-party platforms, validating payloads, mapping provider-specific fields, and transforming raw responses into structured internal formats.</li>
+        <li>Worked extensively on integration workflows that pull data from platforms such as Meta, Google, and TikTok, then normalize, reconcile, and prepare that data for reporting, dashboards, and business insights.</li>
+        <li>Hands-on experience with third-party integrations covering authentication, bearer-token and API-key patterns, payload validation, response mapping, retries, failure handling, and API contract support for downstream consumers.</li>
+      </ul>
+    </section>
+
+    <section class="section compact-section">
+      <h2>Core Stack</h2>
+      <hr class="rule" />
+      <div class="grid">
+        <div class="k first">Languages</div>
+        <div class="v first">Python, Java, TypeScript, SQL</div>
+        <div class="k">Backend</div>
+        <div class="v">FastAPI, Django, Spring Boot, REST API design, endpoint design, async job orchestration, middleware patterns, SSE streaming</div>
+        <div class="k">API Integration</div>
+        <div class="v">Third-party API integration, request/response validation, JSON payload handling, bearer-token and API-key patterns, webhook-style workflows, provider fallback, error handling, retry logic</div>
+        <div class="k">Frontend</div>
+        <div class="v">Next.js, React, TypeScript</div>
+        <div class="k">AI / LLM</div>
+        <div class="v">LLM integration, tool orchestration, agents (OpenAI Agents SDK), RAG, vector-store retrieval, structured outputs, multi-provider routing + fallback, validation/guardrails</div>
+        <div class="k">Cloud / DevOps</div>
+        <div class="v">AWS (Lambda, API Gateway, S3, CloudFront, ECR, EC2, App Runner, RDS, Secrets Manager), Docker, Terraform, GitHub Actions, OIDC</div>
+        <div class="k">Data / Infra</div>
+        <div class="v">PostgreSQL, SQLite, Redis (Upstash), SQLAlchemy, Alembic, MCP tool servers, OpenTelemetry, Sentry, CloudWatch</div>
+        <div class="k">Developer Tools</div>
+        <div class="v">GitHub Copilot, Claude Code, ChatGPT Codex, Gemini CLI, Cursor, Windsurf, VS Code, IntelliJ</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Selected Projects</h2>
+      <hr class="rule" />
+
+      <div class="item">
+        <p class="item-title">Digital Assistant</p>
+        <div class="project-links">
+          <span>Live: <a href="https://digital-assistant.agentairg.site/" target="_blank" rel="noreferrer">digital-assistant.agentairg.site</a></span>
+        </div>
+        <ul>
+          <li>Built a serverless AI assistant that handles multi-step workflows including search, PDF generation, email delivery, uploads, and user-approved memory.</li>
+          <li>Designed backend APIs for chat, jobs, uploads, memory, and tool-triggered workflows, with clear request shaping and status-based responses for frontend consumption.</li>
+          <li>Separated API intake from background execution using an async API + worker pattern so long-running tasks could complete without request timeouts.</li>
+          <li>Integrated external services for web search, PDF generation, and email delivery, with verified tool outcomes so user-facing responses reflect actual execution results rather than model claims alone.</li>
+          <li>Added a truth-gated response path for higher-risk actions so the final user message is constrained by verified tool results instead of fluent but unverified model output.</li>
+          <li>Deployed on AWS with Terraform and GitHub Actions, with tracing and error monitoring across API, worker, and tool layers.</li>
+        </ul>
+        <hr class="rule" />
+      </div>
+
+      <div class="item">
+        <p class="item-title">IdeaGen</p>
+        <div class="project-links">
+          <span>Live: <a href="https://ideagen.agentairg.site/" target="_blank" rel="noreferrer">ideagen.agentairg.site</a></span>
+        </div>
+        <ul>
+          <li>Built a multi-step idea evaluation workflow that moves from generation to comparison, summarization, and execution planning instead of stopping at one-shot content output.</li>
+          <li>Built backend integration flows across multiple model-provider APIs, keeping request contracts and downstream parsing consistent even when providers returned different response patterns.</li>
+          <li>Implemented ordered multi-provider fallback across OpenAI, Gemini, DeepSeek, and Grok, while keeping schema validation and retry logic consistent across providers.</li>
+          <li>Used cache-before-infer and durable run snapshots to reduce repeat cost, support artifact reuse, and keep comparisons reviewable over time.</li>
+          <li>Kept financial and comparison logic in deterministic code where precision mattered, using AI mainly for generation, summarization, and report-style explanation.</li>
+          <li>Deployed the platform on AWS App Runner with PostgreSQL-backed persistence and integrated email delivery for generated outputs and reports.</li>
+        </ul>
+        <hr class="rule" />
+      </div>
+
+      <div class="item">
+        <p class="item-title">Autonomous Agentic Trader</p>
+        <div class="project-links">
+          <span>Live: <a href="https://manager-trader.agentairg.site/" target="_blank" rel="noreferrer">manager-trader.agentairg.site</a></span>
+        </div>
+        <ul>
+          <li>Built a multi-agent trading simulation where agent proposals pass through deterministic portfolio-control checks before any execution path is allowed.</li>
+          <li>Integrated account, pricing, research, and memory APIs behind MCP contracts so agents could consume approved capabilities without direct brokerage access.</li>
+          <li>Implemented SSE-based dashboard updates with replay and resync behavior so operators can recover state cleanly after disconnects or engine restarts.</li>
+          <li>Used a multi-gate review pipeline with explicit approve, reduce, or reject outcomes so agent suggestions remain auditable and bounded by policy rules.</li>
+          <li>Managed cloud deployment on AWS EC2 with Docker, Terraform, and GitHub Actions, with PostgreSQL as shared runtime state.</li>
+        </ul>
+        <hr class="rule" />
+      </div>
+
+      <div class="item">
+        <p class="item-title">MediNotes</p>
+        <div class="project-links">
+          <span>Live: <a href="https://medinotes.agentairg.site/" target="_blank" rel="noreferrer">medinotes.agentairg.site</a></span>
+        </div>
+        <ul>
+          <li>Built a clinical documentation workflow that turns multimodal visit inputs into structured summaries with evidence-aware review and scoped follow-up chat.</li>
+          <li>Used specialized orchestration roles for extraction, review, evidence handling, and chat so quality issues can be isolated by workflow stage.</li>
+          <li>Designed backend flows for intake, processing, streaming, and context-scoped retrieval so the application could coordinate multiple internal services safely.</li>
+          <li>Applied resumable streaming and job-based execution to keep long-running generations usable across unstable connections.</li>
+          <li>Added critic-style review and evidence-linking steps so important claims can be checked against source material before becoming part of the final summary.</li>
+          <li>Constrained chat responses to allowed patient context to reduce unsupported answers and keep the assistant grounded in the current visit record.</li>
+        </ul>
+        <hr class="rule" />
+      </div>
+    </section>
+
+    <section class="section compact-section">
+      <h2>Professional Experience</h2>
+      <hr class="rule" />
+
+      <div class="item">
+        <p class="item-title">Independent — Software Engineer (Full-Stack &amp; AI)</p>
+        <div class="meta">Jan 2026 – Present | Remote</div>
+        <ul>
+          <li>Designed and shipped full-stack AI applications across Python, React, and AWS, with emphasis on reliable workflow execution rather than prompt-only prototypes.</li>
+          <li>Designed backend APIs for multi-step workflows including chat, jobs, memory, uploads, streaming, and provider-backed execution flows.</li>
+          <li>Implemented async API and worker patterns using job-based workflows for tool-heavy requests, improving timeout handling, frontend visibility, and recovery behavior.</li>
+          <li>Integrated external providers for model inference, search, email, research, and document workflows, with request validation, response normalization, retry handling, and provider fallback logic.</li>
+          <li>Deployed workloads with Docker, Terraform, and GitHub Actions, using OIDC-based CI authentication and end-to-end tracing for production visibility and easier issue isolation.</li>
+          <li>Applied deterministic code paths in higher-risk domains such as finance and clinical documentation while using AI for reasoning, summarization, and user-facing explanation.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <p class="item-title">Propelrr — Java Software Developer</p>
+        <div class="meta">Jan 2018 – Oct 2025 | Makati City, Philippines</div>
+        <ul>
+          <li>Developed and maintained backend services and REST APIs for fintech and enterprise workflows using Java and Spring Boot.</li>
+          <li>Integrated third-party platforms including Meta, Google, and TikTok, handling authentication requirements, provider-specific request formats, response mapping, and failure scenarios for analytics and reporting workflows.</li>
+          <li>Built API integration flows that collected marketing and analytics data, normalized inconsistent provider outputs, and transformed multi-source data into structured datasets for reports, dashboards, and business insights.</li>
+          <li>Collaborated with frontend teams using Angular and React by defining API contracts, clarifying payload structures, troubleshooting integration issues, and supporting end-to-end feature delivery.</li>
+          <li>Supported backend troubleshooting and production issue analysis for data-heavy integrations, including request failures, inconsistent provider responses, and edge cases in reporting pipelines.</li>
+          <li>Built practical experience in integration-heavy backend work where stability, data consistency, and provider-specific handling mattered as much as endpoint implementation itself.</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <p class="item-title">Toshiba — Systems Technical Support</p>
+        <div class="meta">Nov 2007 – Jan 2018 | Region IV-A (CALABARZON), Philippines</div>
+        <ul>
+          <li>Managed end-to-end IT hardware support and preventive maintenance for manufacturing operations.</li>
+          <li>Created SOPs and technical documentation to improve consistency in support workflows and local operations.</li>
+          <li>Evaluated local hardware alternatives for imported components, contributing to cost-conscious support decisions.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section compact-section">
+      <h2>Education</h2>
+      <hr class="rule" />
+      <div class="item">
+        <p class="item-title">University of Batangas</p>
+        <div class="meta">Bachelor of Science, Computer Engineering | 2016 - 2017</div>
+      </div>
+      <div class="item">
+        <p class="item-title">Technological University of the Philippines</p>
+        <div class="meta">Computer Engineering Technology/Technician (Vocational) | 2003 - 2007</div>
+      </div>
+    </section>
+
+    <section class="section compact-section">
+      <h2>Certifications</h2>
+      <hr class="rule" />
+      <ul>
+        <li>AI Engineer Agentic Track: The Complete Agent &amp; MCP Course</li>
+        <li>AI Engineer Core Track: LLM Engineering, RAG, QLoRA, Agents</li>
+        <li>Spring Framework Masterclass: Beginner to Professional</li>
+        <li>Learn Spring Boot in 100 Steps - Beginner to Expert</li>
+        <li>Build Modern Responsive Website with HTML5, CSS3 &amp; Bootstrap</li>
+      </ul>
+    </section>
+
+    <section class="section compact-section">
+      <h2>Languages</h2>
+      <hr class="rule" />
+      <p>Tagalog (Native/Bilingual), English (Professional Working)</p>
+    </section>
+  </main>
+</body>
+</html>
