@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>English Speaking Practice for Interviews</title>
+    <style>
+      :root {
+        --bg: #08111f;
+        --panel: rgba(12, 22, 40, 0.9);
+        --panel-2: rgba(8, 16, 30, 0.96);
+        --text: #e8f0ff;
+        --muted: #a7b8d7;
+        --line: rgba(120, 151, 201, 0.28);
+        --accent: #63e7c8;
+        --accent-2: #66b6ff;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Arial, sans-serif;
+        font-size: 17px;
+        background: radial-gradient(circle at top, #1a2f57 0%, var(--bg) 52%);
+        color: var(--text);
+      }
+
+      main {
+        width: min(1120px, calc(100% - 32px));
+        margin: 24px auto 40px;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: clamp(1.5rem, 4vw, 2.2rem);
+      }
+
+      .intro {
+        margin: 0 0 14px;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .tabs {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .tab {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        color: var(--text);
+        border-radius: 12px;
+        padding: 10px 12px;
+        cursor: pointer;
+        text-align: left;
+        font-size: 0.9rem;
+      }
+
+      .tab:hover { border-color: #415b8e; }
+
+      .tab.active {
+        border-color: #44d0b0;
+        background: linear-gradient(145deg, rgba(99, 231, 200, 0.14), rgba(102, 182, 255, 0.1));
+      }
+
+      .panel {
+        display: none;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 16px;
+        background: linear-gradient(170deg, var(--panel), var(--panel-2));
+      }
+
+      .panel.active { display: block; }
+
+      .panel h2 {
+        margin-top: 0;
+        margin-bottom: 8px;
+        font-size: 1.2rem;
+      }
+
+      .panel p {
+        margin: 0 0 12px;
+        line-height: 1.65;
+      }
+
+      .guide {
+        border: 1px solid rgba(99, 231, 200, 0.32);
+        background: rgba(99, 231, 200, 0.08);
+        border-radius: 10px;
+        padding: 12px;
+        margin-bottom: 14px;
+      }
+
+      .guide p { margin: 0 0 8px; }
+      .guide p:last-child { margin-bottom: 0; }
+
+      .scenario-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 10px;
+      }
+
+      .scenario {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px;
+        background: rgba(6, 14, 28, 0.34);
+      }
+
+      .scenario h4 {
+        margin: 0 0 8px;
+        color: var(--accent);
+        font-size: 0.98rem;
+      }
+
+      .scenario p {
+        margin: 0 0 7px;
+        line-height: 1.55;
+        font-size: 0.95rem;
+      }
+
+      .scenario p:last-child { margin-bottom: 0; }
+
+      .muted { color: var(--muted); }
+
+      @media (max-width: 680px) {
+        main { width: calc(100% - 20px); }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>English Speaking Practice for Interviews</h1>
+      <p class="intro">
+        This page is for daily speaking practice. Read each paragraph out loud as if
+        you are talking to a real interviewer, not reading a script. The language is
+        written for Intermediate English, so difficult technical ideas are explained more
+        directly instead of being left as short expert phrases. Keep your voice steady,
+        slow enough to sound clear, and natural enough that it still feels like you.
+      </p>
+
+      <div class="tabs" role="tablist" aria-label="Practice modules">
+        <button class="tab active" data-target="story50" role="tab" aria-selected="true">50 Paragraphs: My Engineering Story</button>
+        <button class="tab" data-target="mindset20" role="tab" aria-selected="false">20 Paragraphs: Engineering Mindset in AI</button>
+        <button class="tab" data-target="scenarios" role="tab" aria-selected="false">Case Scenarios: STAR, Design, Metrics, Privacy</button>
+        <button class="tab" data-target="essay" role="tab" aria-selected="false">Full Interview Essay</button>
+      </div>
+
+      <section id="story50" class="panel active" role="tabpanel">
+        <h2>Simple Practice Essay — My Engineering Story (50 Paragraphs, incl. ML)</h2>
+        <div class="guide">
+          <p><strong>Practice tip:</strong> Read 5-10 paragraphs per session. Speak slowly and clearly, and stop after each paragraph if you need to explain it in your own words.</p>
+          <p><strong>Goal:</strong> Improve vocabulary, pronunciation, and speaking confidence for interviews without losing the technical meaning.</p>
+          <p><strong>Reminder:</strong> If a sentence sounds too formal, pause and say it again in simpler words, but keep the same idea.</p>
+        </div>
+
+        <p><strong>1.</strong> I became interested in software engineering because I like solving real problems with clear logic and useful tools.</p>
+        <p><strong>2.</strong> At first, I focused on simple scripts, but later I learned how to build full applications that people can use every day.</p>
+        <p><strong>3.</strong> I learned that writing code is only one part of the job; understanding users and business needs is also important.</p>
+        <p><strong>4.</strong> Over time, I moved from only backend tasks to full-stack work, so I can connect user interface, API, and infrastructure.</p>
+        <p><strong>5.</strong> I enjoy building systems that are clean and maintainable, because clear structure helps teams move faster with fewer bugs.</p>
+        <p><strong>6.</strong> In my projects, I always think about reliability, not only features, because users care most when systems fail.</p>
+        <p><strong>7.</strong> I started building AI projects because I wanted to understand not only what models can do, but how they behave under real product conditions.</p>
+        <p><strong>8.</strong> I learned quickly that AI output can look impressive and still be unstable, so guardrails are necessary if users are going to trust the system.</p>
+        <p><strong>9.</strong> That is why I focus so much on validation, fallback behavior, and observability in my AI applications.</p>
+        <p><strong>10.</strong> One of my biggest lessons is that model output should not directly control risky actions unless the system checks the result first.</p>
+
+        <p><strong>11.</strong> In my Digital Assistant project, I added tool orchestration for search, PDF export, email delivery, and file handling. Tool orchestration means the system decides which tools to use, in what order, and how to combine their results into one useful answer. I usually explain the architecture as one main user-facing agent supported by an API layer, a background worker, MCP tool servers, and a memory approval layer.</p>
+        <p><strong>12.</strong> I also added async job execution because tool-heavy requests can exceed normal API timeout limits. In this pattern, the API receives the request, returns quickly with a job ID, and the longer task continues in the background instead of keeping the user waiting in one fragile request.</p>
+        <p><strong>13.</strong> Async design improved user experience because the API returns quickly and the worker completes long tasks in the background. The job ID works like a tracking number, so the frontend can check the latest status without starting the whole task again.</p>
+        <p><strong>14.</strong> I implemented quota controls to manage daily usage for tokens, PDF, and email actions. A quota is simply a usage limit, and I use it to prevent waste, reduce abuse, and keep the product fair for different users.</p>
+        <p><strong>15.</strong> This quota design keeps the platform fair and cost-aware, especially during heavy usage. I see these limits as part of product quality, not only as billing rules.</p>
+        <p><strong>16.</strong> I used OpenTelemetry and centralized logs because I wanted to see exactly where failures happened instead of guessing. OpenTelemetry is a tracing system that follows one request across many layers, such as the API, worker, model call, and tool call, so debugging becomes much more precise.</p>
+        <p><strong>17.</strong> That observability made it easier to tell whether the problem came from the model, the tool call, or the infrastructure around it.</p>
+        <p><strong>18.</strong> In interviews, I explain that reliability is a feature, not an optional improvement.</p>
+        <p><strong>19.</strong> I use Terraform and CI/CD because deployment should be repeatable and reviewable, not based on manual memory. Terraform defines the infrastructure in files, and CI/CD automates build, test, and deploy steps in a consistent way.</p>
+        <p><strong>20.</strong> Infrastructure as code helps me avoid manual drift, which means the real environment stays closer to what the team expects. Manual drift happens when people change the live environment by hand and the system slowly becomes different from the design documents or deployment files.</p>
+
+        <p><strong>21.</strong> In IdeaGen, I built a structured workflow: generate ideas, compare runs, summarize decisions, and produce execution plans. I explain the architecture as one orchestrated workflow with several specialized AI stages rather than one free-form agent, because each stage has a clear job and a clear output.</p>
+        <p><strong>22.</strong> This project taught me that decision tools need traceable outputs, not only creative text. If a team wants to review the result later, they need saved runs, clear comparisons, and reports that still make sense after the first conversation is over.</p>
+        <p><strong>23.</strong> I used multi-provider routing and fallback because model behavior changes over time, and I did not want one provider problem to break the whole workflow. Ordered fallback means the system tries providers in a planned sequence instead of switching randomly.</p>
+        <p><strong>24.</strong> I treated outputs like contracts, so bad structure could be caught early and corrected instead of quietly breaking later steps. In this context, a contract means the output must match the exact format and fields that the next step expects.</p>
+        <p><strong>25.</strong> I also separated predictable computation from model-written narrative in the finance sections so the numbers stayed grounded and the explanation stayed readable. In simple words, the code calculates the numbers and the model explains what those numbers mean.</p>
+        <p><strong>26.</strong> I learned that clear tradeoff communication is important when choosing speed, cost, and scalability.</p>
+        <p><strong>27.</strong> I started with simpler persistence where appropriate, while documenting the migration path to larger systems.</p>
+        <p><strong>28.</strong> I always prefer transparent design decisions over hidden complexity.</p>
+        <p><strong>29.</strong> I think engineering maturity includes knowing what not to overbuild in the first version.</p>
+        <p><strong>30.</strong> My approach is practical: ship stable value now, then improve scale with clear milestones.</p>
+
+        <p><strong>31.</strong> In Autonomous Agentic Trader, I built a multi-agent trading simulation to study strategy behavior in a controlled environment instead of pretending agents should be trusted without boundaries. The project is for research and education, so the goal is to study safe system design, not to promote uncontrolled trading.</p>
+        <p><strong>32.</strong> The system uses four trader personas and scheduled trade or rebalance cycles, and I explain the architecture as a scheduled multi-agent runtime with a control layer, a trading engine process, and tool boundaries around execution. That means the agents can generate ideas on a schedule, but a separate control system still decides what is safe to move forward.</p>
+        <p><strong>33.</strong> I used MCP boundaries so the agents could reason and research, but they still had to use approved tools for prices, balances, holdings, and trade actions. MCP means Model Context Protocol, which is a standard for giving models access to allowed tools without giving them unlimited direct control.</p>
+        <p><strong>34.</strong> I kept research tools separate from execution tools because outside information can help a decision, but it should not have a free path to change account state directly. This separation makes the system easier to audit and safer to operate.</p>
+        <p><strong>35.</strong> I added layered price fallback and blocking rules so the system would fail safely when market data was missing, stale, or unreliable. For example, the system can try a primary source, then a backup source, and if the price is still not trustworthy, it blocks the trade instead of forcing execution.</p>
+        <p><strong>36.</strong> I also handled repeated upstream failures more carefully so the runtime would not keep retrying a broken source in a noisy way.</p>
+        <p><strong>37.</strong> I built a control desk UI to show logs, holdings, transactions, performance timeline, and runtime status in one place.</p>
+        <p><strong>38.</strong> That helped me practice operational thinking, because I was not only designing the agents, I was also designing how a person would monitor and manage the system.</p>
+        <p><strong>39.</strong> I clearly state that this project is for research and education, not financial advice.</p>
+        <p><strong>40.</strong> Honest scope statements build credibility in technical conversations.</p>
+
+        <p><strong>41.</strong> In MediNotes, I built a clinical documentation flow with multimodal input and structured output, and it is the most agent-heavy project in my portfolio with eight specialized roles working in a hub-and-spoke architecture. In a hub-and-spoke design, one central coordinator sends work to specialist roles and then gathers their results again.</p>
+        <p><strong>42.</strong> I used critic-review loops and regeneration because in a clinical setting, “mostly correct” is not good enough. The system creates a draft, checks it for missing or unsupported details, and then makes a stronger version if the review is weak.</p>
+        <p><strong>43.</strong> I added evidence mapping so important claims could be traced back to source snippets instead of feeling like black-box output. That means the user can see where an important statement came from, much like a citation in a research paper.</p>
+        <p><strong>44.</strong> This project improved my understanding of AI safety in high-stakes domains.</p>
+        <p><strong>45.</strong> I added resumable SSE events so users could reconnect and continue long-running tasks without losing the current run. SSE means Server-Sent Events, which is a live connection where the server can push progress updates to the browser while the job is still running.</p>
+        <p><strong>46.</strong> I designed scoped chat behavior so answers stayed within patient context boundaries instead of drifting into unsupported claims. Scoped means the assistant should answer only from the allowed patient records and current consultation context, not from broad guesses like a general chatbot.</p>
+        <p><strong>47.</strong> Across all projects, I focus on clear architecture, clear logs, and clear user behavior.</p>
+        <p><strong>48.</strong> I keep improving my communication skills so I can explain technical ideas in plain English.</p>
+        <p><strong>49.</strong> My goal is to become a strong engineer who can build reliable AI systems and collaborate effectively.</p>
+        <p><strong>50.</strong> I am still growing, but I now have a clear engineering direction: practical AI, stable systems, and honest execution.</p>
+      </section>
+
+      <section id="mindset20" class="panel" role="tabpanel">
+        <h2>Engineering Mindset — Why Software Engineering Still Matters in AI (20 Paragraphs)</h2>
+        <div class="guide">
+          <p><strong>Practice tip:</strong> Read this section as if you are answering a senior interviewer, but explain each difficult term in plain English as you go.</p>
+        </div>
+
+        <p><strong>1.</strong> AI models can generate content quickly, but software engineering is what turns that output into dependable product behavior.</p>
+        <p><strong>2.</strong> Without engineering structure, even strong model output can fail in real user workflows.</p>
+        <p><strong>3.</strong> Good engineering defines contracts, validations, and boundaries so AI behavior stays predictable. A contract means one step returns data in the exact shape the next step expects, and a boundary means the model is limited to approved actions.</p>
+        <p><strong>4.</strong> Production AI requires more than prompts; it needs error handling, retries, fallback paths, and clear rules for what happens when a dependency fails. Without those rules, a small problem in one provider can spread through the whole workflow.</p>
+        <p><strong>5.</strong> Software engineering also provides monitoring and traceability, which matter a lot when a failure can happen in the API, model, worker, or tool layer. Traceability means you can follow the path of one request and see where the real problem started.</p>
+        <p><strong>6.</strong> In AI apps, side effects like email, export, or updates must be verified by system facts, not by model confidence.</p>
+        <p><strong>7.</strong> Engineering discipline helps teams avoid silent failure, where output looks correct but is actually wrong. A simple example is a system saying a PDF was created even though the export step failed in the background.</p>
+        <p><strong>8.</strong> Reliable AI systems require strong API design, clean state management, and clear ownership boundaries.</p>
+        <p><strong>9.</strong> Infrastructure choices matter because deployment quality affects latency, uptime, and security.</p>
+        <p><strong>10.</strong> Cost control is also an engineering concern, especially with token-heavy workloads and external APIs.</p>
+        <p><strong>11.</strong> Quota and rate-limit controls are part of product quality because they protect users and business resources.</p>
+        <p><strong>12.</strong> Security and privacy controls are critical in AI systems, especially when handling sensitive content.</p>
+        <p><strong>13.</strong> Software engineering makes AI features testable through deterministic checks and regression coverage. Deterministic checks are tests with stable answers, where the same input should produce the same result every time.</p>
+        <p><strong>14.</strong> Good engineers separate policy from generation, so important rules do not depend on whether a prompt happened to be worded well that day. For example, a rule like “block this risky action” should live in code and policy checks, not only in the prompt.</p>
+        <p><strong>15.</strong> In team settings, clear architecture reduces onboarding time and reduces long-term maintenance cost.</p>
+        <p><strong>16.</strong> Engineering also improves communication, because design decisions can be explained and reviewed clearly.</p>
+        <p><strong>17.</strong> AI evolves quickly, but software engineering gives stable foundations for safe iteration.</p>
+        <p><strong>18.</strong> The strongest AI products are not only smart; they are also auditable, resilient, and user-centered.</p>
+        <p><strong>19.</strong> This is why software engineering still matters in AI: it transforms capability into trust.</p>
+        <p><strong>20.</strong> My mindset is simple: model intelligence is useful, but engineering discipline is what makes it reliable.</p>
+      </section>
+
+      <section id="scenarios" class="panel" role="tabpanel">
+        <h2>Case Scenarios: STAR Stories, System Design, Metrics, and Code-Privacy</h2>
+        <p class="muted">Each module has at least 5 scenarios. Practice by answering each one out loud in 30-90 seconds, as if you are already in the interview. When you see a difficult term, explain it in one extra sentence before moving on.</p>
+
+        <h3>STAR Stories (6)</h3>
+        <div class="scenario-grid">
+          <article class="scenario">
+            <h4>STAR 1 - Timeout to Async Jobs</h4>
+            <p><strong>Situation:</strong> Tool-heavy requests timed out in synchronous API paths.</p>
+            <p><strong>Task:</strong> Keep UX responsive and reduce failed requests.</p>
+            <p><strong>Action:</strong> I switched to an API + worker model with <code>job_id</code> polling so the request could return quickly while the heavy work continued in the background. The <code>job_id</code> acts like a tracking number, so the frontend can keep checking progress without restarting the whole task.</p>
+            <p><strong>Result:</strong> That reduced timeout failures and gave users much clearer progress visibility.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>STAR 2 - False Success Claims</h4>
+            <p><strong>Situation:</strong> Model text claimed side effects completed when tool action failed.</p>
+            <p><strong>Task:</strong> Prevent unverified success messages.</p>
+            <p><strong>Action:</strong> I added contract validation and truth-gated rendering so the final response came from actual tool results, not model confidence. In plain English, the system only says an action happened after the backend has proof that the tool really completed it.</p>
+            <p><strong>Result:</strong> User trust improved because false confirmations were removed.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>STAR 3 - Cross-Provider Instability</h4>
+            <p><strong>Situation:</strong> Different AI providers behaved inconsistently across tasks.</p>
+            <p><strong>Task:</strong> Keep output reliable despite provider variance.</p>
+            <p><strong>Action:</strong> I implemented ordered fallback and strict output validation so a provider failure would degrade the workflow safely instead of breaking it completely. Ordered fallback means I try backup providers in a planned order, and validation makes sure weaker backup output does not slip through quietly.</p>
+            <p><strong>Result:</strong> The workflow stayed more stable even when providers behaved inconsistently.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>STAR 4 - Poor Incident Visibility</h4>
+            <p><strong>Situation:</strong> Failures were hard to diagnose across API, worker, and tools.</p>
+            <p><strong>Task:</strong> Reduce incident triage time.</p>
+            <p><strong>Action:</strong> I added OpenTelemetry traces and logs with trace IDs and job IDs so one request could be followed across multiple layers. That made it possible to see whether the failure came from the API, the worker, the model call, or a tool call.</p>
+            <p><strong>Result:</strong> Root-cause analysis became faster and failure ownership became clearer.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>STAR 5 - Hallucinations in Clinical Summaries</h4>
+            <p><strong>Situation:</strong> Initial summary outputs had missing facts and unsupported statements.</p>
+            <p><strong>Task:</strong> Improve summary quality and trust in healthcare context.</p>
+            <p><strong>Action:</strong> I added a critic loop, regeneration tournament, and evidence mapping before the final output reached the user. That means the system reviews the draft, creates stronger versions when needed, and links important claims back to source material before the user sees the summary.</p>
+            <p><strong>Result:</strong> The summaries became more grounded and easier to trust because key claims could be traced to evidence.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>STAR 6 - Fast Delivery vs Scale Readiness</h4>
+            <p><strong>Situation:</strong> Need to ship fast without overengineering.</p>
+            <p><strong>Task:</strong> Balance speed and technical integrity.</p>
+            <p><strong>Action:</strong> I made pragmatic first-version choices, kept the architecture understandable, and documented the migration path instead of pretending the first version was final.</p>
+            <p><strong>Result:</strong> That let me ship useful product value quickly while staying honest about what should change at larger scale.</p>
+          </article>
+        </div>
+
+        <h3>System Design Scenarios (6)</h3>
+        <div class="scenario-grid">
+          <article class="scenario">
+            <h4>Design 1 - Build Async Agent Workflow</h4>
+            <p><strong>Prompt:</strong> Design API + worker processing for long-running AI tool chains.</p>
+            <p><strong>Focus:</strong> Explain job state, retry policy, idempotency, and how the user sees progress while work continues in the background. Idempotency means a retry should not create duplicate side effects if the same request is sent more than once.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Design 2 - Multi-Provider Fallback Architecture</h4>
+            <p><strong>Prompt:</strong> Design fallback policy across OpenAI/Gemini/DeepSeek/Grok.</p>
+            <p><strong>Focus:</strong> Explain routing rules, hard-fail criteria, and how you stop lower-quality fallback output from quietly slipping through. Hard-fail criteria means clear rules for when the system should stop and return an honest failure instead of continuing with weak output.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Design 3 - Tool Permission Boundaries</h4>
+            <p><strong>Prompt:</strong> Design safe MCP boundaries between research tools and execution tools.</p>
+            <p><strong>Focus:</strong> Least privilege, audit logs, and blocked direct state mutation. Least privilege means each tool gets only the smallest level of access it really needs.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Design 4 - Streaming + Reconnect</h4>
+            <p><strong>Prompt:</strong> Design SSE resumable events for long-running summary generation.</p>
+            <p><strong>Focus:</strong> Event ordering, reconnect tokens, retention policy, and consistency. A reconnect token helps the client continue from the right point after a disconnect instead of starting from zero.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Design 5 - Scale from SQLite to Postgres</h4>
+            <p><strong>Prompt:</strong> Evolve single-instance data layer to managed multi-instance architecture.</p>
+            <p><strong>Focus:</strong> Migration strategy, dual-write period, and rollback safety.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Design 6 - Unified AI Platform</h4>
+            <p><strong>Prompt:</strong> Unify assistant, decision, trading, and clinical modules under one platform.</p>
+            <p><strong>Focus:</strong> Shared control plane, policy engine, and domain-specific workers.</p>
+          </article>
+        </div>
+
+        <h3>Metrics Scenarios (6)</h3>
+        <div class="scenario-grid">
+          <article class="scenario">
+            <h4>Metrics 1 - Reliability Baseline</h4>
+            <p><strong>Goal:</strong> Define 5 core metrics for AI workflow reliability.</p>
+            <p><strong>Expected:</strong> Success rate, p95 latency, fallback rate, tool failure rate, backlog/queue health.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Metrics 2 - Tool Quality</h4>
+            <p><strong>Goal:</strong> Measure correctness for side-effect actions.</p>
+            <p><strong>Expected:</strong> Verified action success ratio, validation block rate, retry success rate.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Metrics 3 - Cost Control</h4>
+            <p><strong>Goal:</strong> Track token, storage, and email/PDF usage efficiency.</p>
+            <p><strong>Expected:</strong> Cost per successful request, quota breach frequency, cache hit rate.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Metrics 4 - User Experience</h4>
+            <p><strong>Goal:</strong> Quantify UX impact of async and streaming design.</p>
+            <p><strong>Expected:</strong> Time-to-first-status, time-to-complete, abandon rate, reconnect recovery rate.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Metrics 5 - Clinical Safety</h4>
+            <p><strong>Goal:</strong> Measure summary quality in healthcare flow.</p>
+            <p><strong>Expected:</strong> Critic fail rate, regeneration frequency, evidence coverage ratio.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Metrics 6 - Deployment Health</h4>
+            <p><strong>Goal:</strong> Track release reliability in CI/CD pipelines.</p>
+            <p><strong>Expected:</strong> Build success rate, rollback frequency, MTTR, incident reopen rate.</p>
+          </article>
+        </div>
+
+        <h3>Code-Privacy Scenarios (6)</h3>
+        <div class="scenario-grid">
+          <article class="scenario">
+            <h4>Privacy 1 - Public Demo, Private Code</h4>
+            <p><strong>Scenario:</strong> Live app is public but repository is private.</p>
+            <p><strong>Practice answer:</strong> I would explain the architecture and behavior clearly, share diagrams or selected docs, and avoid exposing secrets or proprietary code just to sound more impressive.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Privacy 2 - API Keys and Secrets</h4>
+            <p><strong>Scenario:</strong> Team asks how you handle model and provider keys.</p>
+            <p><strong>Practice answer:</strong> I would say I use environment variables and managed secret stores, never commit keys, and rotate credentials regularly so the system is easier to secure and audit.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Privacy 3 - Logs with Sensitive Data</h4>
+            <p><strong>Scenario:</strong> Observability needed, but logs may contain sensitive content.</p>
+            <p><strong>Practice answer:</strong> I would redact PII, keep structured metadata, and separate debug logging from any storage that might contain sensitive payloads.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Privacy 4 - User Memory Controls</h4>
+            <p><strong>Scenario:</strong> AI memory might store personal information.</p>
+            <p><strong>Practice answer:</strong> I would use user approval, TTL, dedupe, and delete controls, and I would avoid storing anything in long-term memory that should never have been saved there in the first place.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Privacy 5 - Multi-Tenant Isolation</h4>
+            <p><strong>Scenario:</strong> Need stronger tenant boundaries for production.</p>
+            <p><strong>Practice answer:</strong> I would enforce server-side identity checks, row-level isolation where appropriate, scoped tokens, and strong audit trails so tenant boundaries are not left to the frontend alone.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Privacy 6 - Interview Question on Source Code Access</h4>
+            <p><strong>Scenario:</strong> Interviewer asks to see full code for private projects.</p>
+            <p><strong>Practice answer:</strong> I would share architectural depth, selected snippets when allowed, and behavior demos while still honoring confidentiality and access boundaries.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="essay" class="panel" role="tabpanel">
+        <h2>Full Interview Essay for Read-Aloud Practice</h2>
+        <div class="guide">
+          <p><strong>How to use this:</strong> Read each section slowly and naturally, as if you are already answering in an interview.</p>
+          <p><strong>Goal:</strong> Build muscle memory with longer spoken explanations instead of isolated short answers.</p>
+          <p><strong>Memory tip:</strong> Listen for the repeating pattern: what I built, why it mattered, how I made it safer, and what lesson I learned.</p>
+          <p><strong>Panel tip:</strong> After each paragraph, ask yourself what a skeptical senior interviewer would challenge, then answer that challenge in one or two direct sentences.</p>
+        </div>
+
+        <p>I usually describe myself as a software engineer who builds full-stack AI systems, but the main point is reliability. I like building useful features, but I care just as much about how they behave when a provider fails, when a request runs long, or when the system has to explain clearly what actually happened. Across my projects, that means backend design, frontend state handling, deployment, and documentation, but the repeated theme is making AI features dependable in real use instead of only impressive in a short demo.</p>
+
+        <p>One thing I learned early is that good model output is not the same as good product behavior. A model can sound fluent and still be wrong, incomplete, or risky. That is why I focus on validation, fallback behavior, observability, and clear system boundaries. I do not treat the model as the only source of truth. I treat it as one component inside a larger workflow that still needs normal engineering control, explicit state, and verified outputs that the backend can support.</p>
+
+        <p>Digital Assistant is one of my best examples of that approach. It is a serverless AI assistant that supports search, PDF export, email delivery, uploads, and memory approval. What mattered most in that project was not just adding those features, but making them work together reliably. Some requests take longer than a normal synchronous API path should allow, so I split the flow into request intake and background execution. The API returns <code>202</code> with a <code>job_id</code>. The <code>202</code> status means the request was accepted and is still being processed, and the <code>job_id</code> is the tracking number for that same task. The frontend then polls the job endpoint for the latest state of the operation. That works well because the heavy work is happening in the worker, and the <code>job_id</code> gives the UI and backend a stable handle for status, tracing, and safe retries.</p>
+
+        <p>I also explain that project through hybrid risk routing and truth gating. Low-risk conversational replies can stay on a lighter path. Higher-risk requests that claim a real action, like sending an email or generating a file, go through a stricter path. The system checks the real tool result first, normalizes that result into a verified context, and then builds the final response from facts the backend can support. In simple terms, it does not trust the claim, it trusts the result. This matters because polished language can sound correct even when the real action failed.</p>
+
+        <p>IdeaGen taught me a different lesson. Many AI tools stop at one-shot generation, but real decision work needs more structure. In IdeaGen, the workflow is generate, compare, summarize, and turn the result into an execution plan. The challenge was that providers behaved differently and some outputs looked acceptable until you tried to use them for the next step. So I treated outputs like contracts, which means each step had to return the exact structure and fields that the next step expected. I added validation with correction retries and used ordered fallback when needed. I also separated deterministic finance calculations from model-written explanation so the numbers stayed grounded while the report still stayed readable.</p>
+
+        <p>Autonomous Agentic Trader helped me practice safe agent design in a fuller system. The project uses four trader personas, scheduled trade and rebalance cycles, a live control desk, and clear boundaries between reasoning and execution. The agents cannot just do anything they want. They have to go through approved tool interfaces for prices, balances, holdings, and trade actions. In this project I used MCP boundaries, where MCP means Model Context Protocol, a standard for giving approved tool access without giving direct uncontrolled power. I also kept research tools separate from execution tools, added layered price fallback, and blocked trades when the price input was not trustworthy.</p>
+
+        <p>MediNotes is where I explored AI quality control in a higher-stakes setting. It takes different kinds of clinical input and produces structured summaries with evidence links. What makes it stronger than a simple summarizer is the workflow around the summary itself. It reviews the draft, makes new versions if the review is weak, links important claims back to evidence, and turns repeated mistakes into stronger guardrails for later runs before the final output is delivered. It uses eight specialized roles in a hub-and-spoke architecture, where one central coordinator sends work to specialist roles and then gathers their results again. The summary path stays in the middle, and the other roles handle extraction, research, critic review, evidence mapping, memory, coordination, and chat.</p>
+        <p>MediNotes also supports streaming output. When a summary is being generated, the user can see progress while it is running. If the connection is lost, it can resume. This improves the experience because the user does not need to restart from zero, and it is especially useful for longer clinical workflows.</p>
+        <p>MediNotes includes a chat assistant too. The important part is that it is scoped. It only answers questions based on the patient’s visit summaries and the current consultation context. It does not act like a general chatbot. This boundary helps keep answers safe and consistent because the assistant should not guess outside the evidence it is allowed to use. I use that project to show that reducing hallucinations is a system design problem, not just a prompt-writing problem.</p>
+
+        <p>Across all of these projects, observability matters a lot to me. I use logs, traces, and metrics because multi-step systems fail in many places. The issue might be the model, the tool, the worker, the API layer, or the infrastructure. Without observability, teams end up guessing. With observability, it gets much easier to answer where the failure happened, how often it happens, and whether error rate, latency, or backlog is getting worse over time. That is important because good operations depend on evidence, not on assumptions.</p>
+
+        <p>I also think carefully about tradeoffs. In some projects I used simpler persistence early, like SQLite, because it let me move faster and keep the architecture understandable. I do not see that as a weakness if I am honest about the limit and already know the migration path. Good engineering is knowing what is good enough for the current stage and what has to change when the system grows.</p>
+
+        <p>If I’m asked about deployment, I explain that I use Terraform and CI/CD because repeatable release behavior is part of software quality. Terraform defines infrastructure clearly and reduces manual drift. GitHub Actions automates build, test, push, deploy, and health checks. I also like OIDC in CI because it gives temporary cloud credentials at deploy time instead of relying on long-lived secrets. OIDC means OpenID Connect, and in practice it lets the pipeline receive short-lived AWS credentials for one deploy run instead of storing permanent keys in the repository settings.</p>
+
+        <p>When I explain these ideas to non-technical stakeholders, I keep the language simple. I usually give one recommendation, one tradeoff, and one fallback option. If the request is vague, I reduce the ambiguity by asking what the input is, what output is expected, what constraints matter, and how success will be measured. That helps turn broad requests into something practical and buildable.</p>
+
+        <p>So if I had to summarize my direction in one longer answer, I would say this: I build practical AI systems, but I care most about whether they stay reliable under real conditions. I like workflows with clear contracts, observable execution, and honest failure handling. I want the system to be understandable, and I want my explanation of the system to be understandable too. That is the kind of engineering work I want to keep doing in a professional team.</p>
+
+        <h3>Skeptical Panel Follow-Up Practice</h3>
+        <div class="scenario-grid">
+          <article class="scenario">
+            <h4>Follow-Up 1 - Why Not Just Prompt Better?</h4>
+            <p><strong>Challenge:</strong> A panel member says your control layers sound like overcompensation for weak prompting.</p>
+            <p><strong>Practice answer:</strong> Better prompting improves answer quality, but it does not prove that a side effect really happened, and it does not remove timeout risk or provider instability. That is why I treat prompting as one layer and engineering controls as another. The prompt can help the model behave better, but the control layer is what keeps the product trustworthy when the model or tool path is imperfect.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Follow-Up 2 - Why Not Stay Synchronous?</h4>
+            <p><strong>Challenge:</strong> Interviewer says async sounds more complex than necessary.</p>
+            <p><strong>Practice answer:</strong> I do not move things to async by default. I do it when the workflow is already tool-heavy, timeout-prone, or dependent on outside providers. In that case, async is usually the clearer design because it gives the user progress, gives the backend a stable job identity, and makes retries and failure handling cleaner.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Follow-Up 3 - How Do You Know the Tradeoff Was Right?</h4>
+            <p><strong>Challenge:</strong> Panel member questions whether simpler early infrastructure was just under-engineering.</p>
+            <p><strong>Practice answer:</strong> I judge that by whether the limit is explicit and whether the migration path is already clear. If I can name the bottleneck, say what signal would trigger the upgrade, and explain how I would move to the next design, then I see it as a controlled tradeoff rather than guesswork. Under-engineering is when the system has a hidden limit and no plan for what happens next.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Follow-Up 4 - What Makes This Enterprise Ready?</h4>
+            <p><strong>Challenge:</strong> Interviewer pushes back that reliability language is not the same as enterprise readiness.</p>
+            <p><strong>Practice answer:</strong> I agree, which is why I separate the two. Enterprise readiness starts with stronger auth, access control, policy gates, audit logging, and evaluation coverage. If those controls are weak, bigger infrastructure does not make the system enterprise-ready. It only makes the weak design more expensive at scale.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Follow-Up 5 - How Would You Debug a Reliability Drop?</h4>
+            <p><strong>Challenge:</strong> Panel wants a concrete first response, not a general statement about observability.</p>
+            <p><strong>Practice answer:</strong> I would start with the user-impact signals first: success rate, latency, fallback rate, tool failure rate, and queue or backlog health. Then I would use traces and logs to narrow the failing layer, because I do not want to guess at the model if the real issue is in the worker, tool, or infrastructure path. My goal is to reduce the fault domain quickly before I start proposing fixes.</p>
+          </article>
+
+          <article class="scenario">
+            <h4>Follow-Up 6 - Why Should We Hire You Instead?</h4>
+            <p><strong>Challenge:</strong> Interviewer asks what makes your contribution different from someone who can also ship AI features.</p>
+            <p><strong>Practice answer:</strong> I think many engineers can build the first version of the feature. The difference I try to bring is that I also think about the control layer that keeps the feature reliable after launch. That means I pay attention to validation, failure modes, deployment behavior, observability, and how to explain tradeoffs clearly when the team has to make hard engineering decisions.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const tabs = document.querySelectorAll('.tab');
+      const panels = document.querySelectorAll('.panel');
+
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          tabs.forEach((t) => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          panels.forEach((p) => p.classList.remove('active'));
+
+          tab.classList.add('active');
+          tab.setAttribute('aria-selected', 'true');
+
+          const target = document.getElementById(tab.dataset.target);
+          if (target) target.classList.add('active');
+        });
+      });
+    </script>
+  </body>
+</html>
