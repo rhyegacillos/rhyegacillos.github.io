@@ -675,6 +675,27 @@ ul.hero-copy li {
   display: block;
 }
 
+/* Fullscreen diagram overlay */
+.cs-diagram-fullscreen-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #050d1c;
+  flex-direction: column;
+}
+
+.cs-diagram-fullscreen-overlay.active {
+  display: flex;
+}
+
+.cs-diagram-fullscreen-overlay iframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+}
+
+
 .cs-diagram-caption {
   margin-top: 8px;
   font-family: "IBM Plex Mono", monospace;

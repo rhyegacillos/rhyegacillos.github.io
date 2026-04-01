@@ -33,11 +33,7 @@
         <h1>Autonomous Agentic Trader</h1>
         <p class="cs-hero-sub">Production-Grade Multi-Agent Trading Infrastructure</p>
         <p class="hero-copy">
-          Building a trading system that separates signal from noise requires more than calling an
-          LLM with market data. This case study covers the four-gate portfolio-control pipeline with
-          14 deterministic risk rules, four named trader personas with individually tuned behavioral
-          parameters, the MCP tool boundaries that prevent direct market access, and the SSE-first
-          real-time architecture that keeps the operator dashboard live under reconnect and resync scenarios.
+          Building a reliable trading system takes more than passing market data to an LLM (Large Language Model — the AI brain that reads text and generates responses, like GPT-4 or Gemini). This case study covers the four-gate portfolio-control pipeline with 14 deterministic (always producing the same result for the same input — no randomness) risk rules. It also covers four named trader personas with individually tuned parameters, the MCP (Model Context Protocol — a standard interface that controls which tools the AI can call and how) tool boundaries that block direct market access, and the SSE (Server-Sent Events — a technology that lets the server push live updates to the browser without the browser asking repeatedly) architecture that keeps the operator dashboard live through reconnects and resyncs.
         </p>
         <div class="cs-hero-meta">
           <a class="portal-live-chip" href="https://manager-trader.agentairg.site/" target="_blank" rel="noopener noreferrer">Live: manager-trader.agentairg.site</a>
@@ -53,6 +49,8 @@
           <span class="cs-badge">Brave Search</span>
           <span class="cs-badge">Docker</span>
           <span class="cs-badge">AWS EC2</span>
+          <span class="cs-badge">Nginx</span>
+          <span class="cs-badge">AWS Secrets Manager</span>
           <span class="cs-badge">Terraform</span>
           <span class="cs-badge">GitHub Actions</span>
         </div>
@@ -66,9 +64,11 @@
         </div>
         <div class="cs-diagram-frame">
           <iframe
+            id="diagram-iframe"
             src="../../projects/autonomous-trader/autonomous_agentic_trader_architecture.html"
             title="Autonomous Agentic Trader Architecture Diagram"
             loading="lazy"
+            allow="fullscreen" allowfullscreen
           ></iframe>
         </div>
       </section>
@@ -81,21 +81,16 @@
         </div>
         <div class="cs-story">
           <p>
-            Most "AI trading" demos share the same failure mode: the LLM has direct access to a
-            trading API, a system prompt tells it to "make good trades," and the demo runs until it
-            makes a bad one. There is no proposal lifecycle, no risk policy, no audit trail, no
-            operator override, and no distinction between the LLM <em>reasoning about trades</em>
-            and the system <em>executing them</em>. This is not a production architecture — it is a
-            notebook experiment that happens to have a broker API key attached.
+            Most "AI trading" demos share the same failure mode. The LLM gets direct access to a trading API. A system prompt tells it to "make good trades." The demo runs until it makes a bad one. There is no proposal lifecycle, no risk policy, no audit trail, and no operator override. There is also no distinction between the LLM <em>reasoning about trades</em> and the system <em>executing them</em>. That is not a production architecture — it is a notebook experiment with a broker API key attached.
           </p>
           <p>
             A production trading system requires four things that demos consistently omit:
           </p>
           <ul>
-            <li>A <strong>controlled execution environment</strong> where every trade follows a deterministic proposal &rarr; decision &rarr; execution lifecycle</li>
-            <li>A <strong>risk policy</strong> that evaluates proposals against portfolio state, not just price signals in isolation</li>
+            <li>A <strong>controlled execution environment</strong> where every trade follows a deterministic (always producing the same result for the same input — no randomness) proposal &rarr; decision &rarr; execution lifecycle</li>
+            <li>A <strong>risk policy</strong> that checks proposals against portfolio state, not just price signals alone</li>
             <li>An <strong>operator layer</strong> that can inspect, approve, reject, or halt at any stage without stopping the engine</li>
-            <li>A <strong>persistence layer</strong> that makes every action recoverable and auditable after the fact</li>
+            <li>A <strong>persistence layer</strong> that makes every action recoverable and gives the ability to trace and review all actions after the fact</li>
           </ul>
           <p>This project builds all four as first-class systems.</p>
         </div>
@@ -109,60 +104,35 @@
         </div>
         <div class="cs-story">
           <p>
-            The system runs four named LLM trader personas — <strong>Warren, George, Ray, and
-            Cathie</strong> — each with a distinct risk profile and tuning parameters injected into
-            both their agent instructions and the risk policy evaluation. These parameters are not
-            cosmetic — they feed directly into the risk gate's numerical thresholds, portfolio
-            exposure cap multipliers, and re-entry timing logic. Each trader can also be independently
-            configured to use a different LLM model — Gemini, OpenAI, DeepSeek, or Grok — via
-            per-trader model routing.
+            The system runs four named LLM trader personas — <strong>Warren, George, Ray, and Cathie</strong> — each with a distinct risk profile and tuning parameters. These parameters are injected into both the agent instructions and the risk policy evaluation. They are not cosmetic. They feed directly into the risk gate's numerical thresholds, portfolio exposure cap multipliers, and re-entry timing logic. Each trader can also be independently configured to use a different LLM model — Gemini, OpenAI, DeepSeek, or Grok — via per-trader model routing.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Warren — Conservative</h3>
           <p>
-            Defensive first. Selective on new entries. Skeptical of stale-price reactions and
-            momentum-driven catalysts. Key parameters: <code>rebuy_aggressiveness: 0.2</code>,
-            <code>loss_cut_strictness: 0.8</code>, <code>new_entry_vs_defense_bias: 0.25</code>.
-            Portfolio cap multiplier: <strong>0.70&times;</strong>. Warren's instructions emphasize
-            capital preservation, high conviction requirements for new positions, and patience over reactivity.
+            Warren defends existing positions first and is selective about new entries. He is skeptical of stale-price reactions and momentum-driven catalysts. Key parameters: <code>rebuy_aggressiveness: 0.2</code> (how quickly to re-enter a position after exiting), <code>loss_cut_strictness: 0.8</code> (how quickly to exit a losing position), <code>new_entry_vs_defense_bias: 0.25</code> (how much to favour new trades over defending existing ones). Portfolio cap multiplier: <strong>0.70&times;</strong>. Warren's instructions focus on capital preservation, high-conviction requirements for new positions, and patience over speed.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>George — Aggressive</h3>
           <p>
-            Aggressive on fresh entries. Faster to re-engage after a position is closed.
-            Catalyst-driven — responds quickly to news events and price momentum.
-            Parameters: <code>rebuy_aggressiveness: 0.7</code>, <code>loss_cut_strictness: 0.45</code>,
-            <code>new_entry_vs_defense_bias: 0.75</code>. Portfolio cap multiplier: <strong>1.30&times;</strong>.
-            Emphasizes speed of entry, broad opportunity scanning, and willingness to absorb
-            short-term drawdown for asymmetric upside.
+            George moves fast on new entries and re-engages quickly after closing a position. He is catalyst-driven — he responds to news events and price momentum. Parameters: <code>rebuy_aggressiveness: 0.7</code>, <code>loss_cut_strictness: 0.45</code>, <code>new_entry_vs_defense_bias: 0.75</code>. Portfolio cap multiplier: <strong>1.30&times;</strong>. George prioritises speed of entry, broad opportunity scanning, and willingness to absorb short-term losses for larger potential gains.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Ray — Balanced</h3>
           <p>
-            Macro-aware and risk-conscious. Defense bias when evidence turns mixed or macro signals
-            are ambiguous. Maintains balanced exposure across sectors.
-            Parameters: <code>rebuy_aggressiveness: 0.4</code>, <code>new_entry_vs_defense_bias: 0.4</code>.
-            Portfolio cap multiplier: <strong>1.00&times;</strong> (baseline). Emphasizes
-            cross-asset context, diversification discipline, and explicit reasoning about macro
-            conditions before entering new positions.
+            Ray is aware of broad economic conditions and is mindful of risk. He leans toward defense when evidence is mixed or macro signals are unclear. He keeps balanced exposure across sectors. Parameters: <code>rebuy_aggressiveness: 0.4</code>, <code>loss_cut_strictness: 0.6</code>, <code>new_entry_vs_defense_bias: 0.4</code>. Portfolio cap multiplier: <strong>1.00&times;</strong> (baseline). Ray focuses on cross-asset context, diversification, and explicit reasoning about economic conditions before entering new positions.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Cathie — Aggressive Growth</h3>
           <p>
-            High-conviction growth focus. Innovation catalyst-first — prioritizes emerging technology
-            adoption signals and long-duration trend continuation over near-term valuation.
-            Parameters: <code>rebuy_aggressiveness: 0.8</code>, <code>loss_cut_strictness: 0.35</code>,
-            <code>new_entry_vs_defense_bias: 0.8</code>. Portfolio cap multiplier: <strong>1.30&times;</strong>.
-            Emphasizes disruptive innovation thesis validation, tolerance for volatility in
-            high-growth names, and concentration in high-conviction positions.
+            Cathie focuses on high-conviction growth opportunities. She prioritises signals of emerging technology adoption and long-term trend continuation over short-term valuation. Parameters: <code>rebuy_aggressiveness: 0.8</code>, <code>loss_cut_strictness: 0.35</code>, <code>new_entry_vs_defense_bias: 0.8</code>. Portfolio cap multiplier: <strong>1.30&times;</strong>. Cathie looks for disruptive innovation, tolerates high volatility in fast-growing names, and concentrates capital in her highest-conviction positions.
           </p>
         </div>
       </section>
@@ -175,34 +145,21 @@
         </div>
         <div class="cs-story">
           <p>
-            No trader agent executes a trade directly. Every <code>buy_shares</code> or
-            <code>sell_shares</code> MCP tool call routes to <strong>proposal intake</strong>, not
-            to the Alpaca execution API. The tool is intentionally named to match the trader's
-            mental model — it calls what it wants to happen — but the implementation routes that
-            call into a controlled pipeline. The proposal then travels through four deterministic
-            gates before anything touches a real brokerage position.
+            No trader agent executes a trade directly. Every <code>buy_shares</code> or <code>sell_shares</code> MCP tool call routes to <strong>proposal intake</strong>, not to the Alpaca execution API. The tool name matches the trader's mental model — it expresses what the trader wants to do. But the implementation sends that call into a controlled pipeline instead. The proposal then travels through four deterministic gates before anything touches a real brokerage position.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Gate 1 — Proposal Intake</h3>
           <p>
-            Proposals are normalized, persisted, and <strong>deduplicated by hash</strong> of
-            <code>(agent_name, symbol, side, quantity, time_bucket)</code> with 5-minute time
-            buckets — preventing the same trader from submitting economically identical proposals
-            within the same cycle window. Proposals expire after 30 minutes via TTL enforcement.
-            Cycle-based duplicate blocking prevents the same <code>symbol/side</code> combination
-            from being proposed twice in one cycle, even from different traders. Status progression:
-            <code>created</code> &rarr; <code>validated</code> &rarr; <code>decided</code>
-            (or <code>rejected_invalid</code> / <code>expired</code> / <code>duplicate</code>).
+            The system normalises, persists, and <strong>deduplicates proposals by hash</strong> of <code>(agent_name, symbol, side, quantity, time_bucket)</code> using 5-minute time buckets. This stops the same trader from submitting identical proposals within the same cycle window. Proposals expire after 30 minutes via TTL (Time-To-Live — an automatic expiry timer that deletes data after a set period) enforcement. Cycle-based duplicate blocking also prevents the same <code>symbol/side</code> combination from being proposed twice in one cycle, even from different traders. Status progression: <code>created</code> &rarr; <code>validated</code> &rarr; <code>decided</code> (or <code>rejected_invalid</code> / <code>expired</code> / <code>duplicate</code>).
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Gate 2 — Deterministic Risk Policy (14+ Rules)</h3>
           <p>
-            The risk policy evaluates each validated proposal against a fresh portfolio snapshot
-            pulled at evaluation time. Rules applied in sequence:
+            The risk policy checks each validated proposal against a fresh portfolio snapshot pulled at evaluation time. Rules run in sequence:
           </p>
           <ul>
             <li>Portfolio state freshness check (reject if snapshot is stale beyond threshold)</li>
@@ -221,42 +178,21 @@
             <li>Offsetting signal detection (blocks a buy when an open sell exists for the same symbol)</li>
           </ul>
           <p>
-            Each rule produces a typed reason code. Outcomes: <code>approved</code>,
-            <code>reduced</code> (quantity reduced to fit within limits with an explicit reduction reason),
-            or <code>rejected</code> with the specific rule and reason code attached.
+            Each rule produces a typed reason code. Outcomes: <code>approved</code>, <code>reduced</code> (quantity reduced to fit within limits with an explicit reduction reason), or <code>rejected</code> with the specific rule and reason code attached.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Gate 3 — Execution Gateway</h3>
           <p>
-            Three execution modes determine what happens to an approved proposal:
-            <code>proposal_only</code> (the execution path is blocked entirely; proposals are
-            captured for review but never submitted to the broker),
-            <code>approval_required</code> (proposals are queued for manual operator approval
-            via the dashboard, with TTL expiry if not acted on),
-            <code>auto_execute</code> (approved proposals proceed to Alpaca automatically).
-            On operator approval in <code>approval_required</code> mode, revalidation checks run
-            before submission — pricing must still be fresh and the risk policy must still pass
-            against current portfolio state. A proposal approved 10 minutes ago may no longer be
-            valid if the position changed. Full status chain:
-            <code>pending_approval</code> &rarr; <code>approved</code> &rarr; <code>submitted</code>
-            &rarr; <code>filled</code> (or <code>failed</code> / <code>rejected_by_human</code> / <code>expired</code>).
+            Three execution modes decide what happens to an approved proposal. <code>proposal_only</code>: the execution path is blocked entirely. Proposals are captured for review but never submitted to the broker. <code>approval_required</code>: proposals wait in a queue for manual operator approval via the dashboard, with TTL expiry if not acted on. <code>auto_execute</code>: approved proposals proceed to Alpaca automatically. In <code>approval_required</code> mode, the system runs revalidation checks before submitting to the broker — pricing must still be fresh and the risk policy must still pass against current portfolio state. A proposal approved 10 minutes ago may no longer be valid if the position changed. Full status chain: <code>pending_approval</code> &rarr; <code>approved</code> &rarr; <code>submitted</code> &rarr; <code>filled</code> (or <code>failed</code> / <code>rejected_by_human</code> / <code>expired</code>). All execution processing is asynchronous (running in the background without blocking other tasks). A background <strong>ExecutionWorker</strong> daemon thread polls the <code>execution_work_items</code> queue and processes each execution through revalidation, broker submission, reconciliation, and final state recording with retry and backoff. In <code>auto_execute</code> mode, approved decisions still persist first as <code>pending_approval</code>, then the system immediately creates work items that move them into the async queue without waiting for a human click. Non-terminal executions are re-enqueued on startup for recovery.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Gate 4 — Supporting Review / Extra Review (Optional)</h3>
           <p>
-            Triggered when 2 or more proposals conflict on the same symbol: a
-            <strong>same_symbol_opposite_side</strong> conflict (one trader buying while another
-            is selling), a <strong>same_symbol_same_side_competing</strong> conflict (multiple
-            traders competing for the same entry), or a same-sector competing allocation conflict.
-            Routes to an advisory LLM for supporting review or extra review analysis that considers
-            each trader's persona parameters and current portfolio context. <strong>Deterministic
-            policy always has final authority</strong> — the LLM output is a recommendation, not a
-            decision. A shadow-style supporting review path is available for running the analysis
-            in parallel without blocking the primary pipeline path.
+            This gate triggers when two or more proposals conflict on the same symbol. Three conflict types are handled: a <strong>same_symbol_opposite_side</strong> conflict (one trader buying while another is selling), a <strong>same_symbol_same_side_competing</strong> conflict (multiple traders competing for the same entry), or a same-sector competing allocation conflict. The system routes conflicting proposals to an advisory LLM for analysis. The LLM considers each trader's persona parameters and current portfolio context. <strong>Deterministic policy always has final authority</strong> — the LLM output is a recommendation, not a decision. A shadow-style review path is available for running the analysis in parallel without blocking the primary pipeline.
           </p>
         </div>
       </section>
@@ -269,50 +205,28 @@
         </div>
         <div class="cs-story">
           <p>
-            Traders never call market APIs or account APIs directly — all access flows through
-            <strong>typed MCP tool contracts</strong>. This makes every external interaction
-            auditable at the tool boundary, independently testable, and replaceable without
-            modifying the agent loop. A failed MCP session for one trader is isolated and retried
-            independently — it does not collapse the sessions of other traders running in the same cycle.
+            Traders never call market APIs or account APIs directly. All access flows through <strong>typed MCP tool contracts</strong>. This makes every external interaction traceable at the tool boundary, independently testable, and replaceable without modifying the agent loop. A failed MCP session for one trader is isolated and retried independently. It does not bring down the sessions of other traders running in the same cycle.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Accounts Server</h3>
           <p>
-            Tools: <code>get_balance</code>, <code>get_holdings</code>,
-            <code>buy_shares</code>, <code>sell_shares</code>, <code>change_strategy</code>.
-            The <code>buy_shares</code> and <code>sell_shares</code> tools are intentionally named
-            as if they execute — the trader calls what it semantically intends — but the
-            implementation submits a structured proposal to the four-gate pipeline. This keeps the
-            trader's reasoning naturalistic while enforcing full pipeline control on the execution side.
+            Tools: <code>get_balance</code>, <code>get_holdings</code>, <code>buy_shares</code>, <code>sell_shares</code>, <code>change_strategy</code>. The <code>buy_shares</code> and <code>sell_shares</code> tools are named as if they execute directly. The trader calls what it intends to do. But the implementation submits a structured proposal to the four-gate pipeline instead. This keeps the trader's reasoning natural while enforcing full pipeline control on the execution side.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Market Server</h3>
           <p>
-            Tools: <code>lookup_share_price</code> (multi-source resolution chain:
-            <strong>Alpaca &rarr; Polygon &rarr; cache</strong>),
-            <code>get_quote_freshness</code>, <code>get_symbol_news_summary</code>,
-            <code>get_symbol_event_risk</code>. Price source quality is tracked across the
-            resolution chain — stale or low-trust quotes trigger the
-            <code>quote_low_trust</code> routing path in Gate 2, which escalates to the price
-            source adequacy rule and may reject the proposal rather than execute on unreliable pricing.
+            Tools: <code>lookup_share_price</code>, <code>get_quote_freshness</code>, <code>get_symbol_news_summary</code>, <code>get_symbol_event_risk</code>. Price resolution follows two distinct paths. <strong>Trader-side</strong> reads use <code>Alpaca &rarr; Polygon &rarr; cache</code> (general fallback chain). <strong>Portfolio-control</strong> decision and execution authority uses the strict <code>Alpaca &rarr; Polygon</code> path only — no cached data is used for new decisions or executions. Price source quality is tracked across the resolution chain. Stale or low-trust quotes trigger the <code>quote_low_trust</code> path in Gate 2. That escalates to the price source adequacy rule and may reject the proposal rather than execute on unreliable pricing. When multiple traders request the same symbol at the same time, the first request becomes the leader and others wait for that shared result. This prevents duplicate provider calls during cold-cache bursts.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Memory Server (PostgreSQL Knowledge Graph)</h3>
           <p>
-            Per-trader knowledge graph stored in PostgreSQL —
-            <code>create_entities</code>, <code>create_relations</code>,
-            <code>search_nodes</code>, <code>read_graph</code>. Traders accumulate research
-            context across cycles: companies analyzed, market conditions observed, sector dynamics,
-            prior trade outcomes, and analyst notes. This forms a <strong>persistent memory</strong>
-            that informs future reasoning without requiring the operator to re-inject context at
-            the start of each cycle. Memory is scoped per trader — Warren's knowledge graph does
-            not contaminate Cathie's.
+            Per-trader knowledge graph stored in PostgreSQL — <code>create_entities</code>, <code>create_relations</code>, <code>search_nodes</code>, <code>read_graph</code>. Traders build up research context across cycles: companies analysed, market conditions observed, sector dynamics, prior trade outcomes, and analyst notes. This forms a <strong>persistent memory</strong> that informs future reasoning without requiring the operator to re-inject context at the start of each cycle. Memory is scoped per trader — Warren's knowledge graph does not mix with Cathie's.
           </p>
         </div>
       </section>
@@ -325,50 +239,38 @@
         </div>
         <div class="cs-story">
           <p>
-            The operator dashboard needs to stay live across reconnects, engine restarts, and
-            network interruptions without losing state or showing stale data. This requires more
-            than a simple WebSocket or polling endpoint — it requires a delivery mechanism that
-            handles message replay on reconnect, graceful fallback when the stream is unavailable,
-            and a consistency model that is correct whether the engine is running or stopped.
+            The operator dashboard must stay live across reconnects, engine restarts, and network interruptions without losing state or showing stale data. A simple WebSocket or polling endpoint is not enough. The system needs a delivery mechanism that replays missed messages on reconnect, falls back gracefully when the stream is unavailable, and stays consistent whether the engine is running or stopped.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>SSE Broker with 300-Event Ring Buffer</h3>
           <p>
-            The dashboard receives all state updates via a single <strong>Server-Sent Events
-            stream</strong>. The SSE broker maintains a 300-event ring buffer keyed by event
-            sequence ID. On reconnect, the client sends <code>Last-Event-ID</code> and the broker
-            replays all missed events from the buffer position forward — the client reconstructs
-            any state changes that occurred during the disconnection without a full page reload.
-            If the <code>Last-Event-ID</code> falls outside buffer coverage (disconnection longer
-            than the buffer window), the client detects the desync condition and triggers a
-            <strong>full REST resync</strong> to rebuild current state before resuming stream consumption.
+            The dashboard receives all state updates via a single SSE stream. The SSE broker maintains a ring buffer (a fixed-size memory store that keeps the most recent N items, overwriting the oldest when full) of 300 events keyed by sequence ID. On reconnect, the client sends <code>Last-Event-ID</code> and the broker replays all missed events from that position forward. The client rebuilds any state changes that occurred during the disconnection without a full page reload. The broker keeps a per-subscriber queue of 64 items and uses sequential event IDs in <code>evt_YYYYMMDD_NNNNNN</code> format. The stream sends heartbeat comments every 20 seconds to keep connections alive through proxies. If the <code>Last-Event-ID</code> falls outside buffer coverage — meaning the disconnection was longer than the buffer window — the client detects the desync condition and triggers a <strong>full REST resync</strong> to rebuild current state before resuming stream consumption.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Disconnected Fallback Polling</h3>
           <p>
-            When the SSE stream is unavailable — network interruption, server restart, connection
-            drop — the frontend switches to polling the <code>versions</code> endpoint every 20
-            seconds to detect state changes that require a UI update. Polling stops the moment
-            the stream successfully reconnects. The dashboard degrades gracefully to polling under
-            adverse network conditions without requiring operator intervention, and immediately
-            restores the more efficient SSE path once connectivity is re-established.
+            When the SSE stream is unavailable — network interruption, server restart, connection drop — the frontend switches to polling the <code>versions</code> endpoint every 20 seconds to detect state changes that need a UI update. Polling stops the moment the stream reconnects successfully. The dashboard falls back to polling under bad network conditions without requiring operator intervention. It immediately restores the more efficient SSE path once connectivity is re-established.
+          </p>
+        </div>
+
+        <div class="cs-decision">
+          <h3>Event Types and Surface Refresh Discipline</h3>
+          <p>
+            The SSE stream carries 12 distinct event types across 6 scopes — <code>bootstrap</code>, <code>manager</code>, <code>trader</code>, <code>scheduler</code>, <code>market</code>, and <code>execution_mode</code>. Events include <code>bootstrap_updated</code>, <code>manager_updated</code>, <code>proposal_created</code>, <code>decision_updated</code>, <code>execution_updated</code>, <code>trader_updated</code>, <code>trader_logs_updated</code>, <code>scheduler_updated</code>, <code>market_updated</code>, <code>market_status_changed</code>, <code>execution_mode_updated</code>, and <code>resync_required</code>.
+          </p>
+          <p>
+            Surface refresh is conditional by design. Active surfaces refresh immediately on relevant events via non-blocking background fetches. Inactive surfaces are marked stale and refresh only when activated. During bursts of related events, coalescing prevents duplicate overlapping fetches.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Read-Model Layer for Dashboard Consistency</h3>
           <p>
-            The dashboard query paths use a dedicated read-model with two operating modes:
-            <strong>persisted shells</strong> (when the trading engine is stopped, the dashboard
-            is served from cached read-model snapshots persisted in PostgreSQL — the operator
-            sees correct portfolio state even with the engine offline) and <strong>live reads</strong>
-            (when the engine is running, queries are made directly against current state for
-            correctness under rapidly changing position data). There is no blank or stale state
-            window during engine restarts, between cycles, or under any stop/start transition.
+            The dashboard query paths use a dedicated read-model with two operating modes. <strong>Persisted shells</strong>: when the trading engine is stopped, the dashboard is served from cached read-model snapshots stored in PostgreSQL. The operator sees correct portfolio state even with the engine offline. <strong>Live reads</strong>: when the engine is running, queries go directly against current state for correctness under rapidly changing position data. There is no blank or stale state window during engine restarts, between cycles, or during any stop/start transition.
           </p>
         </div>
       </section>
@@ -385,8 +287,16 @@
             <p>Control plane, static file host, and SSE broker. Serves both the API and the static Next.js frontend on port 8000. 40+ REST endpoints covering scheduler lifecycle, proposal management, execution controls, read-model queries, and audit log access.</p>
           </div>
           <div class="cs-stack-item">
+            <h4>ExecutionWorker (daemon thread)</h4>
+            <p>Background daemon thread that polls the execution_work_items queue and processes executions asynchronously. Starts on app startup, stops on shutdown. Handles approval-time revalidation, broker mutation, reconciliation, and terminal state emission with retry/backoff.</p>
+          </div>
+          <div class="cs-stack-item">
+            <h4>Market-Status Watcher</h4>
+            <p>Background watcher that polls market status every 60 seconds. Drives the backend-controlled scheduler auto-start at market open — previously browser-driven, now handled server-side so the scheduler can start without an active browser tab.</p>
+          </div>
+          <div class="cs-stack-item">
             <h4>Next.js 14 (static export)</h4>
-            <p>Dashboard built to static HTML/JS, served directly by FastAPI. No separate frontend server required — the entire frontend is a deployment artifact bundled into the container image.</p>
+            <p>Dashboard built to static HTML/JS, served directly by FastAPI. No separate frontend server required — the entire frontend is a deployment artifact bundled into the container image. The operator workspace provides 5 tabs: Manager overview and per-Trader views for Warren, George, Ray, and Cathie.</p>
           </div>
           <div class="cs-stack-item">
             <h4>PostgreSQL 16 + SQLAlchemy 2.x + Alembic</h4>
@@ -405,8 +315,20 @@
             <p>Alpaca for trade execution and account state — accessed only through the Accounts MCP server after full four-gate approval. Alpaca and Polygon handle market price resolution, while Brave Search is used for research, news summaries, and event-risk context.</p>
           </div>
           <div class="cs-stack-item">
+            <h4>Cycle-Scoped Quote Authority</h4>
+            <p>Each decision, preflight, or execution cycle starts with a fresh in-memory quote cache. Symbols are fetched once per cycle and reused within that cycle, but prior-cycle cache and persisted quote records are never authoritative for a new cycle — preventing stale prices from leaking into live decisions while still avoiding rate-limit pressure from repeated same-cycle lookups.</p>
+          </div>
+          <div class="cs-stack-item">
+            <h4>Execution Recovery</h4>
+            <p>On startup, non-terminal executions are detected and re-enqueued to the ExecutionWorker queue. In auto_execute mode, recovered items are automatically re-enqueued so the execution pipeline resumes without operator intervention after process restarts.</p>
+          </div>
+          <div class="cs-stack-item">
             <h4>Docker + AWS EC2/ECR</h4>
             <p>Single containerized deployment on EC2. Chosen over serverless because the trading engine runs as a long-lived subprocess — Lambda cold starts would break the persistent MCP server sessions, the scheduler lifecycle, and the SSE broker state.</p>
+          </div>
+          <div class="cs-stack-item">
+            <h4>Nginx + Certbot (HTTPS termination)</h4>
+            <p>Optional Nginx reverse proxy with Certbot-managed TLS certificates terminates HTTPS on the EC2 instance. Configured with extended upstream timeouts and structured access logging including request path, status, timing, and upstream response time.</p>
           </div>
           <div class="cs-stack-item">
             <h4>Terraform</h4>
@@ -423,5 +345,30 @@
     </main>
     </div>
     <script src="../../script.js"></script>
+    <div class="cs-diagram-fullscreen-overlay" id="diagramFullscreen">
+      <iframe id="fullscreen-iframe" src="" allowfullscreen></iframe>
+    </div>
+    <script>
+      window.addEventListener('message', function(e) {
+        if (e.data && e.data.type === 'diagram-fullscreen') openDiagramFullscreen();
+        if (e.data && e.data.type === 'diagram-fullscreen-close') closeDiagramFullscreen();
+      });
+      function openDiagramFullscreen() {
+        var src = document.getElementById('diagram-iframe').src.split('?')[0] + '?fs=1';
+        var overlay = document.getElementById('diagramFullscreen');
+        document.getElementById('fullscreen-iframe').src = src;
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeDiagramFullscreen() {
+        var overlay = document.getElementById('diagramFullscreen');
+        overlay.classList.remove('active');
+        document.getElementById('fullscreen-iframe').src = '';
+        document.body.style.overflow = '';
+      }
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeDiagramFullscreen();
+      });
+    </script>
   </body>
 </html>

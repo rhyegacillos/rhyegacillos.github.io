@@ -9,6 +9,22 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; background: #050d1c; overflow: hidden; }
     .wrap { display: flex; flex-direction: column; height: 100%; }
+    .legend {
+      display: flex; gap: 18px; flex-wrap: wrap; align-items: center; flex-shrink: 0;
+      padding: 6px 14px;
+      background: rgba(13,30,56,0.88); border: 1px solid rgba(149,175,219,0.15);
+      border-radius: 5px; margin: 4px 4px 0;
+    }
+    .legend-item { display: flex; align-items: center; gap: 7px; font-size: 9px; color: #8fa3c0; font-family: 'IBM Plex Mono', monospace; }
+    .legend .fs-btn {
+      margin-left: auto; display: flex; align-items: center; gap: 5px;
+      background: transparent; border: 1px solid rgba(149,175,219,0.25);
+      color: #8fa3c0; font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+      padding: 3px 10px; border-radius: 5px; cursor: pointer;
+      transition: border-color 0.2s, color 0.2s; white-space: nowrap;
+    }
+    .legend .fs-btn:hover { border-color: #3d7eff; color: #3d7eff; }
+    .legend .fs-btn svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; }
     svg { width: 100%; flex: 1; min-height: 0; }
     .node, .conn { transition: opacity 0.18s; }
     .node > rect { transition: fill 0.18s, stroke 0.18s; }
@@ -38,27 +54,55 @@
 </head>
 <body>
 <div class="wrap">
+  <div class="legend">
+    <div class="legend-item">
+      <svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#3d7eff" stroke-width="1.8" marker-end="url(#leg-blue)"/></svg>
+      Request · parallel
+    </div>
+    <div class="legend-item">
+      <svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#3d7eff" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#leg-blue)"/></svg>
+      Response / return
+    </div>
+    <div class="legend-item">
+      <svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#2dd4bf" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#leg-teal)"/></svg>
+      JWT auth
+    </div>
+    <div class="legend-item">
+      <svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#10b981" stroke-width="1.8" marker-end="url(#leg-green)"/></svg>
+      Pipeline flow
+    </div>
+    <div class="legend-item">
+      <svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#a78bfa" stroke-width="1.8" marker-end="url(#leg-purple)"/></svg>
+      Artifact storage
+    </div>
+    <div class="legend-item">
+      <svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#d4a017" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#leg-amber)"/></svg>
+      Secret injection
+    </div>
+    <div class="legend-item" style="color:#475569; font-size:9px;">Hover nodes to highlight paths</div>
+    <button class="fs-btn" onclick="toggleFullscreen()">
+      <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
+      Fullscreen
+    </button>
+  </div>
+<svg style="position:absolute;width:0;height:0">
+  <defs>
+    <marker id="leg-blue"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#3d7eff"/></marker>
+    <marker id="leg-green"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#10b981"/></marker>
+    <marker id="leg-teal"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#2dd4bf"/></marker>
+    <marker id="leg-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#a78bfa"/></marker>
+    <marker id="leg-amber"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#d4a017"/></marker>
+  </defs>
+</svg>
 <svg viewBox="0 0 1140 660" preserveAspectRatio="xMidYMid meet" role="img" aria-label="IdeaGen Architecture Diagram">
   <defs>
     <marker id="arr-blue"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#3d7eff"/></marker>
     <marker id="arr-green"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#10b981"/></marker>
     <marker id="arr-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#a78bfa"/></marker>
     <marker id="arr-teal"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#2dd4bf"/></marker>
+    <marker id="arr-amber"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#d4a017"/></marker>
   </defs>
 
-  <!-- ═══ LEGEND BAR ═══ -->
-  <rect x="18" y="14" width="1104" height="26" rx="5" fill="rgba(13,30,56,0.88)" stroke="rgba(149,175,219,0.15)" stroke-width="1"/>
-  <line x1="30"  y1="27" x2="54"  y2="27" stroke="#3d7eff" stroke-width="1.8" marker-end="url(#arr-blue)"/>
-  <text x="60"  y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Request · parallel</text>
-  <line x1="168" y1="27" x2="192" y2="27" stroke="#3d7eff" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#arr-blue)"/>
-  <text x="198" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Response / return</text>
-  <line x1="320" y1="27" x2="344" y2="27" stroke="#2dd4bf" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#arr-teal)"/>
-  <text x="350" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">JWT auth</text>
-  <line x1="422" y1="27" x2="446" y2="27" stroke="#10b981" stroke-width="1.8" marker-end="url(#arr-green)"/>
-  <text x="452" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Pipeline flow</text>
-  <line x1="534" y1="27" x2="558" y2="27" stroke="#a78bfa" stroke-width="1.8" marker-end="url(#arr-purple)"/>
-  <text x="564" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Artifact storage</text>
-  <text x="872" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Hover nodes to highlight paths</text>
 
   <!-- ═══ ZONE BACKGROUNDS ═══ -->
   <rect x="18"  y="46" width="200" height="578" rx="4" fill="rgba(13,40,90,0.14)"/>
@@ -84,11 +128,13 @@
   <!-- c-store: Pipeline → PostgreSQL -->
   <path id="c-store"  class="conn" d="M 784,423 L 800,423"                               stroke="#a78bfa" stroke-width="1.8" fill="none" marker-end="url(#arr-purple)"/>
   <!-- c-pdf: PostgreSQL → WeasyPrint -->
-  <path id="c-pdf"    class="conn" d="M 955,403 C 963,403 963,379 970,379"               stroke="#a78bfa" stroke-width="1.6" fill="none" marker-end="url(#arr-purple)"/>
+  <path id="c-pdf"    class="conn" d="M 955,390 L 970,390"                               stroke="#a78bfa" stroke-width="1.6" fill="none" marker-end="url(#arr-purple)"/>
   <!-- c-email: WeasyPrint → Resend -->
   <path id="c-email"  class="conn" d="M 1035,402 L 1035,430"                             stroke="#a78bfa" stroke-width="1.6" fill="none" marker-end="url(#arr-purple)"/>
   <!-- c-return: PostgreSQL → Next.js -->
   <path id="c-return" class="conn" d="M 877,468 L 877,560 L 109,560 L 109,128"          stroke="#3d7eff" stroke-width="1.4" stroke-dasharray="5 3" fill="none" marker-end="url(#arr-blue)"/>
+  <!-- c-secrets: Secrets Manager → FastAPI (inject at startup) -->
+  <path id="c-secrets" class="conn" d="M 232,277 L 220,277 L 220,100 L 232,100" stroke="#d4a017" stroke-width="1.2" stroke-dasharray="4 3" fill="none" marker-end="url(#arr-amber)"/>
 
   <!-- ═══ ANIMATED FLOW DOTS ═══ -->
   <circle class="conn-dot" data-conn="c-req" r="2.5" fill="#3d7eff">
@@ -116,13 +162,16 @@
     <animateMotion dur="0.8s" repeatCount="indefinite" rotate="auto" path="M 784,423 L 800,423"/>
   </circle>
   <circle class="conn-dot" data-conn="c-pdf" r="2.5" fill="#a78bfa">
-    <animateMotion dur="1s" repeatCount="indefinite" rotate="auto" path="M 955,403 C 963,403 963,379 970,379"/>
+    <animateMotion dur="1s" repeatCount="indefinite" rotate="auto" path="M 955,390 L 970,390"/>
   </circle>
   <circle class="conn-dot" data-conn="c-email" r="2.5" fill="#a78bfa">
     <animateMotion dur="0.8s" repeatCount="indefinite" rotate="auto" path="M 1035,402 L 1035,430"/>
   </circle>
   <circle class="conn-dot" data-conn="c-return" r="2" fill="#3d7eff">
     <animateMotion dur="3.5s" repeatCount="indefinite" rotate="auto" path="M 877,468 L 877,560 L 109,560 L 109,128"/>
+  </circle>
+  <circle class="conn-dot" data-conn="c-secrets" r="2" fill="#d4a017">
+    <animateMotion dur="2.5s" repeatCount="indefinite" rotate="auto" path="M 232,277 L 220,277 L 220,100 L 232,100"/>
   </circle>
 
   <!-- ═══ NODES ═══ -->
@@ -131,7 +180,7 @@
   <g id="node-client" class="node" style="cursor:pointer">
     <rect x="28" y="76" width="162" height="52" rx="8" fill="#0a1929" stroke="rgba(61,126,255,0.52)" stroke-width="1.8"/>
     <text x="109" y="98"  text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="13">Next.js</text>
-    <text x="109" y="115" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="9.5">S3 · CloudFront</text>
+    <text x="109" y="115" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="9.5">FastAPI static host</text>
   </g>
 
   <!-- Clerk Auth -->
@@ -256,14 +305,14 @@
   <!-- ═══ ANNOTATION OVERLAYS ═══ -->
 
   <!-- Contract-First overlay (below FastAPI, like Truth-Gated in DA) -->
-  <rect x="232" y="146" width="175" height="44" rx="6" fill="rgba(13,18,46,0.90)" stroke="rgba(61,126,255,0.22)" stroke-width="1"/>
-  <text x="319" y="162" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">Contract-First</text>
-  <text x="319" y="175" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">Pydantic · retry loop · safe fallback</text>
-  <text x="319" y="186" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">cache-before-infer</text>
+  <rect x="232" y="146" width="205" height="50" rx="6" fill="rgba(13,18,46,0.90)" stroke="rgba(61,126,255,0.22)" stroke-width="1"/>
+  <text x="334" y="163" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">Contract-First</text>
+  <text x="334" y="177" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">Pydantic · retry loop · safe fallback</text>
+  <text x="334" y="189" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">cache-before-infer</text>
 
   <!-- Provider fallback note (below LLM Router container) -->
-  <rect x="452" y="283" width="250" height="14" rx="4" fill="rgba(10,20,14,0.88)" stroke="rgba(61,126,255,0.18)" stroke-width="1"/>
-  <text x="577" y="294" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">per-provider model chain · same-provider fallback only</text>
+  <rect x="452" y="283" width="310" height="14" rx="4" fill="rgba(10,20,14,0.88)" stroke="rgba(61,126,255,0.18)" stroke-width="1"/>
+  <text x="607" y="294" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">per-provider model chain · same-provider fallback only</text>
 
   <!-- Go/Conditional/No-Go gate annotation -->
   <rect x="625" y="476" width="175" height="28" rx="5" fill="rgba(13,18,8,0.92)" stroke="rgba(245,158,11,0.32)" stroke-width="1"/>
@@ -275,8 +324,15 @@
   <text x="323" y="560" text-anchor="middle" fill="#3d7eff" font-family="'IBM Plex Mono',monospace" font-size="8.5">artifact data to client</text>
 
   <!-- Infra footer badge -->
-  <rect x="28" y="572" width="210" height="18" rx="4" fill="rgba(13,30,56,0.85)" stroke="rgba(149,175,219,0.15)" stroke-width="1"/>
-  <text x="133" y="585" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">Route 53 · ECR · App Runner · RDS</text>
+  <rect x="28" y="572" width="290" height="18" rx="4" fill="rgba(13,30,56,0.85)" stroke="rgba(149,175,219,0.15)" stroke-width="1"/>
+  <text x="173" y="585" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">Route 53 · ECR · App Runner · RDS · Secrets Mgr</text>
+
+  <!-- AWS Secrets Manager -->
+  <g id="node-secrets" class="node" style="cursor:pointer">
+    <rect x="232" y="252" width="175" height="50" rx="7" fill="#1a1505" stroke="rgba(212,160,23,0.45)" stroke-width="1.8"/>
+    <text x="319" y="273" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">AWS Secrets Manager</text>
+    <text x="319" y="289" text-anchor="middle" fill="#b89c30" font-family="'IBM Plex Mono',monospace" font-size="8.5">API keys · DB credentials</text>
+  </g>
 
   <!-- ═══ ZONE LABELS ═══ -->
   <text x="118" y="638" text-anchor="middle" fill="rgba(149,175,219,0.32)" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="2">CLIENT</text>
@@ -290,7 +346,7 @@
 
 <script>
 const tooltips = {
-  'node-client':    { title: 'Next.js Frontend',    body: 'Static export on S3 served via CloudFront. Adaptive UI: guided flow mode (step-by-step) and status flow mode (real-time progress). localStorage recovery on reload.' },
+  'node-client':    { title: 'Next.js Frontend',    body: 'Static export built into the Docker image and served by FastAPI from the same App Runner container. Adaptive UI: guided flow mode (step-by-step) and status flow mode (real-time progress). localStorage recovery on reload.' },
   'node-clerk':     { title: 'Clerk Auth',           body: 'JWT verified on every API request. All artifact queries scoped to the verified user ID — no cross-user visibility. Organization-level artifact isolation.' },
   'node-config':    { title: 'Run Config',           body: 'User-defined generation inputs: persona (shapes system prompt), industry, and constraints (shapes user prompt). Also selects which LLM providers to run. Premium: recommend_combination_agent (↺ ×3) recommends a persona + constraint pair from allowed lists using exact-string selection semantics.' },
   'node-fastapi':   { title: 'FastAPI · App Runner', body: 'Orchestration layer: builds prompts from persona + industry + constraints, resolves model labels to provider chains, multi-model fan-out, Pydantic validation, deterministic financial computation, PDF generation, email delivery.' },
@@ -303,13 +359,14 @@ const tooltips = {
   'node-postgres':  { title: 'PostgreSQL RDS',       body: 'All artifacts persisted: runs, comparisons, decision summaries, execution plans. Lifecycle: draft → finalized → archived. Full provenance chain back to ideation inputs — every projection re-derivable from stored formula inputs. Alembic migrations on startup.' },
   'node-weasyprint':{ title: 'WeasyPrint PDF',       body: 'Server-side HTML→PDF rendering. Structured templates from verified artifact data — consistent formatting independent of LLM output variance.' },
   'node-resend':    { title: 'Resend Email',         body: 'Verified-send pattern: server confirms receipt before recording delivery success in artifact lifecycle state. Failed sends surface as artifact errors, not silently dropped.' },
+  'node-secrets':   { title: 'AWS Secrets Manager',  body: 'Runtime secrets storage: LLM provider API keys (OpenAI, Gemini, DeepSeek, Grok), PostgreSQL credentials, Clerk JWT secret, and Resend API key. Injected into the App Runner container at startup — no secrets in source control or environment files.' },
 };
 
 const connMap = {
   'node-client':    ['c-req','c-resp','c-return'],
   'node-clerk':     ['c-auth'],
   'node-config':    ['c-config'],
-  'node-fastapi':   ['c-req','c-resp','c-auth','c-config','c-route','c-result','c-pipe'],
+  'node-fastapi':   ['c-req','c-resp','c-auth','c-config','c-route','c-result','c-pipe','c-secrets'],
   'node-llmrouter': ['c-route','c-result'],
   'node-openai':    ['c-route','c-result'],
   'node-gemini':    ['c-route','c-result'],
@@ -319,10 +376,11 @@ const connMap = {
   'node-postgres':  ['c-store','c-pdf','c-return'],
   'node-weasyprint':['c-pdf','c-email'],
   'node-resend':    ['c-email'],
+  'node-secrets':   ['c-secrets'],
 };
 
 const allNodes = Object.keys(connMap);
-const allConns = ['c-req','c-resp','c-auth','c-config','c-route','c-result','c-pipe','c-store','c-pdf','c-email','c-return'];
+const allConns = ['c-req','c-resp','c-auth','c-config','c-route','c-result','c-pipe','c-store','c-pdf','c-email','c-return','c-secrets'];
 const tip = document.getElementById('tooltip');
 
 function showTip(e, id) {
@@ -371,6 +429,19 @@ allNodes.forEach(id => {
   el.addEventListener('mousemove', moveTip);
   el.addEventListener('mouseleave', reset);
 });
+
+var isFs = new URLSearchParams(window.location.search).has('fs');
+var fsBtn = document.querySelector('.fs-btn');
+if (isFs) {
+  fsBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg> Close';
+}
+function toggleFullscreen() {
+  if (isFs) {
+    window.parent.postMessage({ type: 'diagram-fullscreen-close' }, '*');
+  } else if (window.parent !== window) {
+    window.parent.postMessage({ type: 'diagram-fullscreen' }, '*');
+  }
+}
 </script>
 </body>
 </html>

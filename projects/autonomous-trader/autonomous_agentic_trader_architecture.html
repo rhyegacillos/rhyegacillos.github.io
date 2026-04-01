@@ -9,6 +9,22 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; background: #050d1c; overflow: hidden; }
     .wrap { display: flex; flex-direction: column; height: 100%; }
+    .legend {
+      display: flex; gap: 18px; flex-wrap: wrap; align-items: center; flex-shrink: 0;
+      padding: 6px 14px;
+      background: rgba(13,30,56,0.88); border: 1px solid rgba(149,175,219,0.15);
+      border-radius: 5px; margin: 4px 4px 0;
+    }
+    .legend-item { display: flex; align-items: center; gap: 7px; font-size: 9px; color: #8fa3c0; font-family: 'IBM Plex Mono', monospace; }
+    .legend .fs-btn {
+      margin-left: auto; display: flex; align-items: center; gap: 5px;
+      background: transparent; border: 1px solid rgba(149,175,219,0.25);
+      color: #8fa3c0; font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+      padding: 3px 10px; border-radius: 5px; cursor: pointer;
+      transition: border-color 0.2s, color 0.2s; white-space: nowrap;
+    }
+    .legend .fs-btn:hover { border-color: #3d7eff; color: #3d7eff; }
+    .legend .fs-btn svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; }
     svg { width: 100%; flex: 1; min-height: 0; }
     .node, .conn { transition: opacity 0.18s; }
     .node > rect { transition: fill 0.18s, stroke 0.18s; }
@@ -38,6 +54,47 @@
 </head>
 <body>
 <div class="wrap">
+  <div class="legend">
+    <div class="legend-item">
+      <svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#3d7eff" stroke-width="1.8" marker-end="url(#leg-blue)"/></svg>
+      REST request
+    </div>
+    <div class="legend-item">
+      <svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#3d7eff" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#leg-blue)"/></svg>
+      REST response
+    </div>
+    <div class="legend-item">
+      <svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#2dd4bf" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#leg-teal)"/></svg>
+      SSE · live events
+    </div>
+    <div class="legend-item">
+      <svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#10b981" stroke-width="1.8" marker-end="url(#leg-green)"/></svg>
+      Agent orchestration
+    </div>
+    <div class="legend-item">
+      <svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#f59e0b" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#leg-amber)"/></svg>
+      Proposal pipeline
+    </div>
+    <div class="legend-item">
+      <svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="#a78bfa" stroke-width="1.8" marker-end="url(#leg-purple)"/></svg>
+      Storage
+    </div>
+    <div class="legend-item" style="color:#475569; font-size:9px;">Hover nodes to highlight paths</div>
+    <button class="fs-btn" onclick="toggleFullscreen()">
+      <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
+      Fullscreen
+    </button>
+  </div>
+<!-- Legend arrow markers for inline SVGs -->
+<svg style="position:absolute;width:0;height:0">
+  <defs>
+    <marker id="leg-blue"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#3d7eff"/></marker>
+    <marker id="leg-green"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#10b981"/></marker>
+    <marker id="leg-teal"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#2dd4bf"/></marker>
+    <marker id="leg-amber"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#f59e0b"/></marker>
+    <marker id="leg-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#a78bfa"/></marker>
+  </defs>
+</svg>
 <!--
   viewBox 1400×680
   Zones (x):  CLIENT 18–180 | FASTAPI·EC2 184–452 | AGENT RUNTIME 456–808 | PIPELINE·STORAGE 812–1382
@@ -52,21 +109,6 @@
     <marker id="arr-amber"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 Z" fill="#f59e0b"/></marker>
   </defs>
 
-  <!-- ═══ LEGEND BAR ═══ -->
-  <rect x="18" y="14" width="1364" height="26" rx="5" fill="rgba(13,30,56,0.88)" stroke="rgba(149,175,219,0.15)" stroke-width="1"/>
-  <line x1="30"  y1="27" x2="54"  y2="27" stroke="#3d7eff" stroke-width="1.8" marker-end="url(#arr-blue)"/>
-  <text x="60"  y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">REST request</text>
-  <line x1="162" y1="27" x2="186" y2="27" stroke="#3d7eff" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#arr-blue)"/>
-  <text x="192" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">REST response</text>
-  <line x1="314" y1="27" x2="338" y2="27" stroke="#2dd4bf" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#arr-teal)"/>
-  <text x="344" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">SSE · live events</text>
-  <line x1="462" y1="27" x2="486" y2="27" stroke="#10b981" stroke-width="1.8" marker-end="url(#arr-green)"/>
-  <text x="492" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Agent orchestration</text>
-  <line x1="622" y1="27" x2="646" y2="27" stroke="#f59e0b" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#arr-amber)"/>
-  <text x="652" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Proposal pipeline</text>
-  <line x1="772" y1="27" x2="796" y2="27" stroke="#a78bfa" stroke-width="1.8" marker-end="url(#arr-purple)"/>
-  <text x="802" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Storage</text>
-  <text x="1080" y="31" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="9">Hover nodes to highlight paths</text>
 
   <!-- ═══ ZONE BACKGROUNDS ═══ -->
   <!-- CLIENT: 18–180 -->
@@ -104,6 +146,12 @@
   <path id="c-mem"    class="conn" d="M 736,461 L 872,461 L 872,472"                        stroke="#a78bfa" stroke-width="1.6" fill="none" marker-end="url(#arr-purple)"/>
   <!-- c-event: PostgreSQL left edge x=872 → SSE Broker -->
   <path id="c-event"  class="conn" d="M 872,517 L 90,517 L 90,254 L 184,254"                stroke="#2dd4bf" stroke-width="1.4" stroke-dasharray="5 3" fill="none" marker-end="url(#arr-teal)"/>
+  <!-- c-watch-emit: Watchers → SSE Emitter -->
+  <path id="c-watch-emit" class="conn" d="M 320,176 L 320,186"                               stroke="#2dd4bf" stroke-width="1.2" fill="none" marker-end="url(#arr-teal)"/>
+  <!-- c-emit-broker: SSE Emitter → SSE Broker -->
+  <path id="c-emit-broker" class="conn" d="M 320,224 L 320,231"                              stroke="#2dd4bf" stroke-width="1.2" fill="none" marker-end="url(#arr-teal)"/>
+  <!-- c-execwork: ExecutionWorker → Pipeline G3 (processes execution queue) -->
+  <path id="c-execwork" class="conn" d="M 446,311 L 832,311 L 832,220"                       stroke="#f59e0b" stroke-width="1.4" stroke-dasharray="4 3" fill="none" marker-end="url(#arr-amber)"/>
 
   <!-- ═══ ANIMATED FLOW DOTS ═══ -->
   <!-- c-req: Next.js → FastAPI (operator REST request) -->
@@ -154,6 +202,18 @@
   <circle class="conn-dot" data-conn="c-event" r="2" fill="#2dd4bf">
     <animateMotion dur="4s" repeatCount="indefinite" rotate="auto" path="M 872,517 L 90,517 L 90,254 L 184,254"/>
   </circle>
+  <!-- c-watch-emit: Watchers → SSE Emitter -->
+  <circle class="conn-dot" data-conn="c-watch-emit" r="2" fill="#2dd4bf">
+    <animateMotion dur="0.4s" repeatCount="indefinite" rotate="auto" path="M 320,176 L 320,186"/>
+  </circle>
+  <!-- c-emit-broker: SSE Emitter → SSE Broker -->
+  <circle class="conn-dot" data-conn="c-emit-broker" r="2" fill="#2dd4bf">
+    <animateMotion dur="0.4s" repeatCount="indefinite" rotate="auto" path="M 320,224 L 320,231"/>
+  </circle>
+  <!-- c-execwork: ExecutionWorker → Pipeline G3 -->
+  <circle class="conn-dot" data-conn="c-execwork" r="2" fill="#f59e0b">
+    <animateMotion dur="2s" repeatCount="indefinite" rotate="auto" path="M 446,311 L 832,311 L 832,220"/>
+  </circle>
 
   <!-- ═══ NODES ═══ -->
 
@@ -171,11 +231,38 @@
     <text x="320" y="115" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="9.5">AWS EC2 · control plane · static host</text>
   </g>
 
+  <!-- Trader Log / Version Watchers — w=252 -->
+  <g id="node-watchers" class="node" style="cursor:pointer">
+    <rect x="194" y="138" width="252" height="38" rx="7" fill="#0d1420" stroke="rgba(45,212,191,0.32)" stroke-width="1.4"/>
+    <text x="320" y="155" text-anchor="middle" fill="#4fb5a8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">Trader Log / Version Watchers</text>
+    <text x="320" y="168" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">detect state changes · trigger refresh signals</text>
+  </g>
+
+  <!-- SSE Emitter — w=252 -->
+  <g id="node-emitter" class="node" style="cursor:pointer">
+    <rect x="194" y="186" width="252" height="38" rx="7" fill="#071e1a" stroke="rgba(45,212,191,0.36)" stroke-width="1.4"/>
+    <text x="320" y="203" text-anchor="middle" fill="#2dd4bf" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">SSE Emitter</text>
+    <text x="320" y="216" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">lifecycle → stream events · scoped refresh</text>
+  </g>
+
   <!-- SSE Broker — w=252: "ring buffer · 300 events · replay" 34ch×5.4+24=208 ✓ -->
   <g id="node-sse" class="node" style="cursor:pointer">
     <rect x="194" y="231" width="252" height="46" rx="7" fill="#071e1a" stroke="rgba(45,212,191,0.48)" stroke-width="1.8"/>
     <text x="320" y="251" text-anchor="middle" fill="#2dd4bf" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="11.5">SSE Broker</text>
     <text x="320" y="267" text-anchor="middle" fill="#4fb5a8" font-family="'IBM Plex Mono',monospace" font-size="9">ring buffer · 300 events · replay</text>
+  </g>
+
+  <!-- ExecutionWorker — w=252 -->
+  <g id="node-execworker" class="node" style="cursor:pointer">
+    <rect x="194" y="290" width="252" height="42" rx="7" fill="#160a3e" stroke="rgba(139,92,246,0.40)" stroke-width="1.4"/>
+    <text x="320" y="308" text-anchor="middle" fill="#e2eaf8" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="10.5">ExecutionWorker</text>
+    <text x="320" y="322" text-anchor="middle" fill="#9b77e8" font-family="'IBM Plex Mono',monospace" font-size="8">daemon thread · async execution queue</text>
+  </g>
+
+  <!-- Market-Status Watcher — w=252 -->
+  <g id="node-marketwatch" class="node" style="cursor:pointer">
+    <rect x="194" y="342" width="252" height="30" rx="6" fill="#0d1420" stroke="rgba(61,126,255,0.24)" stroke-width="1.2"/>
+    <text x="320" y="362" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">market-status watcher · polls 60s · auto-start</text>
   </g>
 
   <!-- Trading Engine — w=252: "subprocess · operator-controlled lifecycle" 42ch×5.4+24=251 ✓ -->
@@ -306,24 +393,25 @@
   <text x="320" y="550" text-anchor="middle" fill="#5b8dd9" font-family="'IBM Plex Mono',monospace" font-size="8.5">Read-Model Layer</text>
   <text x="320" y="562" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">persisted shell · live reads · no stale state</text>
 
-  <!-- Price resolution note — moved to y=318 (below new container bottom y=308) -->
-  <rect x="872" y="398" width="248" height="28" rx="4" fill="rgba(10,20,14,0.88)" stroke="rgba(61,126,255,0.18)" stroke-width="1"/>
-  <text x="996" y="411" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">price resolution chain</text>
-  <text x="996" y="422" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">Alpaca → Polygon → cache</text>
+  <!-- Price resolution note — two distinct paths -->
+  <rect x="872" y="398" width="248" height="38" rx="4" fill="rgba(10,20,14,0.88)" stroke="rgba(61,126,255,0.18)" stroke-width="1"/>
+  <text x="996" y="411" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">price resolution chains</text>
+  <text x="996" y="422" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">trader: Alpaca → Polygon → cache</text>
+  <text x="996" y="432" text-anchor="middle" fill="#10b981" font-family="'IBM Plex Mono',monospace" font-size="8">control: Alpaca → Polygon (strict)</text>
 
   <!-- Operator approval note -->
-  <rect x="872" y="432" width="252" height="28" rx="4" fill="rgba(10,18,8,0.88)" stroke="rgba(245,158,11,0.22)" stroke-width="1"/>
-  <text x="998" y="445" text-anchor="middle" fill="#f59e0b" font-family="'IBM Plex Mono',monospace" font-size="8.5">approval_required mode</text>
-  <text x="998" y="456" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">operator approves → revalidates before submit</text>
+  <rect x="872" y="442" width="252" height="28" rx="4" fill="rgba(10,18,8,0.88)" stroke="rgba(245,158,11,0.22)" stroke-width="1"/>
+  <text x="998" y="455" text-anchor="middle" fill="#f59e0b" font-family="'IBM Plex Mono',monospace" font-size="8.5">approval_required mode</text>
+  <text x="998" y="466" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">operator approves → revalidates before submit</text>
 
   <!-- SSE fallback note — w=142: "fallback: /versions · 20s" 25ch×4.5+24=136 ✓ -->
   <rect x="28" y="234" width="142" height="28" rx="5" fill="rgba(10,16,36,0.92)" stroke="rgba(45,212,191,0.20)" stroke-width="1"/>
   <text x="99" y="246" text-anchor="middle" fill="#4fb5a8" font-family="'IBM Plex Mono',monospace" font-size="8.5">SSE primary</text>
   <text x="99" y="257" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8">fallback: polling every 20s</text>
 
-  <!-- Infra badge — w=318: "EC2 · ECR · RDS · Route 53 · Terraform · GitHub Actions" 56ch×5.1+24=310 ✓ -->
-  <rect x="28" y="572" width="318" height="18" rx="4" fill="rgba(13,30,56,0.85)" stroke="rgba(149,175,219,0.15)" stroke-width="1"/>
-  <text x="187" y="585" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">EC2 · ECR · RDS · Route 53 · Terraform · GitHub Actions</text>
+  <!-- Infra badge — w=380 -->
+  <rect x="28" y="572" width="380" height="18" rx="4" fill="rgba(13,30,56,0.85)" stroke="rgba(149,175,219,0.15)" stroke-width="1"/>
+  <text x="218" y="585" text-anchor="middle" fill="#8fa3c0" font-family="'IBM Plex Mono',monospace" font-size="8.5">EC2 · ECR · RDS · Secrets Manager · Route 53 · Terraform · GitHub Actions</text>
 
   <!-- ═══ ZONE LABELS ═══ -->
   <text x="99"  y="638" text-anchor="middle" fill="rgba(149,175,219,0.32)" font-family="'IBM Plex Mono',monospace" font-size="9" letter-spacing="2">CLIENT</text>
@@ -339,38 +427,46 @@
 <script>
 const tooltips = {
   'node-client':   { title: 'Next.js Operator Dashboard', body: 'Static export served by FastAPI on port 8000. SSE-driven live updates with 300-event replay on reconnect. Fallback polling every 20s when stream is unavailable. 5 tabs: Manager, per-Trader views, portfolio chart, scorecards.' },
-  'node-fastapi':  { title: 'FastAPI · AWS EC2', body: 'Control plane: 40+ REST endpoints covering scheduler lifecycle, proposal management, execution approval/rejection, read-model queries, and audit log access. Also serves static frontend and manages SSE broker.' },
+  'node-fastapi':  { title: 'FastAPI · AWS EC2', body: 'Control plane: 40+ REST endpoints covering scheduler lifecycle, proposal management, execution approval/rejection, read-model queries, and audit log access. Hosts ExecutionWorker daemon thread for async execution processing and a market-status watcher for backend-driven scheduler auto-start. Also serves static frontend and manages SSE broker.' },
   'node-sse':      { title: 'SSE Broker · Ring Buffer', body: '300-event ring buffer keyed by sequence ID. On reconnect, client sends Last-Event-ID and broker replays missed events. If Last-Event-ID is outside buffer coverage, client triggers full REST resync before resuming stream.' },
   'node-engine':   { title: 'Trading Engine Subprocess', body: 'Long-lived process spawned/stopped by operator command. Manages the scheduler cycle loop, spawns concurrent trader agents, triggers portfolio-control pipeline, and refreshes read models. Must be long-lived — Lambda would break MCP sessions and SSE broker state.' },
   'node-traders':  { title: 'Trader Personas · Concurrent', body: 'Warren (Conservative 0.70×), George (Aggressive 1.30×), Ray (Balanced 1.00×), Cathie (Growth 1.30×). Each runs bounded multi-turn agent loop (MAX_TURNS=30) via OpenAI Agents SDK. Per-trader model routing: Gemini, OpenAI, DeepSeek, or Grok.' },
   'node-mcp':      { title: 'MCP Tool Servers · stdio', body: 'Three servers: Accounts, Market, Memory. Failed MCP session for one trader is isolated and retried independently — does not collapse other traders. All tool calls logged at the MCP boundary for full auditability.' },
   'node-accounts': { title: 'Accounts MCP Server', body: 'Tools: get_balance, get_holdings, buy_shares, sell_shares, change_strategy. buy_shares/sell_shares are named to match trader intent — but the implementation routes to the proposal pipeline, not directly to Alpaca.' },
-  'node-market':   { title: 'Market MCP Server', body: 'Tools: lookup_share_price, get_quote_freshness, get_symbol_news_summary, get_symbol_event_risk. Price resolution: Alpaca → Polygon → cache (Alpaca is primary SIP feed). Brave Search is used for research, news summaries, and event-risk context. Stale/low-trust quotes trigger quote_low_trust path in Gate 2.' },
+  'node-market':   { title: 'Market MCP Server', body: 'Tools: lookup_share_price, get_quote_freshness, get_symbol_news_summary, get_symbol_event_risk. Trader-side resolution: Alpaca → Polygon → cache. Portfolio-control: strict Alpaca → Polygon only (no cache for decisions/executions). Same-symbol in-flight collapse: first request becomes leader, others wait — prevents duplicate provider calls. Stale/low-trust quotes trigger quote_low_trust path in Gate 2.' },
   'node-memory':   { title: 'Memory MCP Server · Knowledge Graph', body: 'Tools: create_entities, create_relations, search_nodes, read_graph. Per-trader PostgreSQL knowledge graph — companies analyzed, sector dynamics, prior trade outcomes. Memory is scoped per trader: Warren\'s graph does not contaminate Cathie\'s.' },
   'node-pipeline': { title: 'Portfolio-Control Pipeline · 4 Gates', body: 'No trader agent executes trades directly. Every buy_shares/sell_shares call routes to Gate 1 (proposal intake), not the Alpaca execution API. The flow passes through deterministic intake, risk policy, execution control, and an optional supporting review / extra review gate before anything touches a real brokerage position.' },
   'node-postgres': { title: 'PostgreSQL · AWS RDS · 30+ Tables', body: 'Source of truth for all runtime state. Proposals, decisions, executions, audit events, position lots, closed trades, performance snapshots, memory graphs, read models, and supporting-review/adjudication records. Alembic migrations applied automatically at container startup.' },
   'node-alpaca':   { title: 'Alpaca · Broker', body: 'Trade execution and account state — accessed only through the Accounts MCP server after full four-gate pipeline approval. Also serves as the primary price source in the quote resolution chain (Alpaca → Polygon → cache).' },
   'node-polygon':  { title: 'Polygon · Brave Search', body: 'Two distinct roles: Brave Search provides news summaries (get_symbol_news_summary) and event risk data (get_symbol_event_risk) — not price resolution. Polygon is the secondary price source in the resolution chain (Alpaca → Polygon → cache), used when Alpaca data is unavailable or stale.' },
+  'node-watchers':    { title: 'Trader Log / Version Watchers', body: 'Background watchers that detect underlying state changes — trader log writes, read-model version bumps — and convert them into refresh signals for the SSE Emitter. This is how database-side changes become live dashboard events.' },
+  'node-emitter':     { title: 'SSE Emitter', body: 'Converts internal lifecycle changes (proposals, decisions, executions, trader updates, scheduler changes) into externally visible SSE stream events. Feeds the SSE Broker for fan-out to connected subscribers.' },
+  'node-execworker':  { title: 'ExecutionWorker · Daemon Thread', body: 'Background daemon thread that polls the execution_work_items queue. Runs approval-time revalidation, broker-facing mutation, reconciliation, and terminal state emission with retry/backoff. Starts on app startup, stops on shutdown. Non-terminal executions are re-enqueued on startup for recovery.' },
+  'node-marketwatch': { title: 'Market-Status Watcher', body: 'Polls market status every 60 seconds. Drives backend-controlled scheduler auto-start at market open — the scheduler can start without an active browser tab. Uses the same AUTO_TRADE_BY_MARKET control path previously only reached through request-time market-status refreshes.' },
 };
 
 const connMap = {
-  'node-client':   ['c-req','c-resp','c-sse'],
-  'node-fastapi':  ['c-req','c-resp','c-spawn'],
-  'node-sse':      ['c-sse','c-event'],
-  'node-engine':   ['c-spawn','c-run'],
-  'node-traders':  ['c-run','c-mcp'],
-  'node-mcp':      ['c-mcp','c-prop','c-market','c-mem'],
-  'node-accounts': ['c-prop'],
-  'node-market':   ['c-market'],
-  'node-memory':   ['c-mem'],
-  'node-pipeline': ['c-prop','c-store','c-exec'],
-  'node-postgres': ['c-store','c-mem','c-event'],
-  'node-alpaca':   ['c-exec','c-market'],
-  'node-polygon':  ['c-market'],
+  'node-client':      ['c-req','c-resp','c-sse'],
+  'node-fastapi':     ['c-req','c-resp','c-spawn'],
+  'node-watchers':    ['c-watch-emit','c-event'],
+  'node-emitter':     ['c-emit-broker','c-watch-emit'],
+  'node-sse':         ['c-sse','c-event','c-emit-broker'],
+  'node-execworker':  ['c-execwork'],
+  'node-marketwatch': [],
+  'node-engine':      ['c-spawn','c-run'],
+  'node-traders':     ['c-run','c-mcp'],
+  'node-mcp':         ['c-mcp','c-prop','c-market','c-mem'],
+  'node-accounts':    ['c-prop'],
+  'node-market':      ['c-market'],
+  'node-memory':      ['c-mem'],
+  'node-pipeline':    ['c-prop','c-store','c-exec','c-execwork'],
+  'node-postgres':    ['c-store','c-mem','c-event'],
+  'node-alpaca':      ['c-exec','c-market'],
+  'node-polygon':     ['c-market'],
 };
 
 const allNodes = Object.keys(connMap);
-const allConns = ['c-req','c-resp','c-sse','c-spawn','c-run','c-mcp','c-prop','c-market','c-exec','c-store','c-mem','c-event'];
+const allConns = ['c-req','c-resp','c-sse','c-spawn','c-run','c-mcp','c-prop','c-market','c-exec','c-store','c-mem','c-event','c-watch-emit','c-emit-broker','c-execwork'];
 const tip = document.getElementById('tooltip');
 
 function fadeAll() {
@@ -417,6 +513,19 @@ allNodes.forEach(nodeId => {
     tip.classList.remove('vis');
   });
 });
+
+var isFs = new URLSearchParams(window.location.search).has('fs');
+var fsBtn = document.querySelector('.fs-btn');
+if (isFs) {
+  fsBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg> Close';
+}
+function toggleFullscreen() {
+  if (isFs) {
+    window.parent.postMessage({ type: 'diagram-fullscreen-close' }, '*');
+  } else if (window.parent !== window) {
+    window.parent.postMessage({ type: 'diagram-fullscreen' }, '*');
+  }
+}
 </script>
 </body>
 </html>

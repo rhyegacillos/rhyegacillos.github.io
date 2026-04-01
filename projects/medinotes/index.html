@@ -33,11 +33,7 @@
         <h1>MediNotes</h1>
         <p class="cs-hero-sub">Agentic Clinical Documentation with Multi-Agent QA</p>
         <p class="hero-copy">
-          Clinical documentation has a correctness imperative that most AI systems ignore. This case
-          study covers the hub-and-spoke multi-agent pipeline that separates extraction from synthesis
-          from critique, the Critic QA loop that catches hallucinations before they reach the clinician,
-          the Evidence Linking protocol that maps every summary claim back to its source, and the
-          persistent format guardrails that improve output quality across sessions without manual prompt tuning.
+          Clinical documentation requires correctness — a standard most AI systems do not meet. This case study covers the hub-and-spoke multi-agent pipeline that separates extraction, synthesis, and critique into distinct stages, the Critic QA loop that catches hallucinations before they reach the clinician, the Evidence Linking protocol that maps every summary claim back to its source document, and the persistent format guardrails that improve output quality across sessions without any manual prompt tuning.
         </p>
         <div class="cs-hero-meta">
           <a class="portal-live-chip" href="https://medinotes.agentairg.site/" target="_blank" rel="noopener noreferrer">Live: medinotes.agentairg.site</a>
@@ -50,6 +46,9 @@
           <span class="cs-badge">DynamoDB (RAG)</span>
           <span class="cs-badge">Upstash Redis</span>
           <span class="cs-badge">AWS App Runner</span>
+          <span class="cs-badge">AWS Secrets Manager</span>
+          <span class="cs-badge">Brave Search</span>
+          <span class="cs-badge">Docker</span>
           <span class="cs-badge">Whisper</span>
           <span class="cs-badge">Resend</span>
           <span class="cs-badge">Clerk</span>
@@ -64,9 +63,11 @@
         </div>
         <div class="cs-diagram-frame">
           <iframe
+            id="diagram-iframe"
             src="../../projects/medinotes/medinotes_architecture.html"
             title="MediNotes Architecture Diagram"
             loading="lazy"
+            allow="fullscreen" allowfullscreen
           ></iframe>
         </div>
       </section>
@@ -79,26 +80,19 @@
         </div>
         <div class="cs-story">
           <p>
-            Clinical documentation operates in a domain where "good enough" is not acceptable. An
-            LLM that hallucinates a drug interaction, omits a contraindication, or invents a dosage
-            instruction is not producing a suboptimal output — it is creating a
-            <strong>patient safety risk</strong>. Most AI summarization systems treat the LLM as a
-            single-step black box: send all the context in, receive a summary out. This architecture
-            fails for clinical use because it provides no mechanism to detect or correct errors
-            before the output reaches the clinician.
+            Clinical documentation does not allow for "good enough." An LLM (Large Language Model — the AI brain that reads text and generates responses, like GPT-4 or Gemini) that invents a drug interaction, misses a contraindication, or creates a dosage instruction that was not in the source material is not producing a bad output — it is creating a <strong>patient safety risk</strong>. Most AI summarisation systems treat the LLM as a single step: send all the context in, receive a summary out. This fails for clinical use because there is no way to catch or fix errors before the output reaches the clinician.
           </p>
           <p>
-            The correctness requirements for MediNotes were defined at the outset:
+            The correctness requirements for MediNotes were defined from the start:
           </p>
           <ul>
             <li>Every claim in the summary must be <strong>traceable to a source document</strong></li>
             <li>Hallucinations must be caught <strong>before delivery</strong>, not after</li>
-            <li>Multimodal inputs must be handled without information loss during format conversion</li>
-            <li>The pipeline must be <strong>auditable at each stage</strong> — not just at the final output</li>
+            <li>Multimodal inputs must be handled without losing information during format conversion</li>
+            <li>The pipeline must be <strong>traceable at each stage</strong> — not just at the final output</li>
           </ul>
           <p>
-            These requirements ruled out a single-prompt architecture from the start and drove the
-            hub-and-spoke agent topology.
+            These requirements ruled out a single-prompt architecture from the start. They led directly to the hub-and-spoke agent topology.
           </p>
         </div>
       </section>
@@ -111,73 +105,44 @@
         </div>
         <div class="cs-story">
           <p>
-            Rather than a single monolithic prompt that handles extraction, synthesis, research,
-            critique, and memory in one pass, the pipeline uses a
-            <strong>hub-and-spoke topology</strong> where the <em>Summary Agent</em> orchestrates
-            specialized agents, each with a single clearly bounded responsibility. A failure in the
-            <em>Research Agent</em> does not contaminate the <em>Extraction Agent</em>'s output,
-            and a Critic failure triggers a targeted regeneration cycle — not a full pipeline restart.
+            Instead of one large prompt that handles extraction, synthesis, research, critique, and memory all at once, the pipeline uses a <strong>hub-and-spoke topology</strong> — a design where one central agent (the hub) coordinates several specialised agents (the spokes), each with a single clearly defined responsibility. A failure in the <em>Research Agent</em> does not affect the <em>Extraction Agent</em>'s output. A Critic failure triggers a targeted regeneration cycle — not a full pipeline restart.
           </p>
         </div>
 
         <div class="cs-decision">
-          <h3>Extraction Agent — Multimodal Input Normalization</h3>
+          <h3>Extraction Agent — Multimodal Input Normalisation</h3>
           <p>
-            Converts all input formats to a unified text representation before any summarization
-            occurs. OCR via vision model for prescription images and scanned documents where a text
-            layer is not available. <strong>OpenAI Whisper</strong> transcription for audio
-            recordings of consultation notes. Text extraction for PDFs with embedded text layers
-            and DOCX documents. By normalizing inputs in a dedicated extraction stage, the
-            <em>Summary Agent</em> always works with clean, uniform context — it never receives raw
-            binary files, half-parsed PDFs, or unprocessed audio blobs.
+            The Extraction Agent converts all input formats into a single unified text representation before any summarisation begins. It uses OCR (Optical Character Recognition — software that reads text from images or scanned documents) for prescription images and scanned documents. It uses <strong>OpenAI Whisper</strong> (a speech-to-text model) for audio recordings of consultation notes. It extracts text directly from PDFs and DOCX documents that already have a text layer. By normalising all inputs in this dedicated stage, the <em>Summary Agent</em> always receives clean, uniform text — it never sees raw image files, partially parsed PDFs, or unprocessed audio.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Research Agent — Conditional External Lookup</h3>
           <p>
-            Conditionally triggered — not on every run, but when the visit context contains signals
-            that warrant external verification: potential drug interactions, unfamiliar medication
-            names, dosage ranges outside common clinical norms, or guidelines requiring current
-            evidence. Queries external clinical sources via the <strong>Brave Search MCP server</strong>.
-            Results are injected as clearly marked referenced external evidence into the
-            <em>Summary Agent</em>'s generation step — not as direct clinical claims. This prevents
-            the research step from introducing new hallucinations while still enriching the summary
-            with relevant external context.
+            The Research Agent does not run on every visit — only when the visit context contains signals that need external verification. These signals include potential drug interactions, unfamiliar medication names, dosage ranges outside common clinical norms, or guidelines that require up-to-date evidence. The agent queries external clinical sources via the <strong>Brave Search MCP (Model Context Protocol — a standard interface that controls which tools the AI can call and how) server</strong>. Results are injected into the <em>Summary Agent</em>'s generation step as clearly labelled external references — not as direct clinical claims. This prevents the research step from introducing new hallucinations while still adding relevant context.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Summary Agent — Orchestration Hub</h3>
           <p>
-            Builds a unified visit context from all extracted inputs and any research evidence
-            gathered by the <em>Research Agent</em>. Composes the structured 3-section HTML summary:
-            <strong>chief complaint and assessment</strong>, <strong>clinical findings and
-            observations</strong>, <strong>treatment plan and follow-up</strong>. Acts as the hub
-            that sequences and assembles pipeline outputs — coordinating deterministic handoffs
-            to the <em>Critic Agent</em> for QA and the <em>Evidence Agent</em> for source mapping.
-            Orchestration logic is explicit: handoffs are deterministic, not emergent from an
-            open-ended agent loop.
+            The Summary Agent builds a unified visit context from all extracted inputs and any research evidence the <em>Research Agent</em> gathered. It then generates the structured 3-section HTML summary: <strong>chief complaint and assessment</strong>, <strong>clinical findings and observations</strong>, <strong>treatment plan and follow-up</strong>. It acts as the hub — coordinating fixed handoffs to the <em>Critic Agent</em> for quality review and the <em>Evidence Agent</em> for source mapping. The handoffs are deterministic, not the result of an open-ended agent loop.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Critic Agent — Pre-Delivery QA Gate</h3>
           <p>
-            Evaluates every generated summary before it reaches the clinician. The
-            <em>Critic Agent</em> checks for four failure categories:
+            The Critic Agent reviews every generated summary before it reaches the clinician. It checks for four types of failures:
           </p>
           <ul>
             <li><strong>Factual contradictions</strong> — claims that directly conflict with the extracted source input</li>
-            <li><strong>Clinical omissions</strong> — findings present in the source that are absent from the summary</li>
+            <li><strong>Clinical omissions</strong> — findings present in the source that are missing from the summary</li>
             <li><strong>Hallucinated specifics</strong> — names, dosages, dates, or measurements with no source support</li>
             <li><strong>Structural violations</strong> — deviations from the expected 3-section format</li>
           </ul>
           <p>
-            If the summary fails on any category, the system runs a <strong>tournament of up to 3
-            regenerated candidates</strong> with the Critic's failure analysis injected as negative
-            constraints, and selects the best-scoring output. This adds latency but eliminates the
-            delivery of unverified clinical claims to the clinician.
+            If the summary fails on any category, the system runs a <strong>tournament of up to 3 regenerated candidates</strong>. The Critic's failure analysis is injected as negative constraints into each new attempt, and the best-scoring output is selected. This adds latency but ensures no unverified clinical claims reach the clinician.
           </p>
         </div>
       </section>
@@ -190,52 +155,28 @@
         </div>
         <div class="cs-story">
           <p>
-            The <em>Critic Agent</em> catches hallucinations before delivery. Evidence Linking makes
-            every surviving claim auditable after delivery. Together with Persistent Format
-            Guardrails, these three mechanisms implement a layered correctness contract — no single
-            mechanism is sufficient for clinical-grade output quality, and all three work together
-            to close different categories of error.
+            The <em>Critic Agent</em> catches hallucinations before delivery. Evidence Linking makes every surviving claim traceable after delivery. Together with Persistent Format Guardrails, these three mechanisms form a layered correctness contract — no single mechanism is enough for clinical-grade output quality. All three work together to close different types of error.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Evidence Agent — Source-to-Claim Mapping</h3>
           <p>
-            Every statement in the finalized summary is mapped back to the specific source chunk
-            that supports it. The <em>Evidence Agent</em> processes the finalized summary and the
-            original extraction output, producing a <strong>claim-to-source index</strong> that the
-            clinician can inspect in the UI — any claim can be expanded to show the exact input
-            excerpt it was derived from. In a clinical context, auditability is a safety requirement.
-            If a statement cannot be traced to a source, it is flagged as unsupported and surfaced
-            as an evidence gap — not silently included in the final output.
+            Every statement in the finalised summary is mapped back to the specific source excerpt that supports it. The <em>Evidence Agent</em> processes the finalised summary and the original extracted text, producing a <strong>claim-to-source index</strong>. The clinician can click any claim in the UI to see the exact input excerpt it came from. In a clinical context, the ability to trace and verify every claim is a safety requirement. If a statement cannot be traced to a source, it is flagged as unsupported and shown as an evidence gap — not silently included in the final output.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Persistent Format Guardrails</h3>
           <p>
-            When the <em>Critic Agent</em> identifies format or structural violations in a summary
-            — missing section headers, incorrect subsection ordering, malformed HTML structure,
-            clinical information placed in the wrong section — those violations are
-            <strong>persisted as format guardrails</strong> for the current doctor's profile in the
-            database. Future generation prompts for this doctor include the accumulated guardrails
-            as explicit negative constraints injected into the system prompt. Output quality
-            improves across sessions without any manual prompt engineering: the pipeline learns
-            from its own Critic failures and encodes that learning as persistent, doctor-scoped
-            generation constraints.
+            When the <em>Critic Agent</em> finds format or structural violations in a summary — missing section headers, wrong subsection order, malformed HTML, clinical information in the wrong section — those violations are <strong>saved as format guardrails</strong> for that doctor's profile in the database. Future generation prompts for the same doctor include these accumulated guardrails as explicit negative constraints in the system prompt. Output quality improves across sessions without any manual prompt engineering. The pipeline learns from its own Critic failures and stores that learning as doctor-specific generation rules.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Zero Hallucination Contract</h3>
           <p>
-            The combination of <em>Critic QA</em>, <em>Evidence Linking</em>, and
-            <em>Persistent Guardrails</em> implements a layered
-            <strong>zero hallucination contract</strong>. The Critic catches errors in the current
-            run. Evidence Linking makes any errors that survive the Critic visible to the clinician
-            before they act on the summary. Persistent Guardrails reduce the probability of the
-            same class of errors appearing in future runs. No single layer is sufficient; the
-            contract requires all three working in sequence.
+            The combination of <em>Critic QA</em>, <em>Evidence Linking</em>, and <em>Persistent Guardrails</em> forms a layered <strong>zero hallucination contract</strong>. The Critic catches errors in the current run. Evidence Linking makes any errors that survive the Critic visible to the clinician before they act on the summary. Persistent Guardrails reduce the chance of the same type of error appearing in future runs. No single layer is enough — all three must work together in sequence.
           </p>
         </div>
       </section>
@@ -248,39 +189,21 @@
         </div>
         <div class="cs-story">
           <p>
-            A clinician working with a returning patient should not need to re-provide history that
-            is already documented. The longitudinal memory layer makes prior visit context
-            automatically available to the <em>Summary Agent</em> without requiring the clinician
-            to manually locate and re-attach previous summaries, and without the privacy risk of
-            injecting unscoped history from other patients.
+            A clinician seeing a returning patient should not need to re-enter history that is already documented. The longitudinal memory layer makes prior visit context automatically available to the <em>Summary Agent</em>. The clinician does not need to find and re-attach previous summaries. And there is no privacy risk of mixing in history from other patients.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>DynamoDB for Cross-Visit Context</h3>
           <p>
-            After each visit, the finalized summary is embedded and stored in a
-            <strong>DynamoDB table keyed by patient ID</strong>. On subsequent visits for the same
-            patient, semantically similar context from prior summaries is retrieved via similarity
-            search and injected as background context into the <em>Summary Agent</em>'s generation
-            step — prior diagnoses, known allergies, current medication history, and documented
-            clinical observations. Retrieval is scoped strictly to the current patient's indexed
-            summaries — cross-patient retrieval is architecturally impossible because the DynamoDB
-            queries are keyed by patient ID at the query layer.
+            After each visit, the finalised summary is converted into an embedding (a numerical representation of text meaning) and stored in a <strong>DynamoDB table keyed by patient ID</strong>. On the next visit for the same patient, the system uses RAG (Retrieval-Augmented Generation — a technique where the AI searches stored information before generating a response) to find semantically similar context from previous summaries. Prior diagnoses, known allergies, current medication history, and documented observations are injected as background context into the <em>Summary Agent</em>'s generation step. Retrieval is strictly scoped to the current patient — cross-patient retrieval is architecturally impossible because DynamoDB queries are keyed by patient ID at the query layer.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Scoped Chat Assistant</h3>
           <p>
-            The <em>Chat Agent</em> gives the clinician a conversational interface for asking
-            questions about the current patient's history and the current visit context. It has
-            read access only to the current patient's visit summaries and consultation context.
-            Cross-patient data access is architecturally impossible, not just policy-constrained:
-            the chat session is initialized with a patient-scoped context object that is the
-            only data source available to the agent. Clinical answers are always grounded in
-            documented evidence — the <em>Chat Agent</em> cannot speculate beyond what is in
-            the patient's record.
+            The <em>Chat Agent</em> gives the clinician a conversational interface to ask questions about the current patient's history and visit context. It has read access only to the current patient's visit summaries and consultation context. Cross-patient data access is not just prohibited by policy — it is architecturally impossible. The chat session starts with a patient-scoped context object that is the only data source available to the agent. Clinical answers are always grounded in documented evidence. The <em>Chat Agent</em> cannot speculate beyond what is in the patient's record.
           </p>
         </div>
       </section>
@@ -293,37 +216,21 @@
         </div>
         <div class="cs-story">
           <p>
-            The full pipeline — extraction, optional research, summarization, Critic QA, evidence
-            linking, and memory indexing — takes 30 to 60 seconds under typical load. Blocking
-            the UI until completion is not acceptable: the clinician has no visibility into what
-            the pipeline is doing, and loses all work if connectivity drops during the wait.
+            The full pipeline — extraction, optional research, summarisation, Critic QA, evidence linking, and memory indexing — takes 30 to 60 seconds under typical load. Making the UI wait silently until completion is not acceptable. The clinician has no visibility into what the pipeline is doing, and loses all progress if the connection drops during the wait.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>SSE-Driven Incremental Updates</h3>
           <p>
-            Each pipeline stage emits an SSE event as it finishes:
-            <code>extraction_complete</code>, <code>research_done</code>,
-            <code>summary_draft_ready</code>, <code>critic_pass_complete</code>,
-            <code>evidence_linked</code>, <code>memory_indexed</code>.
-            The frontend renders incrementally as stages complete, giving the clinician real-time
-            visibility into pipeline progress. If the Critic triggers a regeneration tournament,
-            a <code>critic_regenerating</code> event is emitted so the clinician knows why the
-            pipeline is taking longer. The UI is never in an ambiguous pending state.
+            Each pipeline stage sends an SSE (Server-Sent Events — a technology that lets the server push live updates to the browser without the browser asking repeatedly) event as it finishes: <code>extraction_complete</code>, <code>research_done</code>, <code>summary_draft_ready</code>, <code>critic_pass_complete</code>, <code>evidence_linked</code>, <code>memory_indexed</code>. The frontend updates incrementally as each stage completes, giving the clinician real-time visibility into pipeline progress. If the Critic triggers a regeneration tournament, a <code>critic_regenerating</code> event is sent so the clinician knows why the pipeline is taking longer. The UI is never stuck in an unclear waiting state.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Resumable SSE Jobs</h3>
           <p>
-            Job state is persisted in <strong>Upstash Redis keyed by <code>job_id</code></strong>.
-            If the client disconnects mid-pipeline — browser tab closed, network interruption,
-            mobile app backgrounded — the pipeline continues running on the server. The client
-            reconnects with the <code>job_id</code> and resumes streaming from the last completed
-            stage event. No work is re-executed; no stage outputs are lost. The Redis job record
-            tracks the completion state of each pipeline stage, so the resumption point is exact —
-            the client receives only the events it missed, not a full replay from the beginning.
+            Job state is saved in <strong>Upstash Redis keyed by <code>job_id</code></strong>. If the client disconnects mid-pipeline — browser tab closed, network interruption, mobile app in the background — the pipeline keeps running on the server. The client reconnects with the <code>job_id</code> and resumes streaming from the last completed stage. No work is re-executed and no stage outputs are lost. The Redis job record tracks the completion state of each pipeline stage, so the resumption point is exact — the client only receives the events it missed, not a full replay from the beginning.
           </p>
         </div>
       </section>
@@ -381,5 +288,30 @@
     </main>
     </div>
     <script src="../../script.js"></script>
+    <div class="cs-diagram-fullscreen-overlay" id="diagramFullscreen">
+      <iframe id="fullscreen-iframe" src="" allowfullscreen></iframe>
+    </div>
+    <script>
+      window.addEventListener('message', function(e) {
+        if (e.data && e.data.type === 'diagram-fullscreen') openDiagramFullscreen();
+        if (e.data && e.data.type === 'diagram-fullscreen-close') closeDiagramFullscreen();
+      });
+      function openDiagramFullscreen() {
+        var src = document.getElementById('diagram-iframe').src.split('?')[0] + '?fs=1';
+        var overlay = document.getElementById('diagramFullscreen');
+        document.getElementById('fullscreen-iframe').src = src;
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeDiagramFullscreen() {
+        var overlay = document.getElementById('diagramFullscreen');
+        overlay.classList.remove('active');
+        document.getElementById('fullscreen-iframe').src = '';
+        document.body.style.overflow = '';
+      }
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeDiagramFullscreen();
+      });
+    </script>
   </body>
 </html>

@@ -33,10 +33,7 @@
         <h1>Digital Assistant</h1>
         <p class="cs-hero-sub">Agentic Systems Engineering on AWS Serverless</p>
         <p class="hero-copy">
-          Engineering a production-grade agentic assistant requires solving for execution durability,
-          not just capability. This case study covers the async architecture that survives serverless
-          timeouts, the truth-gating protocol that eliminates hallucinated action claims, and the
-          CAS-style quota governance that keeps the system cost-bounded at scale.
+          Building a production-grade agentic assistant means solving for execution durability, not just capability. This case study covers the asynchronous (running in the background without blocking other tasks) architecture that survives serverless timeouts, the truth-gating protocol that eliminates hallucinated action claims, and the Compare-And-Swap (CAS) — a method that prevents two processes from updating the same data at the same time — quota governance that keeps the system cost-bounded at scale.
         </p>
         <div class="cs-hero-meta">
           <a class="portal-live-chip" href="https://digital-assistant.agentairg.site/" target="_blank" rel="noopener noreferrer">Live: digital-assistant.agentairg.site</a>
@@ -44,11 +41,19 @@
         <div class="cs-badges">
           <span class="cs-badge">FastAPI</span>
           <span class="cs-badge">AWS Lambda</span>
+          <span class="cs-badge">AWS Bedrock</span>
+          <span class="cs-badge">Grok</span>
           <span class="cs-badge">Next.js</span>
           <span class="cs-badge">S3 / CloudFront</span>
           <span class="cs-badge">API Gateway</span>
           <span class="cs-badge">Upstash Redis</span>
           <span class="cs-badge">MCP</span>
+          <span class="cs-badge">Brave Search</span>
+          <span class="cs-badge">WeasyPrint</span>
+          <span class="cs-badge">Resend</span>
+          <span class="cs-badge">Sentry</span>
+          <span class="cs-badge">Docker</span>
+          <span class="cs-badge">AWS Secrets Manager</span>
           <span class="cs-badge">OpenTelemetry</span>
           <span class="cs-badge">Terraform</span>
           <span class="cs-badge">GitHub Actions (OIDC)</span>
@@ -63,9 +68,11 @@
         </div>
         <div class="cs-diagram-frame">
           <iframe
+            id="diagram-iframe"
             src="../../projects/digital-assistant/digital_assistant_architecture.html"
             title="Digital Assistant Architecture Diagram"
             loading="lazy"
+            allow="fullscreen" allowfullscreen
           ></iframe>
         </div>
       </section>
@@ -78,22 +85,13 @@
         </div>
         <div class="cs-story">
           <p>
-            Most agentic chat applications fail in production because they treat AI tool-calling as
-            a simple request-response loop. Real-world agentic workflows — recursive web research,
-            multi-page document parsing, multi-step artifact generation — are inherently
-            non-deterministic and high-latency.
+            Most agentic chat applications fail in production because they treat AI tool-calling as a simple request-response loop. Real-world agentic workflows — recursive web research, multi-page document parsing, multi-step artifact generation — are unpredictable by nature and high-latency.
           </p>
           <p>
-            In an AWS serverless environment, these tasks frequently collide with a physical
-            infrastructure limit: the <strong>29-second hard-timeout boundary of API Gateway</strong>.
-            Attempting to run agentic processes synchronously leads to <strong>Zombie Processes</strong>
-            — the backend continues to compute while the user's connection is severed, resulting in a
-            total loss of session state and wasted compute costs. The user sees nothing; the work is gone.
+            In a serverless (cloud environment where the infrastructure is managed automatically and code runs only when needed) AWS environment, these tasks frequently hit a hard infrastructure limit: the <strong>29-second timeout of API Gateway</strong> (the AWS service that routes incoming requests to the backend). Running agentic processes synchronously leads to <strong>Zombie Processes</strong> — the backend keeps computing while the user's connection is cut, resulting in a total loss of session state and wasted compute costs. The user sees nothing; the work is gone.
           </p>
           <p>
-            I engineered this system to solve for <strong>Execution Durability</strong> — ensuring
-            that agentic work survives the volatility of cloud environments by aligning the
-            architecture with the actual physics of serverless compute, not fighting against it.
+            I built this system to solve for <strong>Execution Durability</strong> — making sure agentic work survives cloud volatility by aligning the architecture with the actual constraints of serverless compute, not fighting against them.
           </p>
         </div>
       </section>
@@ -106,58 +104,45 @@
         </div>
         <div class="cs-story">
           <p>
-            To solve for reliability, I implemented a <strong>Hybrid Risk Routing</strong> architecture
-            that decouples the user's perceived latency from the system's execution physics.
+            To solve for reliability, I built a <strong>Hybrid Risk Routing</strong> architecture that separates the user's perceived latency from the system's actual execution time.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Risk-Tiered Routing</h3>
           <p>
-            The system classifies incoming intents at the entry point. Low-risk conversational prose
-            follows a guarded synchronous path for sub-second responses. High-risk or tool-dependent
-            requests — PDF generation, email delivery, deep web research — are automatically routed
-            to the Async Job Model without any manual configuration from the user.
+            The system classifies incoming requests at the entry point. Low-risk conversational messages follow a guarded synchronous path for sub-second responses. High-risk or tool-dependent requests — PDF generation, email delivery, deep web research — are automatically routed to the Async Job Model. No manual configuration from the user is needed.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>The Orchestrator — API Lambda</h3>
           <p>
-            The FastAPI control plane receives the user intent, enqueues it into <strong>Upstash
-            Redis</strong>, and returns a persistent <code>job_id</code> immediately — well within
-            the API Gateway timeout window. The client never blocks on tool execution; it receives
-            a job handle and proceeds. This single design decision is what makes the entire
-            architecture timeout-proof.
+            The FastAPI control plane receives the user request and adds it to a job queue in <strong>Upstash Redis</strong> (an in-memory data store used as a job queue). It returns a persistent <code>job_id</code> immediately — well within the API Gateway timeout window. The client never waits for tool execution. It receives a job handle and continues. This single design decision makes the entire architecture timeout-proof.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>The Decoupled Worker — Worker Lambda</h3>
           <p>
-            A separate AWS Lambda worker function assumes full responsibility for the entire
-            execution lifecycle. It dequeues the job and runs the MCP-orchestrated tool chain:
+            A separate AWS Lambda worker function takes full responsibility for the execution lifecycle. It picks up the job from the queue and runs the MCP (Model Context Protocol — a standard interface that controls which tools the AI can call and how) -orchestrated tool chain:
           </p>
           <ul>
             <li>Brave Search for web research</li>
             <li>WeasyPrint for PDF generation</li>
             <li>Resend for email delivery</li>
-            <li>File ingestion and memory extraction</li>
+            <li>File reader for PDF, DOCX, and plain text ingestion</li>
+            <li>Memory MCP server for per-user knowledge extraction</li>
           </ul>
           <p>
-            The worker operates entirely outside the API Gateway's timeout domain — it can run for
-            as long as the work requires, persisting output artifacts to S3 and progress state to Redis.
+            The worker runs entirely outside the API Gateway's timeout domain. It can run as long as the work requires, saving output files to S3 and progress state to Redis.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Execution Durability &amp; Client Resync</h3>
           <p>
-            This API + Worker pattern ensures that even if the client session is interrupted or
-            the browser is closed, the agent continues its work uninterrupted. The client
-            <strong>resyncs seamlessly</strong> upon reconnection, pulling completed results
-            without re-running expensive LLM tool-chains. There is no lost state, no re-execution
-            cost, no wasted compute.
+            The API + Worker pattern means the agent keeps working even if the client session is interrupted or the browser is closed. The client <strong>resyncs seamlessly</strong> on reconnection, pulling completed results without re-running expensive LLM tool chains. There is no lost state, no re-execution cost, and no wasted compute.
           </p>
         </div>
       </section>
@@ -170,43 +155,56 @@
         </div>
         <div class="cs-story">
           <p>
-            To eliminate <strong>Action Hallucination</strong> — where an LLM claims a successful
-            outcome (a generated download link, a sent email confirmation) that was never actually
-            verified — I engineered the <strong>Truth-Gated Canonical Rendering</strong> protocol.
-            This contract-first architecture strictly separates Intent from Fact, ensuring a 0% rate
-            of placeholder links and zero unverified action claims in the final output.
+            <strong>Action Hallucination</strong> happens when an LLM claims it completed a task — created a download link, sent an email — but never actually did it. To prevent this, I built the <strong>Truth-Gated Canonical Rendering</strong> protocol. It strictly separates what the AI <em>intended</em> from what the system <em>verified</em>. The result is zero placeholder links and zero unverified action claims in the final output.
           </p>
         </div>
 
         <div class="cs-decision">
-          <h3>Step 1 — Intent Contract</h3>
+          <h3>Stage 1 — Approved-Memory Validation</h3>
           <p>
-            The LLM produces a strict <code>IntentEnvelope</code> defining the requested action
-            type and parameters. It is <em>never</em> permitted to draft the final delivery prose
-            or provide its own links. Its role ends at declaring what it wants to happen — not at
-            claiming that it happened. This boundary is enforced at the API layer, not through
-            prompting alone.
+            If the user has saved approved memory items, a separate validator model checks whether the assistant's response follows those items. If not, the system reruns the response with targeted fix instructions. Approved memory is not just added to the prompt and hoped for — it is backed by an explicit check after the response is generated.
           </p>
         </div>
 
         <div class="cs-decision">
-          <h3>Step 2 — Canonical Execution</h3>
+          <h3>Stage 2 — Targeted PDF Error Recovery</h3>
           <p>
-            The server independently executes the tool — calling the Resend API, running the
-            WeasyPrint PDF engine, or performing the Brave Search — and captures a verified
-            <code>TruthContext</code> containing the actual file path, delivery confirmation
-            status, or structured result data. The LLM has no visibility into this execution step.
+            If a <code>generate_pdf_from_text</code> tool call fails with a <code>PDF_INPUT_INVALID</code> code, the backend triggers one controlled retry. The retry fixes only the formatting or JSON structure, not the content. If that retry also fails, the system returns a clear error message — it never pretends the PDF exists.
           </p>
         </div>
 
         <div class="cs-decision">
-          <h3>Step 3 — Deterministic Rendering</h3>
+          <h3>Stage 3 — Required-Tool Enforcement</h3>
           <p>
-            The final user-facing response is generated via server-side templates using
-            <em>only</em> the verified <code>TruthContext</code>. If the tool fails, the Truth
-            Gate blocks the success claim entirely and returns a structured error — the AI cannot
-            lie about its own progress. The result is a system where every link in the UI is a
-            real, verified artifact path, and every action confirmation reflects a real execution result.
+            The backend checks the list of tool events and confirms that each required tool actually ran, in the correct order. This prevents "execution bluffing." If the user asked for a PDF and email send but the model only wrote text about those actions without calling the tools, the response is rejected.
+          </p>
+        </div>
+
+        <div class="cs-decision">
+          <h3>Stage 4 — Truth-Context Normalization</h3>
+          <p>
+            Raw tool outputs come in many formats — nested JSON, wrapper objects, inline strings, MCP response structures. The system unwraps and normalises all of them into three clear types of evidence: <strong>artifacts</strong> (generated PDFs with verified download URLs), <strong>action outcomes</strong> (email delivery status with email IDs), and <strong>search results</strong> (source URLs with tracking parameters removed).
+          </p>
+        </div>
+
+        <div class="cs-decision">
+          <h3>Stage 5 — Canonical Rendering</h3>
+          <p>
+            The final response shown to the user is built using <em>only</em> verified evidence. If a PDF exists, the system attaches the verified download URL. If an email was sent, the system confirms with the email ID. Any links the model mentions that are not in the verified evidence set are removed. Source lists come from normalised search results, not from the model's raw text.
+          </p>
+        </div>
+
+        <div class="cs-decision">
+          <h3>Stage 6 — Truth-Gate Validation</h3>
+          <p>
+            The rendered response must not claim more than the tool evidence supports. If the output contains unverifiable links, cites sources the search tool never returned, or claims an action result that does not match the recorded tool outcome, the truth gate blocks it. The AI cannot lie about what it actually did.
+          </p>
+        </div>
+
+        <div class="cs-decision">
+          <h3>Stage 7 — Truth-Fix Loop</h3>
+          <p>
+            If the truth gate blocks the output and the issue is automatically fixable, the system builds targeted fix instructions and reruns the provider. The new output is merged back into the verified evidence context and re-rendered. This loop is limited by <code>TRUTH_FIX_MAX_ATTEMPTS</code>. It is designed to fix phrasing or unsupported claims — not to trigger open-ended regeneration.
           </p>
         </div>
       </section>
@@ -219,45 +217,28 @@
         </div>
         <div class="cs-story">
           <p>
-            Production reliability is governed by granular cost controls and deep observability.
-            The system is instrumented with <strong>OpenTelemetry (OTel)</strong> for trace-level
-            job correlation across both the API and Worker Lambda boundaries — every job carries a
-            traceable span from enqueue through final artifact delivery.
+            Production reliability needs both cost controls and visibility into what the system is doing. The system uses <strong>OpenTelemetry (OTel)</strong> — a standard toolkit for tracking requests as they move through a system — for tracing every job across both the API and Worker Lambda functions. Every job has a traceable path from when it was added to the queue through to final output delivery.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>CAS-Style Quota Governance</h3>
           <p>
-            Daily limits — token budget, PDF exports, email sends — are enforced using
-            <strong>Compare-And-Swap (CAS) optimistic concurrency</strong> in Upstash Redis.
-            This prevents <em>double-spend</em> in distributed environments where multiple
-            concurrent Lambda invocations could race to consume the same quota slot. The system
-            remains cost-aware and protected against runaway agentic loops, even under concurrent
-            load. Real-time counters surface live quota state in the UI without a separate settings page.
+            Daily limits — token budget, PDF exports, email sends — are enforced using <strong>Compare-And-Swap (CAS)</strong>, a method that prevents two processes from updating the same data at the same time. This stops double-spending in situations where multiple Lambda functions run at once and try to use the same quota slot. The system stays cost-aware and protected against runaway loops, even under heavy load. Live quota counters are shown directly in the UI — no separate settings page needed.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>User-Approved Memory</h3>
           <p>
-            Memory candidates extracted from conversations are surfaced to the user in a dedicated
-            Memory tab for explicit approval or rejection — they are never automatically applied.
-            Only approved memories are injected into the system prompt at the highest priority
-            tier. This maintains user trust and eliminates the risk of contamination from
-            incorrectly extracted or misinterpreted context.
+            When the system extracts memory candidates from a conversation, it shows them to the user in a dedicated Memory tab. The user approves or rejects each one — nothing is applied automatically. Only approved memories are injected into the system prompt at the highest priority. This keeps the user in control and prevents incorrect or misinterpreted context from mixing into future responses.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Immutable Infrastructure &amp; Credential-Less CI/CD</h3>
           <p>
-            The entire infrastructure is provisioned as code via <strong>Terraform</strong> — Lambda,
-            API Gateway, S3, CloudFront, ECR, IAM, and Secrets Manager references, with no manual
-            console configuration. Deployments run through <strong>GitHub Actions with OIDC
-            federation</strong> — no long-lived AWS access keys exist anywhere in the pipeline.
-            On every push to main: the Docker image is built, pushed to ECR, and Lambda functions
-            are updated atomically.
+            The entire infrastructure is defined as code using <strong>Terraform</strong> — Lambda, API Gateway, S3, CloudFront, ECR, IAM roles, and Secrets Manager references. No manual configuration in the AWS console. Deployments run through <strong>GitHub Actions with OIDC (OpenID Connect — a security standard that lets services verify identity without storing long-term credentials) federation</strong>. No long-lived AWS access keys exist anywhere in the pipeline. On every push to main, the Docker image is built, pushed to ECR, and Lambda functions are updated.
           </p>
         </div>
       </section>
@@ -287,15 +268,15 @@
           </div>
           <div class="cs-stack-item">
             <h4>S3 (Memory + Artifacts)</h4>
-            <p>Conversation history, approved memory files, and generated artifacts stored as structured JSON in S3. Durable and cheap — no database needed for conversation persistence.</p>
+            <p>Conversation history (5 most recent sessions, 50-message context window), approved memory files, and generated artifacts stored as structured JSON in S3. Lazy expiration of approved memory on read. Durable and cheap — no database needed for conversation persistence.</p>
           </div>
           <div class="cs-stack-item">
             <h4>MCP Tool Servers (stdio)</h4>
-            <p>Brave Search, WeasyPrint (PDF), Resend (email), file reader, memory extractor — each isolated behind an MCP server boundary. Independently testable and swappable without modifying the agent loop.</p>
+            <p>Three server families: Brave Search for web research, a core action server (WeasyPrint PDF, Resend email, file reader), and a separate Memory MCP server for knowledge extraction. Each isolated behind a subprocess boundary with <code>AsyncExitStack</code> lifecycle management. Memory extraction runs async in API mode, sync in worker mode. All subprocesses inherit trace context for coherent OpenTelemetry spans.</p>
           </div>
           <div class="cs-stack-item">
             <h4>Multi-Provider LLM (Grok + AWS Bedrock)</h4>
-            <p>Primary and fallback LLM providers. Multi-provider routing ensures resilience if one endpoint is degraded or rate-limited, without surfacing provider failures to the user.</p>
+            <p>Two distinct execution paths: Grok uses the <code>openai-agents</code> runtime with delegated tool decision-making; Bedrock uses a custom tool loop around the <code>converse</code> API with explicit <code>toolChoice</code> forcing for required tools. Region-prefixed model ID derivation (apac, us, eu) handles Bedrock's region-specific access patterns. Provider routing ensures resilience without surfacing failures to the user.</p>
           </div>
           <div class="cs-stack-item">
             <h4>OpenTelemetry &#8594; Sentry</h4>
@@ -315,5 +296,30 @@
     </main>
     </div>
     <script src="../../script.js"></script>
+    <div class="cs-diagram-fullscreen-overlay" id="diagramFullscreen">
+      <iframe id="fullscreen-iframe" src="" allowfullscreen></iframe>
+    </div>
+    <script>
+      window.addEventListener('message', function(e) {
+        if (e.data && e.data.type === 'diagram-fullscreen') openDiagramFullscreen();
+        if (e.data && e.data.type === 'diagram-fullscreen-close') closeDiagramFullscreen();
+      });
+      function openDiagramFullscreen() {
+        var src = document.getElementById('diagram-iframe').src.split('?')[0] + '?fs=1';
+        var overlay = document.getElementById('diagramFullscreen');
+        document.getElementById('fullscreen-iframe').src = src;
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeDiagramFullscreen() {
+        var overlay = document.getElementById('diagramFullscreen');
+        overlay.classList.remove('active');
+        document.getElementById('fullscreen-iframe').src = '';
+        document.body.style.overflow = '';
+      }
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeDiagramFullscreen();
+      });
+    </script>
   </body>
 </html>

@@ -33,11 +33,7 @@
         <h1>IdeaGen</h1>
         <p class="cs-hero-sub">Multi-Model Decision Intelligence Platform</p>
         <p class="hero-copy">
-          Engineering a multi-model decision workflow requires solving for output comparability, not
-          just generation volume. This case study covers the contract-first validation architecture
-          that enforces structured outputs across four LLM providers, the deterministic financial
-          modeling layer that prevents hallucinated investment projections, and the artifact lifecycle
-          that makes every analysis persistent and re-exploitable.
+          Building a multi-model decision workflow means solving for output comparability, not just generating more text. This case study covers the contract-first validation architecture that enforces structured outputs across four LLM (Large Language Model — the AI brain that reads text and generates responses, like GPT-4 or Gemini) providers, the deterministic (always producing the same result for the same input — no randomness) financial modelling layer that prevents hallucinated investment projections, and the artifact lifecycle that makes every analysis persistent and reusable.
         </p>
         <div class="cs-hero-meta">
           <a class="portal-live-chip" href="https://ideagen.agentairg.site/" target="_blank" rel="noopener noreferrer">Live: ideagen.agentairg.site</a>
@@ -51,7 +47,12 @@
           <span class="cs-badge">DeepSeek</span>
           <span class="cs-badge">Grok</span>
           <span class="cs-badge">WeasyPrint</span>
+          <span class="cs-badge">Resend</span>
+          <span class="cs-badge">Docker</span>
           <span class="cs-badge">AWS App Runner</span>
+          <span class="cs-badge">AWS RDS</span>
+          <span class="cs-badge">AWS Secrets Manager</span>
+          <span class="cs-badge">Route 53</span>
           <span class="cs-badge">Clerk</span>
         </div>
       </section>
@@ -64,9 +65,11 @@
         </div>
         <div class="cs-diagram-frame">
           <iframe
+            id="diagram-iframe"
             src="../../projects/ideagen/ideagen_architecture.html"
             title="IdeaGen Architecture Diagram"
             loading="lazy"
+            allow="fullscreen" allowfullscreen
           ></iframe>
         </div>
       </section>
@@ -79,10 +82,7 @@
         </div>
         <div class="cs-story">
           <p>
-            Single-model AI ideation gives one perspective shaped by one provider's training data,
-            RLHF preferences, and capability profile. When the output of a decision AI is a
-            recommendation to invest capital or pursue a strategy, that single-perspective limitation
-            is a material risk. Different frontier models reason differently:
+            A single AI model gives one perspective. That perspective is shaped by one provider's training data, RLHF (Reinforcement Learning from Human Feedback — a training method where human preferences shape the AI's output style) preferences, and capabilities. When the AI is recommending whether to invest capital or pursue a strategy, relying on one perspective is a real risk. Different leading models reason differently:
           </p>
           <ul>
             <li><strong>OpenAI</strong> tends toward structured decomposition</li>
@@ -91,14 +91,7 @@
             <li><strong>Grok</strong> toward real-time-aware analysis</li>
           </ul>
           <p>
-            Routing the same ideation task across all four and scoring the outputs against a
-            structured rubric gives something no single-model system can provide — a
-            <strong>cross-model consensus signal with visible disagreement</strong>. The engineering
-            challenge is making that output <strong>comparable, auditable, and decision-ready</strong>
-            — not just a collection of text blobs. That requires contract-first schema enforcement
-            so every model's output has the same shape, deterministic computation so financial
-            numbers are never pattern-matched hallucinations, and a persistent artifact model so
-            the analysis can be retrieved and re-used weeks after it was generated.
+            Sending the same ideation task to all four models and scoring each output against a structured rubric gives something no single-model system can provide — a <strong>cross-model consensus signal that also shows where models disagree</strong>. The engineering challenge is making those outputs <strong>comparable, traceable, and ready for a decision</strong> — not just a collection of text. That requires enforcing a fixed output structure so every model produces the same shape of data, computing financial numbers programmatically so they are never hallucinated, and storing every analysis so it can be retrieved and reused weeks later.
           </p>
         </div>
       </section>
@@ -111,54 +104,28 @@
         </div>
         <div class="cs-story">
           <p>
-            The generation layer is designed around three interlocking properties: every output has
-            a guaranteed structure, every provider failure is automatically recovered within its own
-            slot, and multiple models generate against the same prompt simultaneously so their outputs
-            can be ranked head-to-head. These three properties are not independent — the schema
-            enforcement is what makes parallel scoring possible, and the per-provider model chain
-            is what keeps each parallel slot reliable under real-world provider availability.
+            The generation layer is built around three connected properties. First, every output has a guaranteed structure. Second, every provider failure is automatically recovered within its own slot. Third, multiple models generate against the same prompt at the same time so their outputs can be ranked side by side. These three properties depend on each other — the fixed structure is what makes parallel scoring possible, and the per-provider fallback chain is what keeps each slot reliable when real-world providers go down.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Contract-First Structured Outputs</h3>
           <p>
-            Every LLM generation step produces a typed response validated against a
-            <strong>Pydantic JSON schema</strong>. If validation fails, the system retries with a
-            correction prompt that includes the specific schema violations extracted from the failed
-            response — field names, type mismatches, missing required properties. If retries exhaust
-            (maximum 3 attempts), the system falls back to a <strong>deterministic safe payload</strong>
-            that satisfies the schema with explicit null values and error annotations, rather than
-            propagating a malformed response to the frontend. The frontend always receives a
-            predictable structure regardless of LLM behavior — no UI crashes, no partial renders,
-            no silent missing fields.
+            Every LLM generation step produces a typed response that is validated against a <strong>Pydantic JSON schema</strong> (a Python tool that checks whether data has the correct format and field types). If validation fails, the system retries with a correction prompt that includes the specific violations from the failed response — field names, type mismatches, missing required properties. After 3 failed attempts, the system falls back to a <strong>deterministic safe payload</strong> that satisfies the schema with explicit null values and error annotations. The frontend always receives a predictable structure regardless of LLM behaviour — no UI crashes, no partial renders, no silent missing fields.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Per-Provider Model Fallback</h3>
           <p>
-            Each provider slot has its own internal model chain — if the primary model of that
-            provider encounters a transient failure or rate limit, the system falls back to a
-            <strong>lesser model from the same provider</strong>, not a different one. OpenAI falls
-            back within OpenAI; Gemini falls back within Gemini. This means each parallel generation
-            task is independently resilient without cross-provider routing. The provider and model
-            that ultimately fulfilled each slot are recorded in the artifact metadata for
-            auditability — operators can see which model produced which output.
+            Each provider slot has its own internal model chain. If the primary model hits a temporary failure or rate limit, the system falls back to a <strong>less powerful model from the same provider</strong> — not a different provider. OpenAI falls back within OpenAI; Gemini falls back within Gemini. Each parallel generation task is independently resilient without cross-provider routing. The provider and model that fulfilled each slot are recorded in the artifact metadata so you can see exactly which model produced which output.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Parallel Multi-Model Generation</h3>
           <p>
-            Up to 5 model configurations can generate outputs concurrently for the same ideation
-            prompt using <code>asyncio.gather</code>. Each run is scored independently against the
-            same structured rubric — <strong>novelty, feasibility, market size, competitive moat,
-            execution risk</strong> — producing numerical rankings that enable direct head-to-head
-            comparison across providers. Because every run is schema-validated before scoring,
-            the rubric evaluator always receives clean, comparable inputs regardless of which
-            model produced the output. This is the core property the contract-first layer enables:
-            comparability at the evaluation stage requires uniformity at the generation stage.
+            Up to 5 model configurations generate outputs at the same time for the same ideation prompt using <code>asyncio.gather</code> (a Python tool for running multiple tasks concurrently). Each output is scored independently against the same rubric — <strong>novelty, feasibility, market size, competitive moat, execution risk</strong> — producing numerical rankings for direct head-to-head comparison. Because every output is validated against the schema before scoring, the evaluator always receives clean, comparable inputs regardless of which model produced them. Uniformity at the generation stage is what makes comparability at the scoring stage possible.
           </p>
         </div>
       </section>
@@ -171,60 +138,31 @@
         </div>
         <div class="cs-story">
           <p>
-            The most dangerous failure mode in an AI investment platform is not a bad recommendation
-            — it is a confidently stated hallucinated number. An LLM will generate financial
-            projections with apparent precision: "Year 3 revenue: $4.2M, CAGR: 34%." These numbers
-            have no grounding. They are pattern-matched outputs that resemble financial analysis
-            but are not computed from any explicit model. In a decision context, that distinction
-            is the difference between a tool and a liability.
+            The most dangerous failure mode in an AI investment platform is not a bad recommendation — it is a confidently stated hallucinated number. An LLM can generate financial projections that look precise: "Year 3 revenue: $4.2M, CAGR (Compound Annual Growth Rate — the average yearly growth rate over a period): 34%." These numbers have no real basis. They are pattern-matched outputs that look like financial analysis but are not computed from any formula. In a decision context, that is the difference between a useful tool and a dangerous one.
           </p>
           <p>
-            The <em>Execution Plan</em> module addresses this with a strict separation between
-            what the LLM is allowed to produce and what the system computes programmatically.
-            The boundary is enforced at the API layer — it is not a prompt-level suggestion but
-            an architectural constraint.
+            The <em>Execution Plan</em> module solves this with a strict separation between what the LLM is allowed to produce and what the system computes programmatically. This boundary is enforced at the API layer — it is not a suggestion in a prompt, it is an architectural constraint.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Separation of Computation from Narration</h3>
           <p>
-            Financial projections in <em>Execution Plans</em> are computed programmatically from
-            explicit formulas: revenue modeling by growth rate and initial market penetration, cost
-            structure by category ratios applied to the revenue base, break-even by contribution
-            margin calculation, sensitivity ranges by bounded parameter variation. The LLM
-            contributes <strong>narrative framing and assumption justification</strong> — it
-            describes what the numbers mean, interprets sensitivity outputs, and explains the
-            strategic reasoning behind assumption inputs. It does not produce the numbers themselves.
-            The generation prompt explicitly forbids numerical financial claims.
+            All financial projections in <em>Execution Plans</em> are calculated by the system using explicit formulas — revenue by growth rate and market penetration, cost structure by category ratios, break-even by contribution margin, sensitivity ranges by bounded parameter variation. The LLM only contributes <strong>narrative framing and assumption justification</strong>. It explains what the numbers mean, interprets the sensitivity analysis, and describes the strategic reasoning behind the assumptions. It does not produce any numbers. The generation prompt explicitly forbids numerical financial claims.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Go / Conditional / No-Go Decision Gates</h3>
           <p>
-            The execution plan includes a <strong>deterministic gate evaluation</strong>: if IRR
-            falls below a configured threshold or break-even extends beyond N years, the gate
-            returns <strong>conditional</strong> or <strong>no-go</strong> with explicit reasoning
-            attached to each threshold violation. Profitability recovery logic identifies which
-            input assumptions would flip a no-go to a conditional — for example, reducing initial
-            headcount by 20% or extending the runway by 6 months — and surfaces those as named
-            levers. Sensitivity stress testing computes which input variables have the highest
-            elasticity on the final gate outcome, giving decision-makers a ranked list of what
-            to monitor and negotiate.
+            The execution plan includes a <strong>deterministic gate evaluation</strong>. If IRR (Internal Rate of Return — a financial metric showing the expected annual growth rate of an investment) falls below a configured threshold, or break-even extends beyond a set number of years, the gate returns <strong>conditional</strong> or <strong>no-go</strong> with a clear reason for each threshold violation. Profitability recovery logic then identifies which assumptions would change a no-go to a conditional — for example, reducing initial headcount by 20% or extending the runway by 6 months — and shows these as named levers. Sensitivity testing also calculates which input variables have the biggest impact on the final gate outcome, giving decision-makers a ranked list of what to watch and negotiate.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Audit Trail by Construction</h3>
           <p>
-            Because projections are computed from explicit inputs and formulas that are persisted
-            alongside the artifact in PostgreSQL, every number in the output can be re-derived from
-            first principles at any point after generation. There is no "the model said so" — every
-            projection has a traceable source equation. This makes the output defensible in a
-            due-diligence context: any stakeholder can inspect the assumption inputs, verify the
-            formula application, and reproduce the result independently without access to the
-            original LLM session.
+            Because projections are calculated from explicit inputs and formulas that are saved alongside the artifact in PostgreSQL, every number in the output can be re-derived at any point after generation. There is no "the model said so" — every projection has a traceable source formula. This makes the output defensible in a due-diligence context. Any stakeholder can inspect the assumption inputs, verify the formula, and reproduce the result independently — without access to the original LLM session.
           </p>
         </div>
       </section>
@@ -237,50 +175,28 @@
         </div>
         <div class="cs-story">
           <p>
-            Most AI tools produce ephemeral outputs — close the tab and the work is gone. IdeaGen
-            treats every output as a <strong>first-class persistent artifact</strong> with its own
-            lifecycle state, re-export surface, and downstream composition potential. A run generated
-            today can become the input for an execution plan next week without any manual
-            copy-paste — the artifact graph manages the dependency chain.
+            Most AI tools produce temporary outputs — close the tab and the work is gone. IdeaGen treats every output as a <strong>first-class persistent artifact</strong> with its own lifecycle state, re-export options, and the ability to feed into later workflow steps. A run generated today can become the input for an execution plan next week — no manual copy-paste needed. The artifact graph manages the dependency chain.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Artifact Persistence Model</h3>
           <p>
-            Every run, comparison, decision summary, and execution plan is persisted to
-            <strong>PostgreSQL</strong> with its own lifecycle state:
-            <code>draft</code> &rarr; <code>finalized</code> &rarr; <code>archived</code>. Artifacts
-            can be retrieved at any lifecycle stage, re-exported to PDF via <em>WeasyPrint</em>,
-            emailed via <em>Resend</em>, or used as inputs for downstream workflow steps. The
-            relational model captures dependency edges explicitly — a <em>Decision Summary</em>
-            references the run IDs it was built from; an <em>Execution Plan</em> references the
-            decision summary it was derived from. Every artifact has a traceable provenance chain
-            back to the original ideation inputs.
+            Every run, comparison, decision summary, and execution plan is saved to <strong>PostgreSQL</strong> with its own lifecycle state: <code>draft</code> &rarr; <code>finalized</code> &rarr; <code>archived</code>. Artifacts can be retrieved at any stage, re-exported to PDF via <em>WeasyPrint</em>, emailed via <em>Resend</em>, or used as inputs for downstream steps. The database model records dependency links explicitly — a <em>Decision Summary</em> references the run IDs it was built from; an <em>Execution Plan</em> references the decision summary it came from. Every artifact has a traceable origin back to the original ideation inputs.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Run-to-Run Comparison</h3>
           <p>
-            Users select any two saved runs for head-to-head comparison. The system identifies the
-            winner across each rubric dimension independently, surfaces the trade-off rationale —
-            where model A outperformed on novelty but underperformed on execution risk and why —
-            and highlights where the two models contradicted each other on the same underlying concept.
-            This comparison is itself a saved artifact with its own lifecycle state, re-exportable
-            to PDF or usable as context for a downstream <em>Decision Summary</em>.
+            Users select any two saved runs for a side-by-side comparison. The system identifies the winner on each rubric dimension separately, explains the trade-off — where model A scored higher on novelty but lower on execution risk and why — and highlights where the two models contradicted each other on the same concept. This comparison is itself a saved artifact with its own lifecycle state. It can be exported to PDF or used as context for a downstream <em>Decision Summary</em>.
           </p>
         </div>
 
         <div class="cs-decision">
           <h3>Cache-Before-Infer</h3>
           <p>
-            Before calling an LLM for scoring or comparison, the system checks whether an identical
-            request has a cached result keyed by a deterministic hash of the input parameters and
-            schema version. This reduces latency and cost for repeated or similar inputs without
-            sacrificing result quality. Cache invalidation is artifact-scoped: re-finalizing an
-            artifact invalidates its downstream cache entries, ensuring stale scoring results are
-            never served after a source artifact is updated.
+            Before calling an LLM for scoring or comparison, the system checks whether an identical request already has a cached result. The cache key is a deterministic hash of the input parameters and schema version. This reduces latency and cost for repeated or similar inputs without lowering result quality. Cache entries are scoped to the artifact — when an artifact is re-finalised, its downstream cache entries are invalidated. Stale scoring results are never shown after a source artifact is updated.
           </p>
         </div>
       </section>
@@ -325,6 +241,10 @@
             <p>Managed database with automated backups and point-in-time recovery. Chosen over self-hosted PostgreSQL for durability guarantees and operational simplicity. Connection pooling via SQLAlchemy's async engine.</p>
           </div>
           <div class="cs-stack-item">
+            <h4>AWS Secrets Manager</h4>
+            <p>Runtime secrets — API keys, database credentials, and third-party service tokens — stored in Secrets Manager and injected into the App Runner container at startup. No secrets in source control or environment file artifacts.</p>
+          </div>
+          <div class="cs-stack-item">
             <h4>Route 53</h4>
             <p>ALIAS record maps the custom domain to the App Runner service URL. Certificate provisioning handled by App Runner's managed TLS. DNS health check failover configured for additional resilience during service restarts.</p>
           </div>
@@ -334,5 +254,30 @@
     </main>
     </div>
     <script src="../../script.js"></script>
+    <div class="cs-diagram-fullscreen-overlay" id="diagramFullscreen">
+      <iframe id="fullscreen-iframe" src="" allowfullscreen></iframe>
+    </div>
+    <script>
+      window.addEventListener('message', function(e) {
+        if (e.data && e.data.type === 'diagram-fullscreen') openDiagramFullscreen();
+        if (e.data && e.data.type === 'diagram-fullscreen-close') closeDiagramFullscreen();
+      });
+      function openDiagramFullscreen() {
+        var src = document.getElementById('diagram-iframe').src.split('?')[0] + '?fs=1';
+        var overlay = document.getElementById('diagramFullscreen');
+        document.getElementById('fullscreen-iframe').src = src;
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeDiagramFullscreen() {
+        var overlay = document.getElementById('diagramFullscreen');
+        overlay.classList.remove('active');
+        document.getElementById('fullscreen-iframe').src = '';
+        document.body.style.overflow = '';
+      }
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeDiagramFullscreen();
+      });
+    </script>
   </body>
 </html>

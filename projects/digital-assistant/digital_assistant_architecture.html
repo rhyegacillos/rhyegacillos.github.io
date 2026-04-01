@@ -21,6 +21,15 @@
       border-radius: 8px;
     }
     .legend-item { display: flex; align-items: center; gap: 7px; font-size: 11px; color: #94a3b8; }
+    .legend .fs-btn {
+      margin-left: auto; display: flex; align-items: center; gap: 5px;
+      background: transparent; border: 1px solid rgba(149,175,219,0.25);
+      color: #94a3b8; font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+      padding: 3px 10px; border-radius: 5px; cursor: pointer;
+      transition: border-color 0.2s, color 0.2s; white-space: nowrap;
+    }
+    .legend .fs-btn:hover { border-color: #3d7eff; color: #3d7eff; }
+    .legend .fs-btn svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; }
     svg { display: block; width: 100%; flex: 1; min-height: 0; }
     .node { cursor: pointer; }
     .node .box { transition: filter 0.15s; }
@@ -54,6 +63,10 @@
       Data flow
     </div>
     <div class="legend-item" style="color:#475569; font-size:10px;">Hover nodes to highlight paths</div>
+    <button class="fs-btn" onclick="toggleFullscreen()">
+      <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
+      Fullscreen
+    </button>
   </div>
 
   <svg id="arch" viewBox="0 0 1140 660" preserveAspectRatio="xMidYMid meet">
@@ -178,8 +191,16 @@
       </circle>
     </g>
 
+    <!-- c-sm: Secrets Manager → API Lambda (inject at startup) -->
+    <g class="conn" id="c-sm">
+      <path d="M 430,331 L 400,331 L 400,112 L 418,112" stroke="#475569" stroke-width="1.2" stroke-dasharray="4 3" fill="none" marker-end="url(#a-gray)"/>
+      <circle class="conn-dot" r="2" fill="#475569">
+        <animateMotion dur="2.5s" repeatCount="indefinite" rotate="auto" path="M 430,331 L 400,331 L 400,112 L 418,112"/>
+      </circle>
+    </g>
+
     <!-- OTel trace line -->
-    <line x1="418" y1="228" x2="640" y2="228" stroke="#1e293b" stroke-width="1" stroke-dasharray="3 3"/>
+    <line x1="418" y1="261" x2="640" y2="261" stroke="#1e293b" stroke-width="1" stroke-dasharray="3 3"/>
 
     <!-- ── NODES ── -->
 
@@ -209,7 +230,7 @@
     </g>
 
     <!-- LLM -->
-    <g class="node" id="node-llm" data-tip="LLM Router · Primary: AWS Bedrock · Fallback: Grok (xAI) via OpenAI-compatible client · Validator pass: if approved memory exists, checks response compliance before returning — one retry with fix instructions if non-compliant">
+    <g class="node" id="node-llm" data-tip="LLM Router · Primary: AWS Bedrock (custom tool loop around converse API with explicit toolChoice forcing · region-prefixed model IDs: apac, us, eu) · Fallback: Grok (xAI) via openai-agents runtime with delegated tool decisions · Validator pass: if approved memory exists, checks response compliance before returning — one retry with fix instructions if non-compliant">
       <rect class="box" x="648" y="18" width="210" height="170" rx="8" fill="#3b0764" stroke="#d946ef" stroke-width="1.5"/>
       <text x="753" y="44" text-anchor="middle" font-size="13" font-weight="700" fill="#f0abfc">LLM Router</text>
       <rect x="662" y="53"  width="182" height="46" rx="5" fill="#4a044e" stroke="#a21caf" stroke-width="1"/>
@@ -239,7 +260,7 @@
     </g>
 
     <!-- MCP Tool Servers (wide bar) -->
-    <g class="node" id="node-mcp" data-tip="MCP Tool Servers (stdio processes) · Each tool is an isolated process boundary · Independently testable and swappable without modifying the agent loop · Tool results flow through TruthContext before reaching the canonical response renderer">
+    <g class="node" id="node-mcp" data-tip="MCP Tool Servers (stdio processes) · Three server families: Brave Search, core action server (WeasyPrint PDF, Resend email, file reader), and Memory MCP · Each tool is an isolated subprocess with AsyncExitStack lifecycle management · Memory extraction runs async in API mode, sync in worker mode · Subprocesses inherit trace context, AWS region, and Upstash job context · Tool results flow through TruthContext before reaching the canonical response renderer">
       <rect class="box" x="450" y="452" width="670" height="78" rx="8" fill="#052e16" stroke="#4ade80" stroke-width="1.5"/>
       <text x="785" y="472" text-anchor="middle" font-size="11" font-weight="700" fill="#86efac">MCP Tool Servers (stdio)</text>
       <line x1="582" y1="456" x2="582" y2="526" stroke="#166534" stroke-width="0.8"/>
@@ -266,6 +287,14 @@
       <text x="753" y="615" text-anchor="middle" font-size="9"  fill="#7c2d12">5 sessions · 50 msg context window</text>
     </g>
 
+    <!-- AWS Secrets Manager -->
+    <g class="node" id="node-sm" data-tip="AWS Secrets Manager · Stores all runtime secrets: LLM API keys (Bedrock, Grok), Upstash Redis credentials, Brave Search key, Resend API key, and Clerk JWT secret. Injected into both API Lambda and Worker Lambda containers at startup — no secrets in source control or environment file artifacts.">
+      <rect class="box" x="430" y="306" width="170" height="54" rx="8" fill="#1a1505" stroke="rgba(212,160,23,0.45)" stroke-width="1.5"/>
+      <text x="515" y="326" text-anchor="middle" font-size="11" font-weight="700" fill="#fde68a">AWS Secrets Manager</text>
+      <text x="515" y="342" text-anchor="middle" font-size="9" fill="#b89c30">API keys · DB credentials</text>
+      <text x="515" y="354" text-anchor="middle" font-size="8" fill="#78716c">injected at container startup</text>
+    </g>
+
     <!-- ── ANNOTATIONS ── -->
 
     <!-- Risk Router label -->
@@ -275,14 +304,16 @@
     <text x="506" y="210" text-anchor="middle" font-size="9" fill="#4338ca">high-risk → async</text>
 
     <!-- Truth Gate annotation -->
-    <rect x="215" y="165" width="195" height="54" rx="6" fill="#1c1917" stroke="#57534e" stroke-width="1"/>
-    <text x="312" y="183" text-anchor="middle" font-size="10" font-weight="600" fill="#a8a29e">Truth-Gated Rendering</text>
-    <text x="312" y="197" text-anchor="middle" font-size="9" fill="#78716c">IntentEnvelope → TruthContext</text>
-    <text x="312" y="210" text-anchor="middle" font-size="9" fill="#57534e">→ Canonical Response</text>
+    <rect x="215" y="165" width="195" height="76" rx="6" fill="#1c1917" stroke="#57534e" stroke-width="1"/>
+    <text x="312" y="181" text-anchor="middle" font-size="10" font-weight="600" fill="#a8a29e">Truth-Gated Rendering</text>
+    <text x="312" y="195" text-anchor="middle" font-size="9" fill="#78716c">7-stage finalization pipeline</text>
+    <text x="312" y="208" text-anchor="middle" font-size="8" fill="#57534e">memory validate → PDF recovery</text>
+    <text x="312" y="220" text-anchor="middle" font-size="8" fill="#57534e">→ tool enforce → normalize → render</text>
+    <text x="312" y="232" text-anchor="middle" font-size="8" fill="#57534e">→ truth gate → fix loop</text>
 
     <!-- OTel badge -->
-    <rect x="215" y="228" width="418" height="26" rx="5" fill="#0f172a" stroke="#1e293b" stroke-width="1" stroke-dasharray="4 3"/>
-    <text x="424" y="246" text-anchor="middle" font-size="10" fill="#475569">⬡ OpenTelemetry → Sentry · trace spans API Lambda + Worker Lambda</text>
+    <rect x="215" y="248" width="418" height="26" rx="5" fill="#0f172a" stroke="#1e293b" stroke-width="1" stroke-dasharray="4 3"/>
+    <text x="424" y="266" text-anchor="middle" font-size="10" fill="#475569">⬡ OpenTelemetry → Sentry · trace spans API Lambda + Worker Lambda</text>
 
     <!-- Memory tab note -->
     <rect x="15" y="270" width="178" height="52" rx="6" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
@@ -314,12 +345,13 @@
   const map = {
     'node-client':    ['c1','c-jobid','c-poll'],
     'node-apigw':     ['c1','c2','c-jobid','c-poll'],
-    'node-apilambda': ['c2','c-sync','c-async','c-jobid','c-s3l'],
+    'node-apilambda': ['c2','c-sync','c-async','c-jobid','c-s3l','c-sm'],
     'node-llm':       ['c-sync'],
     'node-redis':     ['c-async','c-rw','c-status'],
     'node-worker':    ['c-rw','c-wm','c-status'],
     'node-mcp':       ['c-wm','c-ms'],
     'node-s3':        ['c-ms','c-s3l'],
+    'node-sm':        ['c-sm'],
   };
 
   const nodes = document.querySelectorAll('.node');
@@ -352,6 +384,19 @@
       tip.style.display = 'none';
     });
   });
+
+  var isFs = new URLSearchParams(window.location.search).has('fs');
+  var fsBtn = document.querySelector('.fs-btn');
+  if (isFs) {
+    fsBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg> Close';
+  }
+  function toggleFullscreen() {
+    if (isFs) {
+      window.parent.postMessage({ type: 'diagram-fullscreen-close' }, '*');
+    } else if (window.parent !== window) {
+      window.parent.postMessage({ type: 'diagram-fullscreen' }, '*');
+    }
+  }
 </script>
 </body>
 </html>
