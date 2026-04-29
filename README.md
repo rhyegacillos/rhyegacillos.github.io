@@ -1,9 +1,9 @@
 # Rhye Gacillos — Full-Stack AI Portfolio
 
-Production-oriented AI applications with LLM integration, tool orchestration, and reliability guardrails.  
+Production-oriented AI applications with LLM integration, tool orchestration, automation operations, and reliability guardrails.
 Live demos, architecture diagrams, and one-page summaries are linked below.
 
-**Stack:** FastAPI · Next.js/React · TypeScript · AWS · Terraform · Redis · MCP · Observability (OpenTelemetry/Sentry)
+**Stack:** FastAPI · Next.js/React · TypeScript · AWS · Terraform · Redis · MCP · Automation (Shopify, Make, AppSheet, AppScript, n8n) · Observability (OpenTelemetry/Sentry)
 
 ---
 
@@ -39,15 +39,17 @@ Generate → Compare → Decision Summary → Execution Plan.
 ---
 
 ### 3) Autonomous Agentic Trader — Multi-Agent Trading Simulation
-Production-style multi-agent trading simulation with MCP tool boundaries and resilience guardrails.  
+Production-style multi-agent trading simulation with MCP tool boundaries, Redis cycle caching, optional n8n research workflows, and resilience guardrails.
 Research/education simulation; not financial advice.
 
 - 4 trader personas running scheduled trade/rebalance cycles
 - Tool-gated execution via MCP (accounts/trades/prices/research/memory)
-- Resilience: layered pricing fallback + trade blocking on missing/invalid prices
+- Redis/Upstash pre-warm for price, news, event-risk, and research briefs
+- Optional n8n producer for heavy research fan-out while portfolio-control remains in-app
+- Resilience: strict Alpaca -> Polygon quote authority + trade blocking on missing/invalid prices
 - AWS deployment automation (ECR/EC2) via Terraform + GitHub Actions (OIDC)
 
-**Live:** https://autonomous-trader.agentairg.site/  
+**Live:** https://manager-trader.agentairg.site/
 **One-pager:** /assets/autonomous-trader/onepager.pdf  
 **Architecture:** /assets/autonomous-trader/architecture.png  
 
@@ -65,6 +67,16 @@ Agentic healthcare documentation app with multimodal intake, evidence-linked sum
 **Live:** https://medinotes.agentairg.site/  
 **One-pager:** /assets/medinotes/onepager.pdf  
 **Architecture:** /assets/medinotes/architecture.png  
+
+---
+
+## Automation Operations
+
+Recent private-client ecommerce operations automation work. Client details are intentionally omitted.
+
+- **Local Pickup Automation:** connected **ShipStation**, **Make.com**, **Shopify**, and **Shopify Flow** so pickup-ready state, customer reminders, cancellation/refund messaging, and pickup-completed confirmation move through a repeatable workflow instead of manual follow-up.
+- **Warehouse-to-Shopify Inventory Automation:** connected **AppSheet**, **Google Sheets**, **Apps Script**, and the **Shopify Admin API** so warehouse scans, SKU loops, SOP photo capture, completion state, and non-Shopify marketplace inventory sync become traceable operational flows.
+- Reliability controls across both projects: processed-state tags, skip rules, source-order IDs, timestamps, skipped/failed states, error write-back, and operator handoff documentation.
 
 ---
 

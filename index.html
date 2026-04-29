@@ -6,15 +6,15 @@
     <title>Rhye Gacillos — Agentic AI Full-Stack Engineer</title>
     <meta
       name="description"
-      content="Software Engineer portfolio — full-stack AI applications with tool orchestration, MCP boundaries, and AWS deployments. Four live production projects."
+      content="Software Engineer portfolio — full-stack AI applications with tool orchestration, MCP boundaries, automation operations, and AWS deployments. Four live production projects."
     />
     <meta property="og:title" content="Rhye Gacillos — Agentic AI Full-Stack Engineer" />
-    <meta property="og:description" content="7+ years backend engineering, now building production AI systems — tool orchestration, MCP boundaries, multi-agent runtimes, and AWS deployments. Four live projects, each with a full case study." />
+    <meta property="og:description" content="7+ years backend engineering, now building production AI systems — tool orchestration, MCP boundaries, automation operations, multi-agent runtimes, and AWS deployments. Four live projects, each with a full case study." />
     <meta property="og:url" content="https://rhyegacillos.github.io/" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Rhye Gacillos — Agentic AI Full-Stack Engineer" />
-    <meta name="twitter:description" content="7+ years backend engineering, now building production AI systems — tool orchestration, MCP boundaries, multi-agent runtimes, and AWS deployments. Four live projects." />
+    <meta name="twitter:description" content="7+ years backend engineering, now building production AI systems — tool orchestration, MCP boundaries, automation operations, multi-agent runtimes, and AWS deployments. Four live projects." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -31,6 +31,7 @@
       <nav class="site-nav" aria-label="Primary">
         <a href="#about">About</a>
         <a href="#projects">Projects</a>
+        <a href="#automation">Automation</a>
         <a href="#skills">Stack</a>
         <a href="resume/cv-backend-ai.html" target="_blank" rel="noopener noreferrer">CV</a>
         <a href="#contact">Contact</a>
@@ -45,7 +46,7 @@
         <h1>Agentic AI<br />Full-Stack Engineer</h1>
         <p class="hero-copy">
           Building production-ready AI systems — tool orchestration, MCP boundaries,
-          multi-agent runtimes, and AWS deployments. Four live projects, each with a full case study.
+          multi-agent runtimes, automation operations, and AWS deployments. Four live projects, each with a full case study.
         </p>
         <div class="hero-stat-bar">
           <div class="hero-stat">
@@ -59,8 +60,8 @@
           </div>
           <div class="hero-stat-divider"></div>
           <div class="hero-stat">
-            <span class="hero-stat-val">AWS</span>
-            <span class="hero-stat-label">Lambda · App Runner · EC2</span>
+            <span class="hero-stat-val">Ops</span>
+            <span class="hero-stat-label">Shopify · Make.com · ShipStation</span>
           </div>
           <div class="hero-stat-divider"></div>
           <div class="hero-stat">
@@ -85,7 +86,7 @@
           Today, I build full-stack AI applications using that same backend engineering mindset. I focus on systems where the model is only one part of the product, supported by API design, validation, async execution, safe tool orchestration, and clear operational visibility. The goal is not just to generate output, but to build applications that stay reliable and understandable when they are used in real workflows.
         </p>
         <p style="margin-bottom: 0;">
-          My portfolio focuses on AI systems that need more than prompt quality alone. That includes validated outputs, verified tool use, asynchronous job handling for long-running requests, and observability across API, worker, and provider layers. I am especially interested in roles where strong backend engineering, API integration depth, and reliable AI execution are all part of the same product problem.
+          My portfolio focuses on AI systems that need more than prompt quality alone. That includes validated outputs, verified tool use, asynchronous job handling for long-running requests, and recent private-client automation work around Shopify, Make.com, ShipStation, reporting flow, process reliability, and operator handoff. I am especially interested in roles where strong backend engineering, API integration depth, and reliable AI execution are all part of the same product problem.
         </p>
       </section>
 
@@ -148,10 +149,10 @@
             <h3 class="project-entry-title">Autonomous Agentic Trader</h3>
             <div class="project-entry-desc">
               <div class="project-goal" style="margin-bottom: 10px;"><b>Goal:</b> High-integrity trading infrastructure using deterministic risk guardrails to govern LLM-driven trade proposals.</div>
-              <div class="project-how"><b>How:</b> Orchestrates a four-gate portfolio-control pipeline enforcing deterministic risk rules. The real-time dashboard uses an SSE-first architecture with a recent update memory to handle client reconnections and state resyncing.</div>
+              <div class="project-how"><b>How:</b> Orchestrates a four-gate portfolio-control pipeline with Redis-backed cycle pre-warm for prices, news, event risk, and research briefs. Optional n8n workflows handle heavy research production while the app keeps proposal, execution, audit, and SSE-first dashboard control.</div>
             </div>
             <div class="project-entry-tech">
-              <span>FastAPI</span><span>Next.js</span><span>OpenAI Agents SDK</span><span>MCP</span><span>Alpaca</span><span>PostgreSQL</span><span>AWS EC2</span>
+              <span>FastAPI</span><span>Next.js</span><span>OpenAI Agents SDK</span><span>MCP</span><span>Redis</span><span>n8n</span><span>Alpaca</span><span>PostgreSQL</span><span>AWS EC2</span>
             </div>
             <div class="project-entry-footer">
               <a class="project-live-link" href="https://manager-trader.agentairg.site/" target="_blank" rel="noopener noreferrer">
@@ -183,6 +184,41 @@
             </div>
           </article>
 
+        </div>
+      </section>
+
+      <!-- AUTOMATION OPERATIONS -->
+      <section id="automation" class="section reveal">
+        <p class="section-label">// automation operations</p>
+        <h2>Automation Operations</h2>
+        <p class="section-copy">
+          Recent private-client ecommerce operations automation work organized around two projects: <strong>Local Pickup Automation</strong> and <strong>Warehouse-to-Shopify Inventory Automation</strong>. Client details are intentionally omitted. The work converted manual warehouse, storefront, customer-notification, and inventory steps into repeatable workflows using the tools the operations team already used.
+        </p>
+        <div class="ops-grid">
+          <article class="ops-card">
+            <h3>Local Pickup Automation</h3>
+            <p>
+              Manual operation: warehouse and customer-service staff had to check local pickup orders, identify when an order was ready, update the storefront state, send customer emails, track reminders, and stop follow-ups after pickup, fulfillment, or cancellation.
+            </p>
+            <p>
+              Automated operation: <strong>ShipStation</strong> stays the warehouse trigger, <strong>Make.com</strong> moves pickup-ready state into <strong>Shopify</strong>, and <strong>Shopify Flow</strong> sends ready-for-pickup emails, reminder emails, cancellation/refund messaging, and pickup-completed confirmation.
+            </p>
+            <p>
+              Reliability controls: explicit <strong>Shopify</strong> tags track processed states such as ready email sent, 5-day reminder, 8-day reminder, cancelled, and completed. Fulfillment and cancellation state stop later workflow steps so customers do not receive duplicate or incorrect messages.
+            </p>
+          </article>
+          <article class="ops-card">
+            <h3>Warehouse-to-Shopify Inventory Automation</h3>
+            <p>
+              Manual operation: warehouse staff had to scan orders and SKUs, capture SOP photos, mark completion, and coordinate inventory updates for non-Shopify marketplace orders. The risk was missed updates, unclear status, and double inventory deduction for orders already handled through <strong>Shopify</strong>.
+            </p>
+            <p>
+              Automated operation: <strong>AppSheet</strong> provides the warehouse scanning interface on mobile, backed by <strong>Google Sheets</strong>. <strong>Apps Script</strong> and the <strong>Shopify Admin API</strong> create the bridge from completed warehouse scans into <strong>Shopify</strong>, so existing inventory-system integrations can process the order flow.
+            </p>
+            <p>
+              Reliability controls: source detection and skip rules prevent duplicate deduction for existing <strong>Shopify</strong> orders. Operator-visible sync statuses, source-order IDs, timestamps, skipped/failed states, and error write-back make handoff and troubleshooting clearer.
+            </p>
+          </article>
         </div>
       </section>
 
@@ -224,7 +260,13 @@
           <div class="stack-row">
             <span class="stack-label">DevOps</span>
             <div class="stack-pills">
-              <span>Docker</span><span>Terraform</span><span>GitHub Actions</span>
+              <span>Docker</span><span>Terraform</span><span>GitHub Actions</span><span>OIDC</span><span>AWS SSM</span>
+            </div>
+          </div>
+          <div class="stack-row">
+            <span class="stack-label">Automation</span>
+            <div class="stack-pills">
+              <span>Shopify</span><span>Make</span><span>AppSheet</span><span>AppScript</span><span>n8n</span>
             </div>
           </div>
           <div class="stack-row">
@@ -236,7 +278,7 @@
           <div class="stack-row">
             <span class="stack-label">AI-Assisted Tool</span>
             <div class="stack-pills">
-              <span>Claude Code</span><span>ChatGPT Codex</span><span>Gemini CLI</span><span>Github Copilot</span>
+              <span>Claude Code</span><span>ChatGPT Codex</span><span>Gemini CLI</span><span>GitHub Copilot</span>
             </div>
           </div>
           <div class="stack-row">
@@ -254,7 +296,7 @@
         <h2>Contact</h2>
         <p class="contact-intro">
           Open to full-time Software Engineer / Full-Stack AI roles and contract work.
-          Focus: LLM-integrated full-stack applications, agent orchestration, and production cloud deployments.
+          Focus: LLM-integrated full-stack applications, agent orchestration, automation operations, and production cloud deployments.
         </p>
         <div class="contact-grid">
           <a class="contact-card" href="mailto:gacillos.rhye@gmail.com">

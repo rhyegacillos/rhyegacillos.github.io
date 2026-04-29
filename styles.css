@@ -1027,7 +1027,7 @@ ul {
 
   .site-nav {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 4px;
     overflow: visible;
     padding-bottom: 0;
@@ -1445,6 +1445,40 @@ ul {
 }
 
 /* =========================================================
+   AUTOMATION OPERATIONS (index.html)
+   ========================================================= */
+.ops-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.ops-card {
+  border: 1px solid rgba(149, 175, 219, 0.18);
+  border-radius: 12px;
+  padding: 16px;
+  background: rgba(10, 19, 38, 0.68);
+}
+
+.ops-card h3 {
+  font-size: 0.98rem;
+  color: var(--accent-2);
+  margin-bottom: 8px;
+}
+
+.ops-card p {
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.ops-card strong,
+.section-copy strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* =========================================================
    STACK MANIFEST (index.html)
    ========================================================= */
 .stack-manifest {
@@ -1591,6 +1625,10 @@ a.contact-card:hover {
     gap: 12px;
   }
 
+  .ops-grid {
+    grid-template-columns: 1fr;
+  }
+
   .stack-row {
     grid-template-columns: 100px 1fr;
     gap: 10px;
@@ -1632,6 +1670,10 @@ a.contact-card:hover {
 
   .project-entry-desc {
     font-size: 0.83rem;
+  }
+
+  .ops-card {
+    padding: 13px 12px;
   }
 
   .stack-row {

@@ -6,7 +6,7 @@
     <title>Autonomous Agentic Trader — Case Study | Rhye Gacillos</title>
     <meta
       name="description"
-      content="Engineering case study: production-grade multi-agent trading infrastructure — four-gate portfolio-control pipeline, 14 deterministic risk rules, four named trader personas, MCP tool boundaries, and SSE-first real-time architecture."
+      content="Engineering case study: production-grade multi-agent trading infrastructure — four-gate portfolio-control pipeline, Redis cycle cache, optional n8n research pre-warm, MCP tool boundaries, and SSE-first real-time architecture."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -33,7 +33,7 @@
         <h1>Autonomous Agentic Trader</h1>
         <p class="cs-hero-sub">Production-Grade Multi-Agent Trading Infrastructure</p>
         <p class="hero-copy">
-          Building a reliable trading system takes more than passing market data to an LLM (Large Language Model — the AI brain that reads text and generates responses, like GPT-4 or Gemini). This case study covers the four-gate portfolio-control pipeline with 14 deterministic (always producing the same result for the same input — no randomness) risk rules. It also covers four named trader personas with individually tuned parameters, the MCP (Model Context Protocol — a standard interface that controls which tools the AI can call and how) tool boundaries that block direct market access, and the SSE (Server-Sent Events — a technology that lets the server push live updates to the browser without the browser asking repeatedly) architecture that keeps the operator dashboard live through reconnects and resyncs.
+          Building a reliable trading system takes more than passing market data to an LLM (Large Language Model — the AI brain that reads text and generates responses, like GPT-4 or Gemini). This case study follows the full control loop: four named trader personas generate trade intent, a Redis-backed cycle cache gives them bounded market and research context, optional n8n workflows can produce deeper research, and a four-gate portfolio-control pipeline with 14 deterministic (always producing the same result for the same input — no randomness) risk rules decides what is allowed to execute. MCP (Model Context Protocol — a standard interface that controls which tools the AI can call and how) boundaries block direct market access, while SSE (Server-Sent Events — a technology that lets the server push live updates to the browser without the browser asking repeatedly) keeps the operator dashboard live through reconnects and resyncs.
         </p>
         <div class="cs-hero-meta">
           <a class="portal-live-chip" href="https://manager-trader.agentairg.site/" target="_blank" rel="noopener noreferrer">Live: manager-trader.agentairg.site</a>
@@ -42,8 +42,10 @@
           <span class="cs-badge">FastAPI</span>
           <span class="cs-badge">Next.js</span>
           <span class="cs-badge">PostgreSQL</span>
+          <span class="cs-badge">Redis / Upstash</span>
           <span class="cs-badge">OpenAI Agents SDK</span>
           <span class="cs-badge">MCP</span>
+          <span class="cs-badge">n8n</span>
           <span class="cs-badge">Alpaca</span>
           <span class="cs-badge">Polygon</span>
           <span class="cs-badge">Brave Search</span>
@@ -81,18 +83,21 @@
         </div>
         <div class="cs-story">
           <p>
-            Most "AI trading" demos share the same failure mode. The LLM gets direct access to a trading API. A system prompt tells it to "make good trades." The demo runs until it makes a bad one. There is no proposal lifecycle, no risk policy, no audit trail, and no operator override. There is also no distinction between the LLM <em>reasoning about trades</em> and the system <em>executing them</em>. That is not a production architecture — it is a notebook experiment with a broker API key attached.
+            Most "AI trading" demos share the same failure mode. The LLM gets direct access to a trading API. A system prompt tells it to "make good trades." The demo runs until it makes a bad one. There is no proposal lifecycle, no risk policy, no audit trail, and no operator override. Research is usually just another live tool call inside each agent run, which means four agents can duplicate the same search, read different context, or put pressure on upstream providers at exactly the moment the system needs stability. There is also no distinction between the LLM <em>reasoning about trades</em> and the system <em>executing them</em>. That is not a production architecture — it is a notebook experiment with a broker API key attached.
           </p>
           <p>
-            A production trading system requires four things that demos consistently omit:
+            A production trading system requires a set of controls that demos consistently omit:
           </p>
           <ul>
             <li>A <strong>controlled execution environment</strong> where every trade follows a deterministic (always producing the same result for the same input — no randomness) proposal &rarr; decision &rarr; execution lifecycle</li>
             <li>A <strong>risk policy</strong> that checks proposals against portfolio state, not just price signals alone</li>
+            <li>A <strong>cycle-scoped research/cache layer</strong> that prevents four agents from multiplying the same provider calls</li>
             <li>An <strong>operator layer</strong> that can inspect, approve, reject, or halt at any stage without stopping the engine</li>
             <li>A <strong>persistence layer</strong> that makes every action recoverable and gives the ability to trace and review all actions after the fact</li>
           </ul>
-          <p>This project builds all four as first-class systems.</p>
+          <p>
+            This project builds those controls as one continuous loop: prepare shared context, let agents propose, run deterministic portfolio-control, persist the decision trail, and keep the operator surface current.
+          </p>
         </div>
       </section>
 
@@ -104,7 +109,7 @@
         </div>
         <div class="cs-story">
           <p>
-            The system runs four named LLM trader personas — <strong>Warren, George, Ray, and Cathie</strong> — each with a distinct risk profile and tuning parameters. These parameters are injected into both the agent instructions and the risk policy evaluation. They are not cosmetic. They feed directly into the risk gate's numerical thresholds, portfolio exposure cap multipliers, and re-entry timing logic. Each trader can also be independently configured to use a different LLM model — Gemini, OpenAI, DeepSeek, or Grok — via per-trader model routing.
+            The system runs four named LLM trader personas — <strong>Warren, George, Ray, and Cathie</strong> — each with a distinct risk profile and tuning parameters. At the start of a cycle, the app prepares shared price, news, event-risk, and research records so the personas are not independently scraping the same context before they reason. Their differences come from strategy and risk appetite, not from inconsistent tool access. These parameters are injected into both the agent instructions and the risk policy evaluation. They are not cosmetic. They feed directly into the risk gate's numerical thresholds, portfolio exposure cap multipliers, and re-entry timing logic. Each trader can also be independently configured to use a different LLM model — Gemini, OpenAI, DeepSeek, or Grok — via per-trader model routing.
           </p>
         </div>
 
@@ -145,7 +150,7 @@
         </div>
         <div class="cs-story">
           <p>
-            No trader agent executes a trade directly. Every <code>buy_shares</code> or <code>sell_shares</code> MCP tool call routes to <strong>proposal intake</strong>, not to the Alpaca execution API. The tool name matches the trader's mental model — it expresses what the trader wants to do. But the implementation sends that call into a controlled pipeline instead. The proposal then travels through four deterministic gates before anything touches a real brokerage position.
+            Shared research context does not give traders execution authority. No trader agent executes a trade directly. Every <code>buy_shares</code> or <code>sell_shares</code> MCP tool call routes to <strong>proposal intake</strong>, not to the Alpaca execution API. The tool name matches the trader's mental model — it expresses what the trader wants to do. But the implementation sends that call into a controlled pipeline instead. The proposal then travels through four deterministic gates before anything touches a real brokerage position.
           </p>
         </div>
 
@@ -159,7 +164,7 @@
         <div class="cs-decision">
           <h3>Gate 2 — Deterministic Risk Policy (14+ Rules)</h3>
           <p>
-            The risk policy checks each validated proposal against a fresh portfolio snapshot pulled at evaluation time. Rules run in sequence:
+            The risk policy checks each validated proposal against a fresh portfolio snapshot pulled at evaluation time. The Redis cycle cache can reduce upstream provider work, but portfolio-control still anchors decision authority to the current-cycle quote snapshot and the persisted portfolio state. Rules run in sequence:
           </p>
           <ul>
             <li>Portfolio state freshness check (reject if snapshot is stale beyond threshold)</li>
@@ -201,11 +206,11 @@
       <section class="cs-section reveal">
         <div class="cs-chapter-header">
           <span class="cs-chapter-num">IV</span>
-          <h2>MCP Tool Boundaries: The Isolation Contract</h2>
+          <h2>MCP, Cache, and Research Boundaries</h2>
         </div>
         <div class="cs-story">
           <p>
-            Traders never call market APIs or account APIs directly. All access flows through <strong>typed MCP tool contracts</strong>. This makes every external interaction traceable at the tool boundary, independently testable, and replaceable without modifying the agent loop. A failed MCP session for one trader is isolated and retried independently. It does not bring down the sessions of other traders running in the same cycle.
+            The previous chapters describe who proposes and who decides. This boundary layer explains how agents gather context without bypassing either side of that split. Traders never call market APIs, account APIs, or research workflows directly. All access flows through <strong>typed MCP tool contracts</strong> and cache-aware service boundaries. This makes every external interaction traceable at the tool boundary, independently testable, and replaceable without modifying the agent loop. A failed MCP session for one trader is isolated and retried independently. It does not bring down the sessions of other traders running in the same cycle.
           </p>
         </div>
 
@@ -219,7 +224,14 @@
         <div class="cs-decision">
           <h3>Market Server</h3>
           <p>
-            Tools: <code>lookup_share_price</code>, <code>get_quote_freshness</code>, <code>get_symbol_news_summary</code>, <code>get_symbol_event_risk</code>. Price resolution follows two distinct paths. <strong>Trader-side</strong> reads use <code>Alpaca &rarr; Polygon &rarr; cache</code> (general fallback chain). <strong>Portfolio-control</strong> decision and execution authority uses the strict <code>Alpaca &rarr; Polygon</code> path only — no cached data is used for new decisions or executions. Price source quality is tracked across the resolution chain. Stale or low-trust quotes trigger the <code>quote_low_trust</code> path in Gate 2. That escalates to the price source adequacy rule and may reject the proposal rather than execute on unreliable pricing. When multiple traders request the same symbol at the same time, the first request becomes the leader and others wait for that shared result. This prevents duplicate provider calls during cold-cache bursts.
+            Tools: <code>lookup_share_price</code>, <code>get_quote_freshness</code>, <code>get_symbol_news_summary</code>, <code>get_symbol_event_risk</code>, <code>get_symbol_research_brief</code>. During each scheduler cycle, the app pre-warms a Redis cache keyed by <code>{kind}:{cycle_id}:{symbol}</code> for price, news, event-risk, and research records. Trader-side market tools read that cycle cache first, then call an internal FastAPI cache endpoint on miss, and only then trigger upstream provider work. This keeps four concurrent personas from making four copies of the same Alpaca, Polygon, Brave, Playwright, or research workflow call. <strong>Portfolio-control</strong> decision and execution authority still uses strict current-cycle quote snapshots fed by the <code>Alpaca &rarr; Polygon</code> path — prior-cycle Redis or persisted quote records are never treated as fresh authority for a new decision.
+          </p>
+        </div>
+
+        <div class="cs-decision">
+          <h3>Researcher and n8n Boundary</h3>
+          <p>
+            Research production is switchable. In internal mode, the app derives research briefs during pre-warm from its own news/event pipeline and can fall back to a Researcher sub-agent with Web Tools MCP servers such as Playwright, Brave Search, and Fetch. In n8n mode, FastAPI keeps lifecycle ownership but delegates heavy source fan-out, page reading, summarization, filtering, and retry behavior to a configured n8n workflow. The workflow writes back to the same Redis cache contract, so trader prompts and MCP tools do not need to know which producer generated the research brief. If the cached brief is sufficient, the trader never invokes deeper research at all.
           </p>
         </div>
 
@@ -295,7 +307,7 @@
             <p>Background watcher that polls market status every 60 seconds. Drives the backend-controlled scheduler auto-start at market open — previously browser-driven, now handled server-side so the scheduler can start without an active browser tab.</p>
           </div>
           <div class="cs-stack-item">
-            <h4>Next.js 14 (static export)</h4>
+            <h4>Next.js 15 / React 19 (static export)</h4>
             <p>Dashboard built to static HTML/JS, served directly by FastAPI. No separate frontend server required — the entire frontend is a deployment artifact bundled into the container image. The operator workspace provides 5 tabs: Manager overview and per-Trader views for Warren, George, Ray, and Cathie.</p>
           </div>
           <div class="cs-stack-item">
@@ -308,11 +320,19 @@
           </div>
           <div class="cs-stack-item">
             <h4>MCP (stdio servers)</h4>
-            <p>Three servers: Accounts, Market, and Memory. Failed MCP sessions are isolated per-trader and retried independently. All tool calls are logged at the MCP boundary for full auditability.</p>
+            <p>Trader-facing Accounts, Market, and Memory servers, plus Web Tools MCP for the Researcher sub-agent. Failed MCP sessions are isolated per-trader and retried independently. All tool calls are logged at the MCP boundary for full auditability.</p>
           </div>
           <div class="cs-stack-item">
             <h4>Alpaca + Polygon + Brave Search</h4>
-            <p>Alpaca for trade execution and account state — accessed only through the Accounts MCP server after full four-gate approval. Alpaca and Polygon handle market price resolution, while Brave Search is used for research, news summaries, and event-risk context.</p>
+            <p>Alpaca handles trade execution and account state after full four-gate approval and is the primary strict quote provider. Polygon is the structured price fallback. Brave Search is research/news only and is no longer part of price authority for manager decisions or execution approval.</p>
+          </div>
+          <div class="cs-stack-item">
+            <h4>Redis / Upstash Cycle Cache</h4>
+            <p>Cycle-scoped cache for price, news, event-risk, and research records. Local Docker Redis is used in development; Upstash REST is supported in production. Cache keys include the active cycle ID, so old-cycle data cannot satisfy a new cycle's research or quote lookup by accident.</p>
+          </div>
+          <div class="cs-stack-item">
+            <h4>n8n Research Workflows</h4>
+            <p>Optional external producer for pre-warm research and on-demand deeper research. FastAPI posts the cycle payload to n8n, waits for Redis readiness status, and keeps the proposal, decision, execution, and audit lifecycle inside the app.</p>
           </div>
           <div class="cs-stack-item">
             <h4>Cycle-Scoped Quote Authority</h4>
@@ -338,6 +358,22 @@
             <h4>GitHub Actions</h4>
             <p>CI/CD pipeline: build Docker image, push to ECR, deploy to EC2 via SSM. No exposed SSH ports and no long-lived access credentials in the pipeline. Triggered on push to main and available for manual hotfix deploys.</p>
           </div>
+        </div>
+      </section>
+
+      <!-- CHAPTER VII -->
+      <section class="cs-section reveal">
+        <div class="cs-chapter-header">
+          <span class="cs-chapter-num">VII</span>
+          <h2>Architectural Result</h2>
+        </div>
+        <div class="cs-story">
+          <p>
+            The final shape is not "agents that trade." It is a controlled trading simulation where agents create structured intent, shared context is prepared before they run, optional n8n workflows can expand research production, and deterministic portfolio-control decides whether anything is allowed to move forward. The external workflow layer improves research throughput; it does not become the trading authority.
+          </p>
+          <p>
+            That separation is the main engineering point of the project. Trader reasoning, research production, risk policy, execution, persistence, and dashboard state all have clear boundaries. The system can add richer research or different model providers without weakening the proposal &rarr; decision &rarr; execution contract that keeps the operator in control.
+          </p>
         </div>
       </section>
 
