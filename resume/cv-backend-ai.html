@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rayan Gacillos - Backend to Full-Stack AI CV</title>
+  <title>Rayan Gacillos - Backend, AI, and Automation CV</title>
   <style>
     :root {
       --ink: #0f172a;
@@ -200,7 +200,7 @@
   <main class="page">
     <header class="header">
       <h1>Rayan Gacillos</h1>
-      <div class="subtitle">Software Engineer with 7+ Years in Backend Systems, Now Building Full-Stack AI Applications</div>
+      <div class="subtitle">Software Engineer with 7+ Years in Backend Systems, Full-Stack AI, and Operations Automation</div>
       <div class="contact">
         <div class="contact-location">Location: Calabarzon, Philippines (Open to Remote/Hybrid)</div>
         <div>Email: gacillos.rhye@gmail.com</div>
@@ -213,10 +213,10 @@
       <h2>Professional Profile</h2>
       <hr class="rule" />
       <p>
-        Software Engineer with 7+ years of experience building backend systems, REST APIs, and third-party integrations, with recent work focused on full-stack AI applications. My background in Java and Spring Boot shaped how I approach AI engineering: clear API contracts, dependable backend behavior, and systems that remain understandable after the demo stage.
+        Software Engineer with 7+ years of experience building backend systems, REST APIs, third-party integrations, and operations automation, with recent work focused on full-stack AI applications and ecommerce workflow automation. My background in Java and Spring Boot shaped how I approach AI engineering and automation work: clear API contracts, dependable backend behavior, explicit workflow state, and systems that remain understandable after the demo stage.
       </p>
       <p>
-        Experienced in Java (Spring Boot), Python (FastAPI/Django), and TypeScript/React, I build end-to-end applications that combine API integration, AI workflows, validation, async job handling, safe tool orchestration, fallback routing, and observability. My integration work includes designing and consuming REST endpoints, handling authentication and bearer-token flows, validating request and response payloads, integrating external provider APIs, and supporting frontend-to-backend coordination for production workflows. I am targeting Software Engineer and Full-Stack AI roles where strong backend engineering, API integration depth, and reliable AI execution matter more than prompt-only experimentation.
+        Experienced in Java (Spring Boot), Python (FastAPI/Django), and TypeScript/React, I build end-to-end applications that combine API integration, AI workflows, validation, async job handling, safe tool orchestration, fallback routing, and observability. My integration work includes designing and consuming REST endpoints, handling authentication and bearer-token flows, validating request and response payloads, integrating external provider APIs, and supporting frontend-to-backend coordination for production workflows. Recent private-client automation work includes Shopify, Make, AppSheet, AppScript, and n8n-oriented operations workflows. I am targeting Software Engineer and Full-Stack AI roles where strong backend engineering, API integration depth, reliable AI execution, and practical workflow automation matter more than prompt-only experimentation.
       </p>
     </section>
 
@@ -241,6 +241,8 @@
         <div class="v">FastAPI, Django, Spring Boot, REST API design, endpoint design, async job orchestration, middleware patterns, SSE streaming</div>
         <div class="k">API Integration</div>
         <div class="v">Third-party API integration, request/response validation, JSON payload handling, bearer-token and API-key patterns, webhook-style workflows, provider fallback, error handling, retry logic</div>
+        <div class="k">Automation</div>
+        <div class="v">Shopify, Make, AppSheet, AppScript, n8n, Shopify Admin API, Shopify Flow, ShipStation, warehouse workflow automation, ecommerce operations automation</div>
         <div class="k">Frontend</div>
         <div class="v">Next.js, React, TypeScript</div>
         <div class="k">AI / LLM</div>
@@ -306,6 +308,20 @@
       </div>
 
       <div class="item project-item">
+        <p class="item-title">Private-Client Ecommerce Operations Automation</p>
+        <div class="project-links">
+          <span>Client details omitted for confidentiality</span>
+        </div>
+        <ul>
+          <li><strong>Local Pickup Automation:</strong> converted a manual local-pickup workflow into a repeatable operations flow using ShipStation as the warehouse trigger, Make to transfer pickup-ready state into Shopify, and Shopify Flow for customer emails, reminders, cancellation/refund messaging, and pickup-completed confirmation.</li>
+          <li><strong>Warehouse-to-Shopify Inventory Automation:</strong> supported warehouse scanning and inventory sync using AppSheet, Google Sheets, AppScript, and the Shopify Admin API so order scans, SKU loops, SOP photo capture, completion state, and non-Shopify marketplace order sync became traceable.</li>
+          <li>Added processed-state controls such as Shopify tags, source-order IDs, skipped/failed states, timestamps, and error write-back to prevent duplicate notifications, avoid double inventory deduction, and make operator handoff easier.</li>
+          <li>Mapped manual warehouse, storefront, customer-service, and inventory steps into documented workflows with clear tool ownership, stop conditions, and troubleshooting paths for non-engineer operators.</li>
+        </ul>
+        <hr class="rule" />
+      </div>
+
+      <div class="item project-item">
         <p class="item-title">MediNotes</p>
         <div class="project-links">
           <span>Live: <a href="https://medinotes.agentairg.site/" target="_blank" rel="noreferrer">medinotes.agentairg.site</a></span>
@@ -334,6 +350,7 @@
           <li>Designed backend APIs for multi-step workflows including chat, jobs, memory, uploads, streaming, and provider-backed execution flows.</li>
           <li>Implemented async API and worker patterns using job-based workflows for tool-heavy requests, improving timeout handling, frontend visibility, and recovery behavior.</li>
           <li>Integrated external providers for model inference, search, email, research, and document workflows, with request validation, response normalization, retry handling, and provider fallback logic.</li>
+          <li>Built private-client ecommerce automation projects covering Local Pickup Automation and Warehouse-to-Shopify Inventory Automation across Shopify, Make, AppSheet, AppScript, ShipStation, and Shopify Flow.</li>
           <li>Deployed workloads with Docker, Terraform, and GitHub Actions, using OIDC-based CI authentication and end-to-end tracing for production visibility and easier issue isolation.</li>
           <li>Applied deterministic code paths in higher-risk domains such as finance and clinical documentation while using AI for reasoning, summarization, and user-facing explanation.</li>
         </ul>
