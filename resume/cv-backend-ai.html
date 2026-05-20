@@ -188,6 +188,11 @@
         page-break-inside: avoid;
       }
 
+      .print-page-start {
+        break-before: page;
+        page-break-before: always;
+      }
+
       p,
       li {
         orphans: 3;
@@ -203,7 +208,8 @@
       <div class="subtitle">Software Engineer with 7+ Years in Backend Systems, Full-Stack AI, and Operations Automation</div>
       <div class="contact">
         <div class="contact-location">Location: Calabarzon, Philippines (Open to Remote/Hybrid)</div>
-        <div>Email: gacillos.rhye@gmail.com</div>
+        <div>Gmail: gacillos.rhye@icloud.com</div>
+        <div>Phone: +63 952 456 5026</div>
         <div>LinkedIn: <a href="https://www.linkedin.com/in/rhyegacillos/" target="_blank" rel="noreferrer">linkedin.com/in/rhyegacillos</a></div>
         <div>Portfolio: <a href="https://rhyegacillos.github.io/" target="_blank" rel="noreferrer">rhyegacillos.github.io</a></div>
       </div>
@@ -264,10 +270,12 @@
         <p class="item-title">Digital Assistant</p>
         <div class="project-links">
           <span>Live: <a href="https://digital-assistant.agentairg.site/" target="_blank" rel="noreferrer">digital-assistant.agentairg.site</a></span>
+          <span>Duration: Jan 2026 - Apr 2026 (4 months)</span>
         </div>
         <ul>
           <li>Built a serverless AI assistant that handles multi-step workflows including search, PDF generation, email delivery, uploads, and user-approved memory.</li>
           <li>Designed backend APIs for chat, jobs, uploads, memory, and tool-triggered workflows, with clear request shaping and status-based responses for frontend consumption.</li>
+          <li>Used Python/FastAPI to validate tool outputs, label successful versus failed execution states, and keep user-facing responses grounded in observable backend results.</li>
           <li>Separated API intake from background execution using an async API + worker pattern so long-running tasks could complete without request timeouts.</li>
           <li>Integrated external services for web search, PDF generation, and email delivery, with verified tool outcomes so user-facing responses reflect actual execution results rather than model claims alone.</li>
           <li>Added a truth-gated response path for higher-risk actions so the final user message is constrained by verified tool results instead of fluent but unverified model output.</li>
@@ -280,10 +288,12 @@
         <p class="item-title">IdeaGen</p>
         <div class="project-links">
           <span>Live: <a href="https://ideagen.agentairg.site/" target="_blank" rel="noreferrer">ideagen.agentairg.site</a></span>
+          <span>Duration: Jan 2026 - Apr 2026 (4 months)</span>
         </div>
         <ul>
           <li>Built a multi-step idea evaluation workflow that moves from generation to comparison, summarization, and execution planning instead of stopping at one-shot content output.</li>
           <li>Built backend integration flows across multiple model-provider APIs, keeping request contracts and downstream parsing consistent even when providers returned different response patterns.</li>
+          <li>Applied annotation-style review patterns by comparing generated outputs across runs, validating schema compliance, and preserving reviewable artifacts for later assessment.</li>
           <li>Implemented ordered multi-provider fallback across OpenAI, Gemini, DeepSeek, and Grok, while keeping schema validation and retry logic consistent across providers.</li>
           <li>Used cache-before-infer and durable run snapshots to reduce repeat cost, support artifact reuse, and keep comparisons reviewable over time.</li>
           <li>Kept financial and comparison logic in deterministic code where precision mattered, using AI mainly for generation, summarization, and report-style explanation.</li>
@@ -296,9 +306,11 @@
         <p class="item-title">Autonomous Agentic Trader</p>
         <div class="project-links">
           <span>Live: <a href="https://manager-trader.agentairg.site/" target="_blank" rel="noreferrer">manager-trader.agentairg.site</a></span>
+          <span>Duration: Jan 2026 - Apr 2026 (4 months)</span>
         </div>
         <ul>
           <li>Built a multi-agent trading simulation where agent proposals pass through deterministic portfolio-control checks before any execution path is allowed.</li>
+          <li>Implemented Python-based validation gates that classify agent proposals into approve, reduce, reject, or review outcomes based on structured policy checks.</li>
           <li>Integrated account, pricing, research, and memory APIs behind MCP contracts so agents could consume approved capabilities without direct brokerage access.</li>
           <li>Implemented SSE-based dashboard updates with replay and resync behavior so operators can recover state cleanly after disconnects or engine restarts.</li>
           <li>Used a multi-gate review pipeline with explicit approve, reduce, or reject outcomes so agent suggestions remain auditable and bounded by policy rules.</li>
@@ -311,10 +323,12 @@
         <p class="item-title">Private-Client Ecommerce Operations Automation</p>
         <div class="project-links">
           <span>Client details omitted for confidentiality</span>
+          <span>Duration: Mar 2026 - Apr 2026 (2 months)</span>
         </div>
         <ul>
           <li><strong>Local Pickup Automation:</strong> converted a manual local-pickup workflow into a repeatable operations flow using ShipStation as the warehouse trigger, Make to transfer pickup-ready state into Shopify, and Shopify Flow for customer emails, reminders, cancellation/refund messaging, and pickup-completed confirmation.</li>
           <li><strong>Warehouse-to-Shopify Inventory Automation:</strong> supported warehouse scanning and inventory sync using AppSheet, Google Sheets, AppScript, and the Shopify Admin API so order scans, SKU loops, SOP photo capture, completion state, and non-Shopify marketplace order sync became traceable.</li>
+          <li>Maintained annotation-like operational status fields for synced, skipped, failed, completed, and duplicate-risk records so exceptions could be reviewed and corrected consistently.</li>
           <li>Added processed-state controls such as Shopify tags, source-order IDs, skipped/failed states, timestamps, and error write-back to prevent duplicate notifications, avoid double inventory deduction, and make operator handoff easier.</li>
           <li>Mapped manual warehouse, storefront, customer-service, and inventory steps into documented workflows with clear tool ownership, stop conditions, and troubleshooting paths for non-engineer operators.</li>
         </ul>
@@ -325,9 +339,11 @@
         <p class="item-title">MediNotes</p>
         <div class="project-links">
           <span>Live: <a href="https://medinotes.agentairg.site/" target="_blank" rel="noreferrer">medinotes.agentairg.site</a></span>
+          <span>Duration: Jan 2026 - Apr 2026 (4 months)</span>
         </div>
         <ul>
           <li>Built a clinical documentation workflow that turns multimodal visit inputs into structured summaries with evidence-aware review and scoped follow-up chat.</li>
+          <li>Used Python/FastAPI orchestration with validation steps that annotate generated claims against source evidence, unsupported details, and critic-review findings.</li>
           <li>Used specialized orchestration roles for extraction, review, evidence handling, and chat so quality issues can be isolated by workflow stage.</li>
           <li>Designed backend flows for intake, processing, streaming, and context-scoped retrieval so the application could coordinate multiple internal services safely.</li>
           <li>Applied resumable streaming and job-based execution to keep long-running generations usable across unstable connections.</li>
@@ -338,7 +354,7 @@
       </div>
     </section>
 
-    <section class="section compact-section">
+    <section class="section compact-section print-page-start">
       <h2>Professional Experience</h2>
       <hr class="rule" />
 
