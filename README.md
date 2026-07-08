@@ -1,7 +1,7 @@
 # Rhye Gacillos — Full-Stack AI Portfolio
 
 Production-oriented AI applications with LLM integration, tool orchestration, automation operations, and reliability guardrails.
-Live demos, architecture diagrams, and one-page summaries are linked below.
+Architecture diagrams and one-page summaries are linked below.
 
 **Stack:** FastAPI · Next.js/React · TypeScript · AWS · Terraform · Redis · MCP · Automation (Shopify, Make, AppSheet, AppScript, n8n) · Observability (OpenTelemetry/Sentry)
 
@@ -17,7 +17,6 @@ Serverless AI assistant with tool orchestration (search, PDF export, email, uplo
 - Observability: OpenTelemetry exported to Sentry
 - AWS: Lambda, API Gateway, S3, CloudFront, ECR; IaC via Terraform
 
-**Live:** https://digital-assistant.agentairg.site/  
 **One-pager:** /assets/digital-assistant/onepager.pdf  
 **Architecture:** /assets/digital-assistant/architecture.png  
 
@@ -32,7 +31,6 @@ Generate → Compare → Decision Summary → Execution Plan.
 - PDF/email exports for stakeholder-ready deliverables
 - Guardrails: structured outputs, validation/retries, quotas, caching, snapshot durability
 
-**Live:** https://ideagen.agentairg.site/  
 **One-pager:** /assets/ideagen/onepager.pdf  
 **Architecture:** /assets/ideagen/architecture.png  
 
@@ -49,7 +47,6 @@ Research/education simulation; not financial advice.
 - Resilience: strict Alpaca -> Polygon quote authority + trade blocking on missing/invalid prices
 - AWS deployment automation (ECR/EC2) via Terraform + GitHub Actions (OIDC)
 
-**Live:** https://manager-trader.agentairg.site/
 **One-pager:** /assets/autonomous-trader/onepager.pdf  
 **Architecture:** /assets/autonomous-trader/architecture.png  
 
@@ -64,7 +61,6 @@ Agentic healthcare documentation app with multimodal intake, evidence-linked sum
 - RAG memory + scoped chat (bounded to patient visit summaries + consultation context)
 - AWS: Dockerized deployment via ECR + App Runner
 
-**Live:** https://medinotes.agentairg.site/  
 **One-pager:** /assets/medinotes/onepager.pdf  
 **Architecture:** /assets/medinotes/architecture.png  
 
@@ -72,17 +68,19 @@ Agentic healthcare documentation app with multimodal intake, evidence-linked sum
 
 ## Automation Operations
 
-Recent private-client ecommerce operations automation work. Client details are intentionally omitted.
+Recent private-client operations automation work. Client and product details are intentionally omitted; the summaries focus on the workflow concept and business problem solved.
 
-- **Local Pickup Automation:** connected **ShipStation**, **Make.com**, **Shopify**, and **Shopify Flow** so pickup-ready state, customer reminders, cancellation/refund messaging, and pickup-completed confirmation move through a repeatable workflow instead of manual follow-up.
-- **Warehouse-to-Shopify Inventory Automation:** connected **AppSheet**, **Google Sheets**, **Apps Script**, and the **Shopify Admin API** so warehouse scans, SKU loops, SOP photo capture, completion state, and non-Shopify marketplace inventory sync become traceable operational flows.
-- Reliability controls across both projects: processed-state tags, skip rules, source-order IDs, timestamps, skipped/failed states, error write-back, and operator handoff documentation.
+- **Warehouse Inventory Sync:** turns order scanning, item completion, proof capture, and inventory updates into one auditable workflow with status write-back, source rules, correction handling, and review dashboards.
+- **B2B Account Import Tool:** lets operators paste account data into a spreadsheet, validate it, preview setup, import records, approve ordering, and review row-level results without hand-entering every account.
+- **Procurement Reorder Dashboard:** replaces manual exports and spreadsheet checking with a dashboard that combines sales, stock, open purchase orders, lead times, mappings, and forecast logic to recommend what to reorder and when.
+- **Shipping Manifest Automation:** combines shipping records into a printable daily carrier handoff manifest, saves the PDF, notifies the operator, and keeps history plus hold/restore controls for packages that should not print yet.
+- **Local Pickup Notification Flow:** moves pickup-ready state from warehouse operations into customer notifications, with processed-state tags and stop conditions to prevent duplicate or incorrect reminders.
 
 ---
 
 ## Notes on Source Code
-These projects are deployed publicly, but the primary implementation repositories are private (security and production configuration).  
-Architecture diagrams, one-pagers, and live demos are provided here. Code samples can be shared upon request.
+The primary implementation repositories are private (security and production configuration).  
+Architecture diagrams and one-pagers are provided here. Code samples can be shared upon request.
 
 ---
 
