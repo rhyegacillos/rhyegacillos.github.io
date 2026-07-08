@@ -247,67 +247,67 @@
         <p class="section-label">// automation operations</p>
         <h2>AI Automation Engineering</h2>
         <p class="section-copy">
-          Recent private-client operations automation work focused on replacing manual copy-paste, spreadsheet checking, and follow-up tasks with simple operator tools. Each project starts with the same goal: make the business process easier to run, harder to break, and clear enough that non-engineers can operate it without needing the implementation details.
+          Recent private-client operations automation work focused on the parts of a business that usually live in spreadsheets, admin screens, and repeated follow-ups. The work was about turning those steps into clear tools that operators can trust, understand, and run without needing a developer beside them.
         </p>
         <div class="ops-grid">
           <article class="ops-card">
             <h3>Warehouse Inventory Sync</h3>
             <p>
-              <strong>Goal:</strong> Turn warehouse scanning and inventory updates into one traceable workflow instead of separate manual steps across warehouse, spreadsheet, store, and inventory tools.
+              The warehouse needed one clear path from scanning an order to updating inventory. I built a workflow where staff can scan items, record completion, attach proof, and see the status of each order without jumping between disconnected tools.
             </p>
             <p>
-              <strong>What it solves:</strong> Staff can scan an order, record item completion, attach proof, and mark the work done while the automation prepares the right inventory update path. It reduces missed deductions, duplicate updates, and unclear handoffs between warehouse and back-office operations.
+              The main problem was reliability: missed deductions, duplicate updates, and unclear handoffs. The automation adds source rules, status write-back, audit logs, review dashboards, and operator approval points so the team can see what happened and fix exceptions safely.
             </p>
             <p>
-              <strong>How it works:</strong> AppSheet, Google Sheets, Apps Script, Shopify Admin API, and ERP/inventory APIs are connected through clear status states, source rules, audit logs, review dashboards, retry-safe actions, and operator approval steps.
+              Built with AppSheet, Google Sheets, Apps Script, ecommerce APIs, and ERP/inventory APIs.
             </p>
           </article>
           <article class="ops-card">
             <h3>B2B Account Import Tool</h3>
             <p>
-              <strong>Goal:</strong> Make a large business-customer migration safe to run from a spreadsheet instead of forcing operators to create each account manually in an admin UI.
+              A large business-account import would have taken hours of careful manual entry. I built a spreadsheet-driven tool that lets operators paste account data, validate it, preview the setup, then run the import with clear row-by-row results.
             </p>
             <p>
-              <strong>What it solves:</strong> Manual account setup is slow and error-prone. The tool validates rows before import, generates IDs, previews setup data, creates or updates account records, links existing contacts, applies ordering rules, and writes clear row-level results back to the sheet.
+              The tool handles ID generation, existing-contact matching, account creation or update, ordering approval, and verification columns. If something fails, the sheet shows exactly which row needs attention instead of stopping the whole batch.
             </p>
             <p>
-              <strong>How it works:</strong> Google Sheets and Apps Script drive the workflow, with Shopify GraphQL calls behind dry-run mode, rate limiting, retry/backoff, idempotent re-runs, whole-row status coloring, actionable error messages, and append-only run logs.
+              Built with Google Sheets, Apps Script, GraphQL APIs, dry-run mode, rate limiting, retry/backoff, idempotent re-runs, status coloring, and append-only run logs.
             </p>
           </article>
           <article class="ops-card">
             <h3>Procurement Reorder Dashboard</h3>
             <p>
-              <strong>Goal:</strong> Replace manual sales exports, inventory exports, and spreadsheet formulas with a dashboard that answers what to reorder, how many units to buy, and when to place the order.
+              Purchasing decisions were spread across exports, formulas, stock checks, and open purchase orders. I built a dashboard that brings those inputs together and gives operators a practical answer: what needs to be ordered, how many units, and when action is needed.
             </p>
             <p>
-              <strong>What it solves:</strong> Purchasing decisions become easier to review because sales, inventory, open purchase orders, supplier lead times, kit breakdowns, and forecast logic are pulled into one place instead of being checked across several files.
+              The dashboard combines sales history, current stock, open orders, lead times, item mappings, and forecast logic. It also highlights data issues and groups recommendations so purchasing can review the work instead of rebuilding the calculation by hand.
             </p>
             <p>
-              <strong>How it works:</strong> Apps Script pulls channel and ERP data, normalizes item mappings, computes reorder recommendations, groups orders by supplier/factory, highlights data issues, supports discontinued-item controls, and presents the result in an operator dashboard.
+              Built with Apps Script, Google Sheets, channel APIs, ERP/inventory APIs, forecast logic, supplier grouping, and dashboard controls for discontinued items.
             </p>
           </article>
           <article class="ops-card">
             <h3>Shipping Manifest Automation</h3>
             <p>
-              <strong>Goal:</strong> Create a daily pickup manifest that operators can print, have signed, and keep as proof that packages were handed to the carrier.
+              The shipping team needed a simple daily record of what was handed to the carrier. I built a manifest workflow that gathers shipping records, creates a printable PDF, saves it, and notifies the operator when it is ready.
             </p>
             <p>
-              <strong>What it solves:</strong> When tracking scans are delayed or missing, the business needs a reliable record of which packages left the warehouse. The workflow combines shipping labels and inbound shipment records into one signed document instead of relying on manual lists.
+              This gives the business a signed handoff record when tracking scans are late or missing. It also supports held packages, restored packages, and package removal so the printed manifest matches what is actually leaving that day.
             </p>
             <p>
-              <strong>How it works:</strong> Apps Script pulls shipments from ShipStation and marketplace shipping APIs, deduplicates tracking numbers, separates account groups, generates a PDF in Google Drive, posts a print notification, and keeps history, hold, restore, and remove controls in the sheet.
+              Built with Apps Script, shipping APIs, marketplace shipping data, tracking-number deduplication, Google Drive PDF generation, print notifications, and a history log.
             </p>
           </article>
           <article class="ops-card ops-card-wide">
             <h3>Local Pickup Notification Flow</h3>
             <p>
-              <strong>Goal:</strong> Convert a manual pickup-ready and reminder process into a repeatable workflow that keeps customers informed without staff sending each message by hand.
+              Local pickup orders needed a different customer experience than shipped orders. I connected the warehouse trigger to the customer notification flow so pickup-ready messages, reminders, cancellations, refunds, and pickup-complete messages happen consistently.
             </p>
             <p>
-              <strong>What it solves:</strong> Pickup orders need different messages than shipped orders, and reminders must stop once an order is picked up, cancelled, or refunded. The automation prevents duplicate reminders, missed pickup notifications, and incorrect customer messages.
+              The important part was preventing the wrong message at the wrong time. Processed-state tags and fulfillment stop conditions keep reminders from repeating after an order is picked up, cancelled, or completed.
             </p>
             <p>
-              <strong>How it works:</strong> ShipStation acts as the warehouse trigger, Make.com moves pickup-ready state into Shopify, and Shopify Flow handles ready, reminder, cancellation, refund, and completion messages using explicit processed-state tags and fulfillment stop conditions.
+              Built with ShipStation, Make.com, Shopify, and Shopify Flow, with clear tags for each notification state.
             </p>
           </article>
         </div>

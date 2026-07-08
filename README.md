@@ -68,13 +68,13 @@ Agentic healthcare documentation app with multimodal intake, evidence-linked sum
 
 ## Automation Operations
 
-Recent private-client operations automation work. Client and product details are intentionally omitted; the summaries focus on the workflow concept and business problem solved.
+Recent private-client operations automation work. Client and product details are intentionally omitted; the summaries focus on the workflow and the business problem solved.
 
-- **Warehouse Inventory Sync:** turns order scanning, item completion, proof capture, and inventory updates into one auditable workflow with status write-back, source rules, correction handling, and review dashboards.
-- **B2B Account Import Tool:** lets operators paste account data into a spreadsheet, validate it, preview setup, import records, approve ordering, and review row-level results without hand-entering every account.
-- **Procurement Reorder Dashboard:** replaces manual exports and spreadsheet checking with a dashboard that combines sales, stock, open purchase orders, lead times, mappings, and forecast logic to recommend what to reorder and when.
-- **Shipping Manifest Automation:** combines shipping records into a printable daily carrier handoff manifest, saves the PDF, notifies the operator, and keeps history plus hold/restore controls for packages that should not print yet.
-- **Local Pickup Notification Flow:** moves pickup-ready state from warehouse operations into customer notifications, with processed-state tags and stop conditions to prevent duplicate or incorrect reminders.
+- **Warehouse Inventory Sync:** connected order scanning, proof capture, completion status, and inventory updates so warehouse staff can run one clear workflow instead of chasing several tools.
+- **B2B Account Import Tool:** gave operators a spreadsheet-based import flow with validation, preview, row-level results, and safe re-runs instead of manual account setup.
+- **Procurement Reorder Dashboard:** brought sales, stock, open orders, lead times, item mappings, and forecast logic into one dashboard for reorder decisions.
+- **Shipping Manifest Automation:** created printable daily carrier handoff manifests from shipping records, with PDF storage, operator notification, history, and hold/restore controls.
+- **Local Pickup Notification Flow:** connected warehouse pickup-ready state to customer messages, with tags and stop conditions to avoid duplicate or incorrect reminders.
 
 ---
 
