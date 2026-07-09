@@ -263,6 +263,26 @@
     </section>
 
     <section class="section">
+      <h2>Ecommerce AI Automation Project</h2>
+      <hr class="rule" />
+
+      <div class="item project-item">
+        <div class="project-links">
+          <span>Duration: Apr 2026 - Present</span>
+        </div>
+        <ul>
+          <li><strong>Warehouse inventory sync:</strong> built an AppSheet, Google Sheets, and Apps Script workflow for order scanning, item completion, proof capture, correction handling, and inventory update review. Added status write-back, audit logs, and operator approval steps so warehouse staff could see which orders were completed, skipped, failed, or needed review.</li>
+          <li><strong>B2B account import:</strong> built a spreadsheet-based import tool for business account onboarding, including raw data mapping, generated account IDs, validation checks, preview mode, API-backed create/update actions, ordering approval, row-level result messages, and safe re-runs without duplicating already-processed records.</li>
+          <li><strong>Procurement reorder dashboard:</strong> automated sales, stock, open purchase-order, lead-time, item-mapping, and forecast inputs into a dashboard that helps operators decide what needs to be reordered, how many units are needed, and which items require attention before purchasing decisions are made.</li>
+          <li><strong>Shipping manifest automation:</strong> generated printable daily carrier handoff manifests from shipping records, saved PDFs to Drive, notified operators when manifests were ready, and added history, hold, restore, and remove controls so the printed manifest matched the packages actually leaving that day.</li>
+          <li><strong>Local pickup notification flow:</strong> connected warehouse pickup-ready state to customer notifications for ready, reminder, cancellation, refund, and completion messages. Used processed-state tags and fulfillment stop conditions so reminders would not repeat after an order was picked up, cancelled, or completed.</li>
+          <li><strong>Reliability and handoff:</strong> added dry-run validation, rate limiting, retry/backoff, idempotent re-runs, audit logs, status write-back, row-level error messages, review dashboards, and handoff documentation so non-engineer operators could run the workflows safely.</li>
+        </ul>
+        <hr class="rule" />
+      </div>
+    </section>
+
+    <section class="section">
       <h2>Selected Projects</h2>
       <hr class="rule" />
 
@@ -272,13 +292,9 @@
           <span>Duration: Jan 2026 - Apr 2026 (4 months)</span>
         </div>
         <ul>
-          <li>Built a serverless AI assistant that handles multi-step workflows including search, PDF generation, email delivery, uploads, and user-approved memory.</li>
-          <li>Designed backend APIs for chat, jobs, uploads, memory, and tool-triggered workflows, with clear request shaping and status-based responses for frontend consumption.</li>
-          <li>Used Python/FastAPI to validate tool outputs, label successful versus failed execution states, and keep user-facing responses grounded in observable backend results.</li>
-          <li>Separated API intake from background execution using an async API + worker pattern so long-running tasks could complete without request timeouts.</li>
-          <li>Integrated external services for web search, PDF generation, and email delivery, with verified tool outcomes so user-facing responses reflect actual execution results rather than model claims alone.</li>
-          <li>Added a truth-gated response path for higher-risk actions so the final user message is constrained by verified tool results instead of fluent but unverified model output.</li>
-          <li>Deployed on AWS with Terraform and GitHub Actions, with tracing and error monitoring across API, worker, and tool layers.</li>
+          <li>Built a serverless AI assistant for multi-step workflows including search, PDF generation, email delivery, uploads, and user-approved memory.</li>
+          <li>Designed FastAPI endpoints for chat, jobs, uploads, memory, and tool-triggered workflows, using async job execution so long-running tasks could finish without request timeouts.</li>
+          <li>Added verified tool outcomes, truth-gated responses, tracing, and AWS deployment through Terraform and GitHub Actions.</li>
         </ul>
         <hr class="rule" />
       </div>
@@ -289,13 +305,9 @@
           <span>Duration: Jan 2026 - Apr 2026 (4 months)</span>
         </div>
         <ul>
-          <li>Built a multi-step idea evaluation workflow that moves from generation to comparison, summarization, and execution planning instead of stopping at one-shot content output.</li>
-          <li>Built backend integration flows across multiple model-provider APIs, keeping request contracts and downstream parsing consistent even when providers returned different response patterns.</li>
-          <li>Applied annotation-style review patterns by comparing generated outputs across runs, validating schema compliance, and preserving reviewable artifacts for later assessment.</li>
-          <li>Implemented ordered multi-provider fallback across OpenAI, Gemini, DeepSeek, and Grok, while keeping schema validation and retry logic consistent across providers.</li>
-          <li>Used cache-before-infer and durable run snapshots to reduce repeat cost, support artifact reuse, and keep comparisons reviewable over time.</li>
-          <li>Kept financial and comparison logic in deterministic code where precision mattered, using AI mainly for generation, summarization, and report-style explanation.</li>
-          <li>Deployed the platform on AWS App Runner with PostgreSQL-backed persistence and integrated email delivery for generated outputs and reports.</li>
+          <li>Built a multi-step idea evaluation workflow that moves from generation to comparison, decision summary, and execution planning.</li>
+          <li>Integrated multiple model providers with ordered fallback, schema validation, retry logic, cache-before-infer, and durable run snapshots.</li>
+          <li>Kept financial and comparison logic deterministic while using AI for generation, summarization, and report-style explanation; deployed on AWS App Runner with persistence and email delivery.</li>
         </ul>
         <hr class="rule" />
       </div>
@@ -306,29 +318,9 @@
           <span>Duration: Jan 2026 - Apr 2026 (4 months)</span>
         </div>
         <ul>
-          <li>Built a multi-agent trading simulation where agent proposals pass through deterministic portfolio-control checks before any execution path is allowed.</li>
-          <li>Implemented Python-based validation gates that classify agent proposals into approve, reduce, reject, or review outcomes based on structured policy checks.</li>
-          <li>Integrated account, pricing, research, and memory APIs behind MCP contracts so agents could consume approved capabilities without direct brokerage access.</li>
-          <li>Implemented SSE-based dashboard updates with replay and resync behavior so operators can recover state cleanly after disconnects or engine restarts.</li>
-          <li>Used a multi-gate review pipeline with explicit approve, reduce, or reject outcomes so agent suggestions remain auditable and bounded by policy rules.</li>
-          <li>Managed cloud deployment on AWS EC2 with Docker, Terraform, and GitHub Actions, with PostgreSQL as shared runtime state.</li>
-        </ul>
-        <hr class="rule" />
-      </div>
-
-      <div class="item project-item">
-        <p class="item-title">Private-Client Ecommerce AI Automation Engineering</p>
-        <div class="project-links">
-          <span>Client details omitted for confidentiality</span>
-          <span>Duration: Mar 2026 - Jun 2026 (4 months)</span>
-        </div>
-        <ul>
-          <li><strong>Warehouse inventory sync:</strong> connected order scanning, proof capture, completion status, and inventory updates into one auditable workflow for warehouse operators.</li>
-          <li><strong>B2B account import:</strong> built a spreadsheet-based import tool with validation, preview steps, API-backed create/update actions, ordering approval, and row-level results.</li>
-          <li><strong>Procurement reorder dashboard:</strong> brought sales, stock, purchase-order, lead-time, item-mapping, and forecast inputs into a dashboard that shows what needs to be ordered and when.</li>
-          <li><strong>Shipping manifest automation:</strong> generated printable daily carrier handoff manifests from shipping records, saved PDFs to Drive, notified operators, and added hold/restore controls.</li>
-          <li><strong>Local pickup notification flow:</strong> connected pickup-ready state to customer messages, using processed-state tags and fulfillment stop conditions to avoid duplicate or incorrect reminders.</li>
-          <li>Added practical reliability controls across workflows: dry-run validation, rate limiting, retry/backoff, safe re-runs, audit logs, status write-back, row-level error messages, review dashboards, and handoff documentation.</li>
+          <li>Built a multi-agent trading simulation where agent proposals pass through deterministic portfolio-control checks before execution is allowed.</li>
+          <li>Implemented validation gates that classify proposals into approve, reduce, reject, or review outcomes, with MCP boundaries around account, pricing, research, and memory access.</li>
+          <li>Added SSE dashboard updates with replay/resync behavior and deployed on AWS EC2 using Docker, Terraform, GitHub Actions, and PostgreSQL.</li>
         </ul>
         <hr class="rule" />
       </div>
@@ -340,12 +332,8 @@
         </div>
         <ul>
           <li>Built a clinical documentation workflow that turns multimodal visit inputs into structured summaries with evidence-aware review and scoped follow-up chat.</li>
-          <li>Used Python/FastAPI orchestration with validation steps that annotate generated claims against source evidence, unsupported details, and critic-review findings.</li>
-          <li>Used specialized orchestration roles for extraction, review, evidence handling, and chat so quality issues can be isolated by workflow stage.</li>
-          <li>Designed backend flows for intake, processing, streaming, and context-scoped retrieval so the application could coordinate multiple internal services safely.</li>
-          <li>Applied resumable streaming and job-based execution to keep long-running generations usable across unstable connections.</li>
-          <li>Added critic-style review and evidence-linking steps so important claims can be checked against source material before becoming part of the final summary.</li>
-          <li>Constrained chat responses to allowed patient context to reduce unsupported answers and keep the assistant grounded in the current visit record.</li>
+          <li>Designed FastAPI backend flows for intake, processing, streaming, context retrieval, and specialized orchestration roles for extraction, review, evidence handling, and chat.</li>
+          <li>Added resumable jobs, critic-style review, evidence-linking, and context limits so generated claims stay grounded in source material.</li>
         </ul>
         <hr class="rule" />
       </div>
@@ -356,7 +344,7 @@
       <hr class="rule" />
 
       <div class="item">
-        <p class="item-title">Independent — Software Engineer (Full-Stack AI &amp; Automation)</p>
+        <p class="item-title">Freelance — Software Engineer (Full-Stack AI &amp; Automation)</p>
         <div class="meta">Jan 2026 – Present | Remote</div>
         <ul>
           <li>Designed and shipped full-stack AI applications across Python, React, and AWS, with emphasis on reliable workflow execution rather than prompt-only prototypes.</li>
